@@ -1,0 +1,106 @@
+---
+title: "Parallel, Multiple, and Unpacking Assignment"
+author: "Nathan Teetor"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Parallel, Multiple, and Unpacking Assignment}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Parallel Assignment
+
+Parallel assignment is the assignment of multiple variables at once. Languages, such as Python or Go, which allow parallel assignment do so with syntax similar to the following.
+
+```
+a, b = 1, 2
+a
+#> 1
+b
+#> 2
+```
+
+In the above example we see `a` and `b` are both assigned in the first line, but with two distinct values. R allows a watered-down version of parallel assignment, but the variables cannot be assigned distinct values.
+
+```{R, eval = FALSE}
+a <- b <- 1
+a
+#> 1
+b
+#> 2
+```
+
+Note that, although assigning two distinct values in one line is the emphasis of the above example, the same value may be assigned, but must be specified the correct number of times, see below.
+
+```
+a, b = 1, 1
+a
+#> 1
+b
+#> 1
+```
+
+Now that we have seen a straightforward example, let's take a look at a slightly more complex and more practical example. The following Python code illustrates unpacking assignment.
+
+```{python}
+def coords():
+  '''A function which returns a list of 2 numbers (coordinates)'''
+  return [38.061944, -122.643889]
+  
+lat, lng = coords()
+lat
+#>>> 38.061944
+lng
+#>>> -122.643889
+```
+
+The list of values returned by `coords()` is unpacked into the two variables `lat` and `lng`, hence this case of parallel assignment is more aptly referred to as *unpacking assignment*. We could also refer to this as *destructuring assignment*. Additionally, we can unpack a list without using a function call and we can unpack more than only two values.
+
+```{python}
+point = [3, 5, 8]
+x, y, z = point
+x
+#>>> 3
+y
+#>>> 5
+z
+#>>> 8
+point
+#>>> [3, 5, 8]
+```
+
+In addition to unpacking flat lists, we can unpack values in nested lists. The following example illustrates what we might expect based on the previous examples.
+
+```{python}
+nested = [4, [0, 1]]
+a, b = nested
+a
+#>>> 4
+b
+#>>> [0, 1]
+```
+
+But, if we add a variable `c` and nest `b` and `c` on the left-hand side we get a different result.
+
+```{python}
+nested = [4, [0, 1]]
+a, (b, c) = nested
+a
+#>>> 4
+b
+#>>> 0
+c
+#>>> 1
+```
+
+Now that we have seen a few examples, let's move on to parallel assignment in R using allotalot.
+
+## The %<-% Operator
+
+allotalot provides the `%<-%` operator for parallel assignment, remember this includes unpacking assignment. Here is one of the early examples above redone in R using `%<-%`.
+
+```{r eval = FALSE}
+.(a, b) %<-% list(1, 2)
+```
+

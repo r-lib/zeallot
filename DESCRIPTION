@@ -1,0 +1,16 @@
+Package: allotalot
+Type: Package
+Title: Parallel Assignment
+Version: 0.0.1
+Author@R: person(given = 'Nathan', family = 'Teetor', email = 'nathanteetor@gmail.com', role = c('aut', 'cre'))
+Description: This package provides functions to perform unpacking or destructuring,
+    multiple, and parallel assignment in R.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 5.0.1
+VignetteBuilder: knitr
+Suggests:
+    testthat,
+    knitr,
+    rmarkdown
