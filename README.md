@@ -1,6 +1,6 @@
 # allotalot
 
-Parallel <strike>alloting</strike> assignment in R
+Parallel <strike>allotment</strike> assignment in R
 
 [travis]: https://travis-ci.org/nteetor/allotalot.svg?branch=master "lots o' building"
 [appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/allotalot?branch=master&svg=true "lots o' 'veyors"
