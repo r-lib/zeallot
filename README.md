@@ -2,11 +2,10 @@
 
 > Parallel Assignment in R
 
-travis: https://travis-ci.org/nteetor/allotalot.svg?branch=master "lots o' building"
-appveyor: https://ci.appveyor.com/api/projects/status/github/nteetor/allotalot?branch=master&svg=true
- "lots o' 'veyors"
-coverage: https://codecov.io/gh/nteetor/allotalot/branch/master/graph/badge.svg "lots o' coverage"
-cran: https://www.r-pkg.org/badges/version/allotalot "getting there"
+[travis]: https://travis-ci.org/nteetor/allotalot.svg?branch=master "lots o' building"
+[appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/allotalot?branch=master&svg=true "lots o' 'veyors"
+[coverage]: https://codecov.io/gh/nteetor/allotalot/branch/master/graph/badge.svg "lots o' coverage"
+[cran]: https://www.r-pkg.org/badges/version/allotalot "getting there"
 
 ![alt text][travis] ![alt text][appveyor] ![alt text][coverage] ![alt text][cran]
 
