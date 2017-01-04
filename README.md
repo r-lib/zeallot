@@ -89,6 +89,8 @@ allotalot can be installed using devtools:
 devtools::install_github('nteetor/allotalot')
 ```
 
+## Vignette
+
 For more information you can always refer to the introductory vignette.
 
 ---
