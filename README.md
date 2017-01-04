@@ -11,20 +11,33 @@
 
 ## Getting Started
 
-The package in action,
+A first example,
 
 ```R
 library(allotalot)
 
-.(a, b) %<-% list(1, 2)
+.(a, b) %<-% list(0, 1)
 a
-#> 1
+#> 0
 b
-#> 2
+#> 1
 ```
 
-A more complex example,
+A few interesting or more demonstrative examples,
+
 ```R
+# assign more than 2 values
+.(one, two, three, four) %<-% list(1, 2, 3, 4)
+one 
+#> 1
+two
+#> 2
+three
+#> 3
+four
+#> 4
+
+# use nested calls to `.()`
 .(a, .(c, d), b) %<-% list('hello', list('goodnight', 'moon'), 'world')
 a
 #> "hello"
@@ -34,27 +47,38 @@ c
 #> "goodnight"
 d
 #> "moon"
+
+# unpack the dimensions of an object
+.(nrows, ncols) %<-% unpack(dim(mtcars))
+nrows
+#> 32
+ncols
+#> 11
+
+# swap values without using a temporary variable
+.(nrows, ncols) %<-% list(ncols, nrows)
+nrows
+#> 11
+ncols
+#> 32
 ```
 
-Vectors are not unpacked and the following will throw an error,
+The `%<-%` operator can stand in for the standard assignment operator `<-`. Because of this, vectors and objects with an underlying list structure are not unpacked. Use the `unpack()` function provided in allotalot to force unpacking of vectors or list-like objects.
+
 ```R
+# standard assignment
+groceries %<-% list('eggs', 'spinach', 'carrots', 'kiwis')
+
+smry %<-% summary(lm(mpg ~ disp, data = mtcars))
+
+# trivial "unpacking"
+.(fear1) %<-% 'The sea in storm'
+
+# this will throw an error
 .(a, b) %<-% c('whoops', 'error')
-```
 
-To work around this use `as.list`,
-```R
-.(a, b) %<-% as.list(c('whoops', 'error'))
-```
-
-One can also swap variable values,
-```R
-prv <- 2016
-nxt <- 2017
-.(prv, nxt) %<-% list(nxt, prv)
-prv
-#> 2017
-nxt
-#> 2016
+# use `unpack()` to fix the problem
+.(a, b) %<-% unpack(c('whoops', 'error'))
 ```
 
 ## Installation
@@ -65,7 +89,7 @@ allotalot can be installed using devtools:
 devtools::install_github('nteetor/allotalot')
 ```
 
-For more information refer to the introductory vignette.
+For more information you can always refer to the introductory vignette.
 
 ---
 

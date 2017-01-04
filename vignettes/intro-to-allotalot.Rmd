@@ -107,7 +107,7 @@ Now that we have seen a few examples, let's move on to parallel assignment in R 
 
 ## The %<-% Operator
 
-allotalot provides the `%<-%` operator for parallel assignment, remember this includes unpacking assignment. Here is one of the first examples above rewritten in R using `%<-%`.
+allotalot provides the `%<-%` operator for parallel assignment, remember this includes unpacking assignment. Here is the first example from above rewritten in R using `%<-%`.
 
 ```{R}
 .(a, b) %<-% list(1, 2)
@@ -115,7 +115,7 @@ a
 b
 ```
 
-Using some very simple syntax we can swap the values of `a` and `b`, see below.
+Using some very simple syntax we can swap the values of `a` and `b` without using a temporary variable, see below.
 
 ```{R}
 .(a, b) %<-% list(b, a)
@@ -125,19 +125,11 @@ b
 
 ### The . Helper
 
-Notice the `.()` function used on the left-hand side of the assignment. Because R does not support nesting variables (e.g. `a, (b, c)` or even `a, b`) allotalot provides a means of creating the left-hand structure of an assignment expression. `.()` is very similar to `list()`, but helps keep our left-hand side cleaner and more concise by allowing bare names. If we desired, we could forgo using `.()` and instead use `list()` and character strings, see below.
+allotalot provides the `.()` function, used on the left-hand side of an assignment expression. Because R does not support nesting variables (e.g. `a, (b, c)` or even `a, b`) allotalot provides `.()` in order to work around these restrictions. `.()` is very similar to `list()`, but helps keep the left-hand side of our expressions cleaner and more concise by allowing bare names and imposing a limited syntax. Only bare or quoted names and further calls to `.()` are allowed within a call to `.()`.
 
-```{R}
-list('a', 'b') %<-% list('fizz', 'whizz')
-a
-b
-```
+### R Examples
 
-Unhelpfully, this syntax further obscures what happens in the body of the `%<-%` operator. So, although this alternative syntax works, using `.()` is strongly encouraged.
-
-### More R Examples
-
-Moving on, let's recreate another one of the Python examples. Using nested calls to `.()` we can perform nested unpacking assignment.
+Now let's work through further examples of parallel assingment in R. In the first example, we use nested calls to `.()` on the left-hand side to unpack a nested list on the right-hand side.
 
 ```{R}
 .(a, .(c, d), b) %<-% list('once', list('upon', 'a'), 'time')
@@ -151,13 +143,63 @@ Here we unpack a function's return value.
 
 ```{R}
 odds <- function(x) {
-  is_odd <- x %% 2 == 1
+  the_odds <- x %% 2 == 1
   list(
-    sum(is_odd),
-    x[is_odd]
+    sum(the_odds),
+    x[the_odds]
   )
 }
-.(n_odds, values) %<-% odds(sample(100, 25))
-n_odds
+.(num_odds, values) %<-% odds(sample(100, 25))
+num_odds
 values
 ```
+
+This next example requires the purrr package. From purrr we will use the `safely()` function. By passing a function to `safely()`, we can create a new "safe" version of that function. This safe version always produces an output of two values. The first value is the result of calling the function, if no error occurred, and the second value is an error, if an error occurred. This safe function never throws an error, instead we can expect the first value to be `NULL` and the second value to be the error.
+
+```{R, eval = require('purrr')}
+# make sure purrr is installed
+# install.packages('purrr')
+
+safe_log <- purrr::safely(log)
+
+tuple <- safe_log(10)
+tuple$result
+tuple$error
+```
+
+The above example code is no deal breaker. But, allotalot aims to improve quality of life and code by allowing more explicit variable naming and cutting down on repititions like the repeated extractions from `tuple`. See below for how we can rework the example using allotalot.
+
+
+```{R, eval = require('purrr')}
+# if `res` and `err` are still not explicit enough we could use
+# `result` and `error`. In either case we are clearly name and 
+# unpack the return values of our safe function. 
+.(res, err) %<-% safe_log(10)
+res
+err
+
+.(res, err) %<-% safe_log("a number")
+
+if (!is.null(err)) {
+  # and here we could do more than print a message
+  message('could not compute log, ', err$message)
+}
+
+# continuing with the purrr example
+x <- list(20, 'gulp', 17)
+
+log_x <- purrr::map(x, safe_log)
+log_x
+
+for (i in seq_along(log_x)) {
+  .(res, err) %<-% log_x[[i]]
+  
+  if (!is.null(err)) {
+    message('problem with result ', i)
+    next
+  }
+  
+  message('result ', i, ' is ', res)
+}
+```
+

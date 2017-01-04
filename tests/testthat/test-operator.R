@@ -72,4 +72,10 @@ test_that('%<-% handles S3 objects with underlying list structure', {
   expect_s3_class(a, 'shape')
 
   expect_error(.(b, c) %<-% shape(), 'expecting 2 values, but found 1')
+
+  .(b, c) %<-% list(shape(3, 'green'), shape(1, 'blue'))
+  expect_equal(b$sides, 3)
+  expect_equal(b$color, 'green')
+  expect_equal(c$sides, 1)
+  expect_equal(c$color, 'blue')
 })

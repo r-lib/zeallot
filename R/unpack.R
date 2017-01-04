@@ -1,42 +1,27 @@
-unpack <- function(...) {
-  args <- eval(substitute(alist(...)))
-  nargs <- length(args)
+#' Force Unpacking of an Object
+#'
+#' The \code{unpack} function is used to force R objects like vectors and S3
+#' objects to unpack during parallel assignment. Because \code{\link{\%<-\%}}
+#' can perform standard assignment, vectors are not automatically unpacked.
+#' Furthermore, to allow for parallel assingment of lists of custom objects with
+#' underlying list structures, objects with custom classes are not automatically
+#' unpacked either. The default behavior of \code{unpack} is to create a copy of
+#' \code{x} coerced to a list.
+#'
+#' @param x An \R object.
+#'
+#' @details
+#'
+#' Because \code{unpack} is a generic further methods may be defined for custom
+#' classes. When implementing a new \code{unpack} method the return value must
+#' be a list structure in order for \code{\%<-\%} to understand how to unpack
+#' the values.
+#'
+#' @export
+unpack <- function(x) {
+  UseMethod('unpack')
+}
 
-  if (nargs == 0) {
-    stop('expecting at least one argument', call. = FALSE)
-  }
-
-  if (!grepl('<-', deparse(args[[nargs]]))) {
-    stop('missing expression to unpack', call. = FALSE)
-  }
-
-  if (length(args[[nargs]]) != 3) {
-    stop('bad expression format, expecting ',
-         '<name_1>, <name_2>, .., <name_N> <- <expression>',
-         call. = FALSE)
-  }
-
-  expr <- args[[nargs]][[3]]
-  args[[nargs]] <- args[[nargs]][[2]]
-
-  if (any(vapply(args, class, character(1)) != 'name')) {
-    stop('bad expression format, expecting ',
-         '<name_1>, <name_2>, .., <name_N> <- <expression>',
-         call. = FALSE)
-  }
-
-  evalenv <- parent.frame()
-
-  values <- eval(expr, envir = evalenv)
-
-  if (length(values) != nargs) {
-    stop('expecting ', nargs, ' values to unpack', call. = FALSE)
-  }
-
-  for (i in seq_along(args)) {
-    assign(as.character(args[[i]]), values[[i]], envir = evalenv,
-           inherits = FALSE)
-  }
-
-  invisible(TRUE)
+unpack.default <- function(x) {
+  lapply(x, identity)
 }
