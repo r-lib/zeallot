@@ -9,39 +9,48 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{R, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = '#>')
+knitr::knit_theme$set('leo')
+
+library(allotalot)
+```
+
 ## Parallel Assignment
 
 Parallel assignment is the assignment of multiple variables at once. Languages, such as Python or Go, which allow parallel assignment do so with syntax similar to the following.
 
-```
+```{python}
 a, b = 1, 2
 a
-#> 1
+#>>> 1
 b
-#> 2
+#>>> 2
 ```
 
 In the above example we see `a` and `b` are both assigned in the first line, but with two distinct values. R allows a watered-down version of parallel assignment, but the variables cannot be assigned distinct values.
 
-```{R, eval = FALSE}
+```{R}
 a <- b <- 1
 a
-#> 1
 b
-#> 2
 ```
 
 Note that, although assigning two distinct values in one line is the emphasis of the above example, the same value may be assigned, but must be specified the correct number of times, see below.
 
-```
+```{python}
 a, b = 1, 1
 a
-#> 1
+#>>> 1
 b
-#> 1
+#>>> 1
 ```
 
-Now that we have seen a straightforward example, let's take a look at a slightly more complex and more practical example. The following Python code illustrates unpacking assignment.
+Now that we have seen a straightforward example, let's take a look at a slightly more complex and more practical example.
+
+### Python Examples
+
+The following Python code illustrates unpacking assignment.
 
 ```{python}
 def coords():
@@ -98,9 +107,57 @@ Now that we have seen a few examples, let's move on to parallel assignment in R 
 
 ## The %<-% Operator
 
-allotalot provides the `%<-%` operator for parallel assignment, remember this includes unpacking assignment. Here is one of the early examples above redone in R using `%<-%`.
+allotalot provides the `%<-%` operator for parallel assignment, remember this includes unpacking assignment. Here is one of the first examples above rewritten in R using `%<-%`.
 
-```{r eval = FALSE}
+```{R}
 .(a, b) %<-% list(1, 2)
+a
+b
 ```
 
+Using some very simple syntax we can swap the values of `a` and `b`, see below.
+
+```{R}
+.(a, b) %<-% list(b, a)
+a
+b
+```
+
+### The . Helper
+
+Notice the `.()` function used on the left-hand side of the assignment. Because R does not support nesting variables (e.g. `a, (b, c)` or even `a, b`) allotalot provides a means of creating the left-hand structure of an assignment expression. `.()` is very similar to `list()`, but helps keep our left-hand side cleaner and more concise by allowing bare names. If we desired, we could forgo using `.()` and instead use `list()` and character strings, see below.
+
+```{R}
+list('a', 'b') %<-% list('fizz', 'whizz')
+a
+b
+```
+
+Unhelpfully, this syntax further obscures what happens in the body of the `%<-%` operator. So, although this alternative syntax works, using `.()` is strongly encouraged.
+
+### More R Examples
+
+Moving on, let's recreate another one of the Python examples. Using nested calls to `.()` we can perform nested unpacking assignment.
+
+```{R}
+.(a, .(c, d), b) %<-% list('once', list('upon', 'a'), 'time')
+a
+b
+c
+d
+```
+
+Here we unpack a function's return value.
+
+```{R}
+odds <- function(x) {
+  is_odd <- x %% 2 == 1
+  list(
+    sum(is_odd),
+    x[is_odd]
+  )
+}
+.(n_odds, values) %<-% odds(sample(100, 25))
+n_odds
+values
+```

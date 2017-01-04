@@ -48,10 +48,22 @@ do_assignment <- function(names, values, envir) {
 
 #' Parallel, Multiple, and Unpacking Assignment
 #'
+#' ~ missing ~
 #'
+#' @param names A bare name or name structure generated using \code{\link{.}}.
+#' @param values A list of values to assign to names.
 #'
-#' @alias parallel-assignment
+#' @rdname parallel-assignment
 #' @export
+#' @examples
+#' .(a, b) %<-% list('A', 'B')
+#'
+#' print(a)
+#'
+#' # swap values
+#' .(a, b) %<-% list(b, a)
+#'
+#' print(a)
 `%<-%` <- function(names, values) {
   names <- substitute(names)
   callingenv <- parent.frame()
