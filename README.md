@@ -1,6 +1,6 @@
 # allotalot
 
-> Parallel Assignment in R
+Parallel <strike>allotment</strike> assignment in R
 
 [travis]: https://travis-ci.org/nteetor/allotalot.svg?branch=master "lots o' building"
 [appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/allotalot?branch=master&svg=true "lots o' 'veyors"
@@ -88,6 +88,8 @@ allotalot can be installed using devtools:
 # install.packages('devtools')
 devtools::install_github('nteetor/allotalot')
 ```
+
+## Vignette
 
 For more information you can always refer to the introductory vignette.
 
