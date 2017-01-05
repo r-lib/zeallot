@@ -1,27 +1,127 @@
-#' Force Unpacking of an Object
+#' Destructure an Object
 #'
-#' The \code{unpack} function is used to force R objects like vectors and S3
-#' objects to unpack during parallel assignment. Because \code{\link{\%<-\%}}
-#' can perform standard assignment, vectors are not automatically unpacked.
-#' Furthermore, to allow for parallel assingment of lists of custom objects with
-#' underlying list structures, objects with custom classes are not automatically
-#' unpacked either. The default behavior of \code{unpack} is to create a copy of
-#' \code{x} coerced to a list.
+#' The \code{unpack} function is used to force vectors and objects with custom
+#' classes to unpack during parallel assignment. The \code{items} function
+#' unpacks a named object into a list of name, value pairs. The \code{enumerate}
+#' function unpacks an object into a list of index, value pairs.
 #'
 #' @param x An \R object.
+#' @param n A numeric specifying the number of elements to unpack from \code{x},
+#'   defaults to \code{NULL} in which case all elements are unpacked.
 #'
 #' @details
 #'
-#' Because \code{unpack} is a generic further methods may be defined for custom
-#' classes. When implementing a new \code{unpack} method the return value must
-#' be a list structure in order for \code{\%<-\%} to understand how to unpack
-#' the values.
+#' If \code{n} is less than the number of elements in \code{x} than the first
+#' \code{n} elements are unpacked as well as an additional value. This final
+#' value is a list of the remaining unpacked elements of \code{x}. If \code{n}
+#' is greater than the number of elements in \code{x} all elements are unpacked.
+#' See below for examples.
+#'
+#' \code{unpack} is necessary because \code{\link{\%<-\%}} can perform standard
+#' assignment, so vectors are not automatically unpacked. In addition to
+#' vectors, S3 objects are not automatically unpacked and \code{unpack} must be
+#' used.
+#'
+#' @return
+#'
+#' For \code{unpack} a list created by \code{\link{lapply}}-ing
+#' \code{\link{identity}} to \code{x}. If \code{n} is specified and \code{n} is
+#' less than the number of elements in \code{x}, a list of length \code{n + 1}
+#' where the first \code{n} elements are unpacked and the last item is a list
+#' containing the unpacked values.
+#'
+#' For \code{items} a list of name, value pairs, one pair for each element of
+#' \code{x}. The name in each pair is the original name of the value in
+#' \code{x}. See below for examples.
+#'
+#' For \code{enumerate} a list of index, value pairs, one pair for each element
+#' of \code{x}. The indices range from 1 to the number of elements in the
+#' unpacked list of \code{x}.
 #'
 #' @export
-unpack <- function(x) {
-  UseMethod('unpack')
+#' @examples
+#' # expects two values to assign to `x` and `y`,
+#' # but the vector does not unpack
+#' \dontrun{
+#' .(x, y) %<-% c(0, 1)
+#' }
+#'
+#' # instead we can force the vector to unpack
+#' .(x, y) %<-% unpack(c(0, 1))
+#'
+#' # we can use unpack and specify argument `n`
+#' # to only unpack a select number of elements
+#'
+#' f <- lm(mpg ~ cyl, data = mtcars)
+#'
+#' .(fcall, rest) %<-% unpack(summary(f), n = 1)
+#'
+#' # this is especially useful as unpacking
+#' # `summary.lm` returns 11 values
+#'
+#' # the first element
+#' fcall
+#'
+#' # the rest of the elements bundled into
+#' # a list
+#' rest
+#'
+#' # some food groups and choices
+#' foods <- list(
+#'   bread = c('rye', 'wheat'),
+#'   veggies = c('peas', 'spinach', 'corn'),
+#'   fruits = c('plums', 'cherries')
+#' )
+#'
+#' # we can use `items` and `enumerate` to
+#' # unpack our list of foods
+#' for (pair in enumerate(items(foods))) {
+#'   .(i, .(group, choices))  %<-% pair
+#'   cat(
+#'     sprintf(
+#'       '%d. %s - %s\n',
+#'       i, group, paste(choices, collapse = ', ')
+#'     )
+#'   )
+#' }
+#'
+#' # more enumeration, this time unpacking the
+#' # iris data set
+#' for (col in enumerate(iris)) {
+#'   .(i, values) %<-% col
+#'
+#'   if (i != 5) {
+#'     cat('mean', i, 'is', mean(values), '\n')
+#'   }
+#' }
+#'
+unpack <- function(x, n = NULL) {
+  if (!is.null(n) && !is.numeric(n)) {
+    stop('argument `n` must be of class numeric', call. = FALSE)
+  }
+
+  unpacked <- lapply(x, identity)
+
+  if (!is.null(n) && n < length(unpacked)) {
+    bundled <- unpacked[seq.int(n + 1, length(unpacked))]
+    unpacked <- unpacked[seq_len(n + 1)]
+    unpacked[[n + 1]] <- bundled
+  }
+
+  unpacked
 }
 
-unpack.default <- function(x) {
-  lapply(x, identity)
+#' @rdname unpack
+#' @export
+items <- function(x) {
+  tags <- names(x)
+  unpacked <- unpack(x)
+  lapply(seq_along(unpacked), function(i) list(tags[[i]], unpacked[[i]]))
+}
+
+#' @rdname unpack
+#' @export
+enumerate <- function(x) {
+  unpacked <- unpack(x)
+  lapply(seq_along(unpacked), function(i) list(i, unpacked[[i]]))
 }

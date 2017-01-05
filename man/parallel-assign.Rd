@@ -11,6 +11,9 @@ x \%<-\% value
 
 \item{value}{A list of values to assign.}
 }
+\value{
+\code{\%<-\%} invisibly returns \code{value}.
+}
 \description{
 The \code{\%<-\%} operator performs parallel assignment by coercing the LHS
 of an assignment expression to a name structure, see \code{\link{.}}, and

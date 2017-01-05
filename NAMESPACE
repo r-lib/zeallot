@@ -2,4 +2,6 @@
 
 export("%<-%")
 export(.)
+export(enumerate)
+export(items)
 export(unpack)

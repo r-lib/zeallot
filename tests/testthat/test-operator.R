@@ -1,4 +1,4 @@
-context('*  testing assignment operator')
+context(' * testing assignment operator')
 
 test_that('%<-% can behave like <-', {
   a %<-% 1

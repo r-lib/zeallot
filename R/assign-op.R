@@ -40,6 +40,10 @@ multi_assign <- function(names, values, envir, inherits = FALSE) {
 #' @param x A bare name or name structure.
 #' @param value A list of values to assign.
 #'
+#' @return
+#'
+#' \code{\%<-\%} invisibly returns \code{value}.
+#'
 #' @rdname parallel-assign
 #' @export
 #' @examples
