@@ -64,4 +64,7 @@ last   # "Le Guin"
 exists('..', inherits = FALSE)  # FALSE
 
 }
+\seealso{
+\code{\link{\%<-\%}}
+}
 

@@ -19,6 +19,8 @@
 #' that bare names coerced to character strings and further calls to \code{.}
 #' are evaluated.
 #'
+#' @seealso \code{\link{\%<-\%}}
+#'
 #' @rdname name-structure
 #' @export
 #' @examples

@@ -36,4 +36,8 @@ guests \%<-\% c('Nathan,Allison,Matt,Polly', 'Smith,Peterson,Williams,Jones')
 firsts  # "Nathan", "Allison", ..
 lasts   # "Smith", "Peterson", ..
 }
+\seealso{
+\code{\link{.}}, \code{\link{unpack}}, \code{\link{items}},
+  \code{\link{enumerate}}
+}
 

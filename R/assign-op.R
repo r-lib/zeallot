@@ -45,6 +45,9 @@ multi_assign <- function(names, values, envir, inherits = FALSE) {
 #'
 #' \code{\%<-\%} invisibly returns \code{value}.
 #'
+#' @seealso \code{\link{.}}, \code{\link{unpack}}, \code{\link{items}},
+#'   \code{\link{enumerate}}
+#'
 #' @rdname parallel-assign
 #' @export
 #' @examples

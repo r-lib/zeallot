@@ -1,9 +1,10 @@
-#' Destructure an Object
+#' Unpack an Object
 #'
-#' The \code{unpack} function is used to force vectors and S3 objects to unpack
-#' during parallel assignment. The \code{items} function unpacks a named object
-#' into a list of name, value pairs. The \code{enumerate} function unpacks an
-#' object into a list of index, value pairs.
+#' The \code{unpack} function coerces an object to a list and is used to force
+#' vectors and S3 objects to unpack during parallel assignment. The \code{items}
+#' function unpacks a named object into a list of name, value pairs. The
+#' \code{enumerate} function unpacks an object into a list of index, value
+#' pairs.
 #'
 #' @param x An \R object.
 #' @param n A numeric specifying the number of elements to unpack from \code{x},
@@ -20,10 +21,10 @@
 #' @return
 #'
 #' For \code{unpack} a list created by \code{\link{lapply}}-ing
-#' \code{\link{identity}} to \code{x}. If \code{n} is specified and \code{n} is
-#' less than the number of elements in \code{x}, a list of length \code{n + 1}
-#' where the first \code{n} elements are unpacked and the last item is a list
-#' containing the unpacked values.
+#' \code{\link{identity}} to \code{x}. If \code{n} is specified and is less than
+#' the number of elements in \code{x}, a list of length \code{n + 1} is returned
+#' where the first \code{n} elements are unpacked and the last list value is a
+#' list containing the remaining unpacked values of \code{x}.
 #'
 #' For \code{items} a list of name, value pairs, one pair for each element of
 #' \code{x}. The name in each pair is the original name of the value in
@@ -33,10 +34,12 @@
 #' of \code{x}. The indices range from 1 to the number of elements in the
 #' unpacked list of \code{x}.
 #'
+#' @seealso \code{\link{\%<-\%}}
+#'
 #' @export
 #' @examples
-#' # expects two values to assign to `x` and `y`,
-#' # but the vector does not unpack
+#' # %<-% expects two values to assign to `x` and `y`,
+#' # but the vector does not automatically unpack
 #' \dontrun{
 #' .(x, y) %<-% c(0, 1)
 #' }
