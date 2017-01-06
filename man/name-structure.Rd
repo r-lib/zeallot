@@ -22,6 +22,8 @@ unpacking assignment expression.
 \code{.} allows bare variable names which may or may not yet exist. By
 nesting calls to \code{.} on the left-hand side of the assignment expression
 one can unpack nested values on the right-hand side.
+
+Use \code{..} to skip assignment of a value.
 }
 \examples{
 # nothing too extraordinary
@@ -35,8 +37,11 @@ one can unpack nested values on the right-hand side.
 a  # 0
 b  # 1
 
-# tackle a heavily nested list
+# tackle a heavily nested list ...
 fibs \%<-\% list(0, list(1, list(1, list(2, list(3)))))
+
+# ... with an equally heavily nested
+# name structure
 .(f0, .(f1, .(f2, .(f3, .(f4))))) \%<-\% fibs
 
 f1  # 1
@@ -45,7 +50,18 @@ f4  # note that f4 is list(3)
 
 # unpack only the first element
 .(f0, fcdr) \%<-\% fibs
+
 f0    # 0
 fcdr  # list(1, list(1, list(2, list(3))))
+
+# unpack first name, skip middle initial,
+# get last name
+.(first, .., last) \%<-\% list('Ursula', 'K', 'Le Guin')
+
+first  # "Ursula"
+last   # "Le Guin"
+
+exists('..', inherits = FALSE)  # FALSE
+
 }
 

@@ -91,7 +91,7 @@ devtools::install_github('nteetor/allotalot')
 
 ## Vignette
 
-For more information you can always refer to the introductory vignette.
+For more on *allotalot* checkout the [introductory vignette](vignettes/intro-to-allotalot.Rmd).
 
 ---
 

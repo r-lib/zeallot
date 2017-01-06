@@ -1,9 +1,9 @@
 #' Destructure an Object
 #'
-#' The \code{unpack} function is used to force vectors and objects with custom
-#' classes to unpack during parallel assignment. The \code{items} function
-#' unpacks a named object into a list of name, value pairs. The \code{enumerate}
-#' function unpacks an object into a list of index, value pairs.
+#' The \code{unpack} function is used to force vectors and S3 objects to unpack
+#' during parallel assignment. The \code{items} function unpacks a named object
+#' into a list of name, value pairs. The \code{enumerate} function unpacks an
+#' object into a list of index, value pairs.
 #'
 #' @param x An \R object.
 #' @param n A numeric specifying the number of elements to unpack from \code{x},
@@ -17,11 +17,6 @@
 #' is greater than the number of elements in \code{x} all elements are unpacked.
 #' See below for examples.
 #'
-#' \code{unpack} is necessary because \code{\link{\%<-\%}} can perform standard
-#' assignment, so vectors are not automatically unpacked. In addition to
-#' vectors, S3 objects are not automatically unpacked and \code{unpack} must be
-#' used.
-#'
 #' @return
 #'
 #' For \code{unpack} a list created by \code{\link{lapply}}-ing
@@ -32,7 +27,7 @@
 #'
 #' For \code{items} a list of name, value pairs, one pair for each element of
 #' \code{x}. The name in each pair is the original name of the value in
-#' \code{x}. See below for examples.
+#' \code{x}. If element is unnamed, \code{''} is used. See below for examples.
 #'
 #' For \code{enumerate} a list of index, value pairs, one pair for each element
 #' of \code{x}. The indices range from 1 to the number of elements in the
@@ -68,7 +63,7 @@
 #'
 #' # some food groups and choices
 #' foods <- list(
-#'   bread = c('rye', 'wheat'),
+#'   breads = c('rye', 'wheat'),
 #'   veggies = c('peas', 'spinach', 'corn'),
 #'   fruits = c('plums', 'cherries')
 #' )
@@ -95,9 +90,19 @@
 #'   }
 #' }
 #'
+#' # alternatively, we could use `items`
+#' # to unpack the iris data set
+#' for (col in items(iris)) {
+#'   .(nm, values) %<-% col
+#'
+#'   if (nm != 'Species') {
+#'     cat(nm, 'mean is', mean(values), '\n')
+#'   }
+#' }
+#'
 unpack <- function(x, n = NULL) {
   if (!is.null(n) && !is.numeric(n)) {
-    stop('argument `n` must be of class numeric', call. = FALSE)
+    stop('argument `n` must be a numeric', call. = FALSE)
   }
 
   unpacked <- lapply(x, identity)
@@ -114,8 +119,8 @@ unpack <- function(x, n = NULL) {
 #' @rdname unpack
 #' @export
 items <- function(x) {
-  tags <- names(x)
   unpacked <- unpack(x)
+  tags <- names(x) %||% rep('', length(unpacked))
   lapply(seq_along(unpacked), function(i) list(tags[[i]], unpacked[[i]]))
 }
 

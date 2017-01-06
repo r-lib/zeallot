@@ -20,7 +20,9 @@ all_equalish <- function(lhs, rhs) {
 
 multi_assign <- function(names, values, envir, inherits = FALSE) {
   if (length(names) == 1) {
-    assign(names[[1]], values, envir = envir, inherits = inherits)
+    if (names != '..') {
+      assign(names[[1]], values, envir = envir, inherits = inherits)
+    }
     return()
   }
 

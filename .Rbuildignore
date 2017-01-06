@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 ^\.travis\.yml$
 ^appveyor\.yml$
+^cran-comments\.md$

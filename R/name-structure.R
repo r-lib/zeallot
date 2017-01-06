@@ -11,6 +11,8 @@
 #' nesting calls to \code{.} on the left-hand side of the assignment expression
 #' one can unpack nested values on the right-hand side.
 #'
+#' Use \code{..} to skip assignment of a value.
+#'
 #' @return
 #'
 #' The return value of \code{.} is a list structure with \ldots evaluated such
@@ -31,8 +33,11 @@
 #' a  # 0
 #' b  # 1
 #'
-#' # tackle a heavily nested list
+#' # tackle a heavily nested list ...
 #' fibs %<-% list(0, list(1, list(1, list(2, list(3)))))
+#'
+#' # ... with an equally heavily nested
+#' # name structure
 #' .(f0, .(f1, .(f2, .(f3, .(f4))))) %<-% fibs
 #'
 #' f1  # 1
@@ -41,8 +46,19 @@
 #'
 #' # unpack only the first element
 #' .(f0, fcdr) %<-% fibs
+#'
 #' f0    # 0
 #' fcdr  # list(1, list(1, list(2, list(3))))
+#'
+#' # unpack first name, skip middle initial,
+#' # get last name
+#' .(first, .., last) %<-% list('Ursula', 'K', 'Le Guin')
+#'
+#' first  # "Ursula"
+#' last   # "Le Guin"
+#'
+#' exists('..', inherits = FALSE)  # FALSE
+#'
 . <- function(...) {
   struct <- ._(...)
   if (is.character(struct)) {

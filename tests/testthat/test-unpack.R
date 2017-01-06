@@ -10,7 +10,7 @@ test_that('unpack unpacks S3', {
   expect_length(unpack(summary(f)), 11)
 })
 
-test_that('1 call to unpack equals N calls to unpack', {
+test_that('1 call to unpack same result as N calls to unpack', {
   expect_equal(unpack(iris), unpack(unpack(iris)))
   expect_equal(unpack(1:5), unpack(unpack(1:5)))
 })

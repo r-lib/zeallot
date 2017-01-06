@@ -79,3 +79,18 @@ test_that('%<-% handles S3 objects with underlying list structure', {
   expect_equal(c$sides, 1)
   expect_equal(c$color, 'blue')
 })
+
+test_that('%<-% skips values using _', {
+  .(a, .., c) %<-% list(1, 2, 3)
+  expect_equal(a, 1)
+  expect_false(exists('..', inherits = FALSE))
+  expect_equal(c, 3)
+
+
+  .(d, .(e, .., f), g) %<-% list(4, list(5, 6, 7), 8)
+  expect_equal(d, 4)
+  expect_equal(e, 5)
+  expect_false(exists('..', inherits = FALSE))
+  expect_equal(f, 7)
+  expect_equal(g, 8)
+})
