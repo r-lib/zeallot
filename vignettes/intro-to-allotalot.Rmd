@@ -23,19 +23,23 @@ Parallel assignment is the assignment of multiple variables at once. Languages, 
 ```{python, comment = '#>>>'}
 a, b = 0, 1
 
-print a, b
+print(a)
+print(b)
 ```
 ```{python, comment = '#>>>'}
 c, d = 'red', 'fish'
 
-print c, d
+print(c)
+print(d)
 ```
 ```{python, comment = '#>>>'}
 values = ['a', 'simple', 'list']
 
 e, f, g = values
 
-print e, f, g
+print(e)
+print(f)
+print(g)
 ```
 
 In the above example we see `a` and `b` assigned on a single line, likewise `c` and `d`, and in the final example we unpack a list of values into `e`, `f`, and `g`. R allows a watered-down version of these examples, but variables must be assigned the same value. 
@@ -97,8 +101,8 @@ def coords():
   
 lat, lng = coords()
 
-print lat
-print lng
+print(lat)
+print(lng)
 ```
 
 In the example, the list of values returned by `coords()` is unpacked into the variables `lat` and `lng`. This instance of parallel assignment is commonly referred to as *unpacking assignment* or *destructuring assignment*.
@@ -205,8 +209,8 @@ nested = [4, [0, 1]]
 
 a, b = nested
 
-print a
-print b
+print(a)
+print(b)
 ```
 
 But, if we add a variable `c` and nest `b` and `c` on the left-hand side we get a different result.
@@ -216,9 +220,9 @@ nested = [4, [0, 1]]
 
 a, (b, c) = nested
 
-print a
-print b
-print c
+print(a)
+print(b)
+print(c)
 ```
 
 Using nested calls to the `.` function we can mimic this syntax. Here is the example redone in R.
