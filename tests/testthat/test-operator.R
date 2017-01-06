@@ -80,7 +80,7 @@ test_that('%<-% handles S3 objects with underlying list structure', {
   expect_equal(c$color, 'blue')
 })
 
-test_that('%<-% skips values using _', {
+test_that('%<-% skips values using ..', {
   .(a, .., c) %<-% list(1, 2, 3)
   expect_equal(a, 1)
   expect_false(exists('..', inherits = FALSE))
@@ -93,4 +93,13 @@ test_that('%<-% skips values using _', {
   expect_false(exists('..', inherits = FALSE))
   expect_equal(f, 7)
   expect_equal(g, 8)
+})
+
+test_that('%<-% throws error if unequal nesting', {
+  expect_error(.(a, b) %<-% list(1), 'expecting 2 values, but found 1')
+  expect_error(.(a, b, c) %<-% list(1), 'expecting 3 values, but found 1')
+  expect_error(.(a, b, c) %<-% list(1, 2), 'expecting 3 values, but found 2')
+
+  expect_error(.(.(a, b), .(c, d, e)) %<-% list(list(1, 2), list(3, 4)),
+               'expecting 3 values, but found 2')
 })

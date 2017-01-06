@@ -10,7 +10,6 @@ all_equalish <- function(lhs, rhs) {
   for (i in seq_along(lhs)) {
     if (length(lhs[[i]]) > 1) {
       msg <- all_equalish(lhs[[i]], rhs[[i]])
-
       if (is.character(msg)) {
         return(msg)
       }

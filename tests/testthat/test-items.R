@@ -34,4 +34,3 @@ test_that('items preserves attributes', {
   expect_equal(attr(itemized[[1]][[2]], 'location', TRUE), 'coming to town')
   expect_equal(attr(itemized[[2]][[2]], 'brand', TRUE), 'Schindler')
 })
-
