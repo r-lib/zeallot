@@ -5,11 +5,13 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 2 notes
 
 ### Notes
 
 * This is a new release.
+
+* Package description uses technical term "destructuring", but is labelled as suspect because it is not in the dictionary
 
 ## Reverse dependencies
 
