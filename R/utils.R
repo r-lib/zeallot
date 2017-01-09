@@ -4,26 +4,35 @@ is.formula <- function(x) {
   inherits(x, 'formula')
 }
 
+is_list <- function(x) {
+  class(x) == 'list'
+}
+
+is_flat_list <- function(x) {
+  is_list(x) && all(vapply(x, Negate(is_list), logical(1)))
+}
+
 as_lang <- function(x) {
   if (is.formula(x)) {
     x[[2]]
   } else if (is.call(x) || is.name(x)) {
     x
+  } else if (is.expression(x)) {
+    x[[1]]
   } else {
     stop('cannot coerce ', class(x), ' to language', call. = FALSE)
   }
 }
 
-as_function <- function(f) {
-  if (is.function(f)) {
-    f
-  } else if (is.formula(f)) {
-    fn <- eval(call('function', as.pairlist(alist(. = )), f[[2]]))
-    environment(fn) <- environment(f)
-    fn
-  } else {
-    stop('cannot coerce ', class(f), ' to function', call. = FALSE)
+tree <- function(x) {
+  make_tree <- function(.x) {
+    if (length(.x) == 1) {
+      return(.x)
+    }
+
+    append(make_tree(.x[[1]]), lapply(.x[-1], make_tree))
   }
+  make_tree(as_lang(x))
 }
 
 car <- function(cons) {
@@ -48,45 +57,111 @@ caddr <- function(cons) {
   car(cdr(cdr(cons)))
 }
 
-calls <- function(x, exclude) {
+calls <- function(x, exclude = '') {
   if (!is.character(exclude)) {
     stop('argument `exclude` must be of class character', call. = FALSE)
   }
 
-  do_search <- function(.x) {
+  get_calls <- function(.x) {
     if (!is.list(.x)) {
-      return(NA_character_)
-    }
-
-    this <- as.character(car(.x))
-    if (this %in% exclude) {
-      this <- NA_character_
+      return(NULL)
     }
 
     if (is.list(.x) && length(.x) == 2) {
-      return(c(this, do_search(cadr(.x))))
+      subtree <- vector('list', 2)
+      subtree[[1]] <- as.character(car(.x))
+      subtree[[2]] <- get_calls(cadr(.x))
+      return(subtree)
     }
 
-    left <- do_search(cadr(.x))
-
-    right <- do_search(caddr(.x))
-
-    c(this, left, right)
+    subtree <- vector('list', 3)
+    subtree[[1]] <- as.character(car(.x))
+    subtree[[2]] <- get_calls(cadr(.x))
+    subtree[[length(subtree)]] <- get_calls(caddr(.x))
+    subtree
   }
 
-  do_search(x)
+  get_calls(x)
 }
 
-
-tree <- function(x) {
-  make_tree <- function(.x) {
-    if (length(.x) == 1) {
-      return(.x)
+variables <- function(x) {
+  get_variables <- function(.x) {
+    if (!is.list(.x)) {
+      return(as.character(.x))
     }
 
-    append(make_tree(.x[[1]]), lapply(.x[-1], make_tree))
+    if (is.list(.x) && length(.x) == 2) {
+      return(get_variables(cadr(.x)))
+    }
+
+    list(get_variables(cadr(.x)), get_variables(caddr(.x)))
   }
-  make_tree(as_lang(x))
+
+  get_variables(x)
+}
+
+values <- function(x) {
+  vals <- vector('list', 16)
+  cursor <- 0
+
+  get_values <- function(.x) {
+    if (!is_list(.x)) {
+      if (cursor == length(vals)) {
+        vals <<- c(vals, vector('list', cursor))
+      }
+
+      cursor <<- cursor + 1
+      vals[[cursor]] <<- .x
+      return()
+    }
+
+    if (!length(.x)) {
+      return()
+    }
+
+    get_values(car(.x))
+    get_values(cdr(.x))
+  }
+
+  get_values(x)
+
+  if (cursor == 0) {
+    list()
+  } else {
+    vals[1:cursor]
+  }
+}
+
+form <- function(x) {
+  parse_form <- function(.x, depth) {
+    if (!is_list(.x)) {
+      return(depth)
+    }
+
+    if (all(lengths(.x) == 1)) {
+      return(rep(depth, length(.x)))
+    }
+
+    if (is.list(.x) && length(.x) == 2) {
+      return(c(depth, parse_form(cadr(.x), depth + 1)))
+    }
+
+    if (!is.list(cadr(.x))) {
+      left <- depth
+    } else {
+      left <- parse_form(cadr(.x), depth + 1)
+    }
+
+    if (!is.list(caddr(.x))) {
+      right <- depth
+    } else {
+      right <- parse_form(caddr(.x), depth + 1)
+    }
+
+    c(depth, left, right)
+  }
+
+  parse_form(x, 1)
 }
 
 lystified <- function(x) {
@@ -111,5 +186,5 @@ lystified <- function(x) {
   if (length(x) > 1 && as.character(x[[1]]) == ':') {
     lyst <- paste0('list(', lyst, ')')
   }
-  lyst
+  eval(parse(text = lyst))
 }

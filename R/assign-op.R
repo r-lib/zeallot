@@ -1,40 +1,38 @@
-all_equalish <- function(lhs, rhs) {
-  if (class(rhs) != 'list') {
-    return(paste('expecting', length(lhs), 'values, but found 1'))
+massign <- function(x, values, envir = parent.frame(), inherits = FALSE) {
+  if (is_list(x) && length(x) == 0) {
+    return(invisible())
   }
 
-  if (length(lhs) != length(rhs)) {
-    return(paste('expecting', length(lhs), 'values, but found', length(rhs)))
-  }
-
-  for (i in seq_along(lhs)) {
-    if (length(lhs[[i]]) > 1) {
-      msg <- all_equalish(lhs[[i]], rhs[[i]])
-      if (is.character(msg)) {
-        return(msg)
+  if (is.character(car(x))) {
+    if (car(x) == '.') {
+      # skip
+    } else if (grepl('^\\.\\.\\.', car(x))) {
+      nm <- sub('^\\.\\.\\.', '', car(x))
+      if (nm == '') {
+        stop('invalid rest prefix', call. = FALSE)
       }
+      assign(nm, values, envir = envir, inherits = inherits)
+    } else {
+      if (is_list(car(values)) && !is_flat_list(car(values))) {
+        stop('too many values to unpack', call. = FALSE)
+      }
+      assign(car(x), car(values), envir = envir, inherits = inherits)
     }
-  }
-}
 
-multi_assign <- function(names, values, envir, inherits = FALSE) {
-  if (length(names) == 1) {
-    if (names != '..') {
-      assign(names[[1]], values, envir = envir, inherits = inherits)
-    }
-    return()
+    massign(cdr(x), cdr(values), envir = envir, inherits = inherits)
+
+    return(invisible())
   }
 
-  for (i in seq_along(names)) {
-    multi_assign(names[[i]], values[[i]], envir, inherits = inherits)
-  }
+  massign(car(x), car(values), envir = envir, inherits = inherits)
+  massign(cdr(x), cdr(values), envir = envir, inherits = inherits)
 }
 
 #' Parallel, Multiple, and Unpacking Assignment
 #'
 #' The \code{\%<-\%} operator performs parallel assignment by coercing the LHS
 #' of an assignment expression to a name structure and assigning values from the
-#' RHS to these names.
+#' RHS to those names.
 #'
 #' @usage x \%<-\% value
 #'
@@ -103,15 +101,14 @@ multi_assign <- function(names, values, envir, inherits = FALSE) {
 `%<-%` <- function(x, value) {
   ast <- tree(substitute(x))
 
-  astcalls <- calls(ast, exclude = c(':', '{'))
-  if (any(!is.na(astcalls))) {
-    sym <- astcalls[which(!is.na(astcalls))[1]]
-    stop('unexpected call `', sym, '`', call. = FALSE)
+  caughls <- calls(ast)
+  if (any(!(caughls %in% c(':', '{')))) {
+    bad <- caughls[which(!(caughls %in% c(':', '{')))][1]
+    stop('unexpected call `', bad, '`', call. = FALSE)
   }
 
-  lhs <- eval(parse(text = lystified(ast)))
-
-  rhs <- if (is.list(value)) value else list(value)
+  lhs <- variables(ast)
+  rhs <- if (!is.list(value)) list(value) else value
   callenv <- parent.frame()
 
   if (length(lhs) == 1) {
@@ -119,15 +116,38 @@ multi_assign <- function(names, values, envir, inherits = FALSE) {
     return(invisible(value))
   }
 
-  comparison <- all_equalish(lhs, rhs)
-  if (is.character(comparison)) {
-    stop(comparison, call. = FALSE)
+  vars <- unlist(lhs)
+  if ('...' %in% vars) {
+    stop('must specify variable name after rest prefix, e.g. ...rest', call. = FALSE)
   }
+
+  # lhform <- form(lhs)
+  # rhform <- form(rhs)
+  #
+  # if (length(lhform) < length(rhform)) {
+  #   rhextra <- rhform[(length(lhform) + 1):length(rhform)]
+  #
+  #   if (rhform[length(rhform) - length(lhform)] == rhextra[1] ||
+  #       any(rhextra[1] != rhextra)) {
+  #     stop('too many values to unpack', call. = FALSE)
+  #   }
+  # } else if (length(lhform) > length(rhform)) {
+  #   lhextra <- length(lhform) - length(rhform)
+  #
+  #   stop('need more than ', lhextra, ' value', if (lhextra > 1) 's ' else ' ',
+  #        'to unpack', call. = FALSE)
+  # } else if (any(lhform != rhform)) {
+  #   lhtrunc <- lhform[1:length(rhform)]
+  #   mismatch <- lhform[which(lhtrunc != rhform)]
+  #
+  #   stop('need more than ', mismatch, ' value', if (mismatch > 1) 's ' else ' ',
+  #        'to unpack', call. = FALSE)
+  # }
 
   tempenv <- new.env(parent = emptyenv())
 
   # first assign variables to temporary environment
-  multi_assign(lhs, rhs, tempenv)
+  massign(lhs, rhs, tempenv)
 
   # then move variables to calling environment
   for (name in ls(tempenv, all.names = TRUE)) {

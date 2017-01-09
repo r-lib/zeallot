@@ -17,7 +17,7 @@ x \%<-\% value
 \description{
 The \code{\%<-\%} operator performs parallel assignment by coercing the LHS
 of an assignment expression to a name structure and assigning values from the
-RHS to these names.
+RHS to those names.
 }
 \examples{
 x: y \%<-\% list(0, 1)

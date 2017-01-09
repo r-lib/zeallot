@@ -48,8 +48,8 @@ is greater than the number of elements in \code{x} all elements are unpacked.
 See below for examples.
 }
 \examples{
-# \%<-\% expects two values to assign to `x` and `y`,
-# but the vector does not automatically unpack
+# \%<-\% expects two values to assign to `x` and `y`
+# and the vector does not automatically unpack
 \dontrun{
 x: y \%<-\% c(0, 1)
 }
