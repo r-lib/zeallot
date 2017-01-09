@@ -118,7 +118,7 @@ coords <- function() {
   list(38.061944, -122.643889)
 }
 
-.(lat, lng) %<-% coords()
+lat: lng %<-% coords()
 
 lat
 
@@ -143,7 +143,7 @@ coords2 <- function() {
   c(38.061944, -122.643889) 
 }
 
-.(lat, lng) %<-% coords2()
+lat: lng %<-% coords2()
 
 lat
 
@@ -159,7 +159,7 @@ x
 ```
 
 ```{R}
-.(y) %<-% c('blue', 'fish')
+{y} %<-% c('blue', 'fish')
 
 y
 ```
@@ -169,7 +169,7 @@ y
 To fix our `coords2` example, without changing the `coords2` function, we can use the right-hand side function `unpack`. 
 
 ```{R}
-.(lat, lng) %<-% unpack(coords2())
+lat: lng %<-% unpack(coords2())
 
 lat
 
@@ -182,7 +182,7 @@ we can specify the `unpack` argument `n`. By default `n` is `NULL`, in which cas
 ```{R}
 f <- lm(mpg ~ cyl, data = mtcars)
 
-.(fcall, fterms, rest) %<-% unpack(summary(f), n = 2)
+fcall: fterms: rest %<-% unpack(summary(f), n = 2)
 
 fcall
 
@@ -193,7 +193,7 @@ length(rest)  # the number of remaining values from `summary(f)`
 names(rest)
 
 # unpack 2 more values, ignore list of remaining values using ".."
-.(resids, coeffs, ..) %<-% unpack(rest, n = 2)
+resids: coeffs: .. %<-% unpack(rest, n = 2)
 
 resids
 
@@ -230,7 +230,7 @@ Using nested calls to the `.` function we can mimic this syntax. Here is the exa
 ```{R}
 nested <- list(4, list(0, 1))
 
-.(a, .(b, c)) %<-% nested
+{a: {b: c}} %<-% nested
 
 a
 
@@ -247,7 +247,7 @@ One of the simple benefits of parallel assignment is swapping variable values wi
 first <- 'Genly'
 last <- 'Ai'
 
-.(first, last) %<-% list(last, first)
+first: last %<-% list(last, first)
 
 first
 
@@ -260,7 +260,7 @@ or
 cat <- 'meow'
 dog <- 'bark'
 
-.(cat, dog, fish) %<-% list(dog, cat, dog)
+cat: dog: fish %<-% list(dog, cat, dog)
 
 cat
 
@@ -286,7 +286,7 @@ pair$error
 The example code is no deal breaker. But, using *allotalot* we can specify clear variable names and cut down on repititions, such as the repeated extractions from `pair`. Here is the example reworked using *allotalot*.
 
 ```{R, eval = require('purrr')}
-.(res, err) %<-% safe_log(10)
+res: err %<-% safe_log(10)
 
 res
 
@@ -303,7 +303,7 @@ log_x <- purrr::map(x, safe_log)
 log_x
 
 for (triple in enumerate(log_x)) {
-  .(i, .(res, err)) %<-% triple
+  {i: {res: err}} %<-% triple
   
   if (!is.null(err)) {
     message('problem with result ', i)

@@ -33,8 +33,8 @@ multi_assign <- function(names, values, envir, inherits = FALSE) {
 #' Parallel, Multiple, and Unpacking Assignment
 #'
 #' The \code{\%<-\%} operator performs parallel assignment by coercing the LHS
-#' of an assignment expression to a name structure, see \code{\link{.}}, and
-#' assigning values from the RHS to these names.
+#' of an assignment expression to a name structure and assigning values from the
+#' RHS to these names.
 #'
 #' @usage x \%<-\% value
 #'
@@ -45,29 +45,72 @@ multi_assign <- function(names, values, envir, inherits = FALSE) {
 #'
 #' \code{\%<-\%} invisibly returns \code{value}.
 #'
-#' @seealso \code{\link{.}}, \code{\link{unpack}}, \code{\link{items}},
-#'   \code{\link{enumerate}}
+#' @seealso \code{\link{unpack}}, \code{\link{items}}, \code{\link{enumerate}}
 #'
 #' @rdname parallel-assign
 #' @export
 #' @examples
-#' .(a, b) %<-% list('A', 'B')
+#' x: y %<-% list(0, 1)
+#' x  # 0
+#' y  # 1
+#'
+#' {z: w} %<-% list(2, 3)
+#' z  # 2
+#' w  # 3
+#'
+#' # tackle a heavily nested list ...
+#' fibs %<-% list(0, list(1, list(1, list(2, list(3)))))
+#'
+#' # ... with an equally heavily nested
+#' # name structure
+#' {f0: {f1: {f2: {f3: {f4}}}}} %<-% fibs
+#'
+#' f1  # 1
+#' f3  # 2
+#' f4  # note that f4 is list(3)
+#'
+#' # unpack only the first element
+#' f0: fcdr %<-% fibs
+#'
+#' f0    # 0
+#' fcdr  # list(1, list(1, list(2, list(3))))
+#'
+#' # unpack first name, skip middle initial,
+#' # get last name
+#' first: ..: last %<-% list('Ursula', 'K', 'Le Guin')
+#'
+#' first  # "Ursula"
+#' last   # "Le Guin"
+#'
+#' exists('..', inherits = FALSE)  # FALSE
+#'
+#' a: b %<-% list('A', 'B')
 #' a  # "A"
 #' b  # "B"
 #'
 #' # swap the values
-#' .(a, b) %<-% list(b, a)
+#' a: b %<-% list(b, a)
 #' a  # "B"
 #' b  # "A"
 #'
 #' guests %<-% c('Nathan,Allison,Matt,Polly', 'Smith,Peterson,Williams,Jones')
 #'
-#' .(firsts, lasts) %<-% strsplit(guests, ',')
+#' firsts: lasts %<-% strsplit(guests, ',')
 #'
 #' firsts  # "Nathan", "Allison", ..
 #' lasts   # "Smith", "Peterson", ..
+#'
 `%<-%` <- function(x, value) {
-  lhs <- eval(substitute(.(name), list(name = substitute(x))))
+  ast <- tree(substitute(x))
+
+  astcalls <- calls(ast, exclude = c(':', '{'))
+  if (any(!is.na(astcalls))) {
+    sym <- astcalls[which(!is.na(astcalls))[1]]
+    stop('unexpected call `', sym, '`', call. = FALSE)
+  }
+
+  lhs <- eval(parse(text = lystified(ast)))
+
   rhs <- if (is.list(value)) value else list(value)
   callenv <- parent.frame()
 

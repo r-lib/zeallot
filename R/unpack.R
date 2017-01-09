@@ -38,21 +38,21 @@
 #'
 #' @export
 #' @examples
-#' # %<-% expects two values to assign to `x` and `y`,
-#' # but the vector does not automatically unpack
+#' # %<-% expects two values to assign to `x` and `y`
+#' # and the vector does not automatically unpack
 #' \dontrun{
-#' .(x, y) %<-% c(0, 1)
+#' x: y %<-% c(0, 1)
 #' }
 #'
 #' # instead we can force the vector to unpack
-#' .(x, y) %<-% unpack(c(0, 1))
+#' x: y %<-% unpack(c(0, 1))
 #'
 #' # we can use unpack and specify argument `n`
 #' # to only unpack a select number of elements
 #'
 #' f <- lm(mpg ~ cyl, data = mtcars)
 #'
-#' .(fcall, rest) %<-% unpack(summary(f), n = 1)
+#' fcall: rest %<-% unpack(summary(f), n = 1)
 #'
 #' # this is especially useful as unpacking
 #' # `summary.lm` returns 11 values
@@ -74,7 +74,7 @@
 #' # we can use `items` and `enumerate` to
 #' # unpack our list of foods
 #' for (pair in enumerate(items(foods))) {
-#'   .(i, .(group, choices))  %<-% pair
+#'   {i: {group: choices}}  %<-% pair
 #'   cat(
 #'     sprintf(
 #'       '%d. %s - %s\n',
@@ -86,7 +86,7 @@
 #' # more enumeration, this time unpacking the
 #' # iris data set
 #' for (col in enumerate(iris)) {
-#'   .(i, values) %<-% col
+#'   i: values %<-% col
 #'
 #'   if (i != 5) {
 #'     cat('mean', i, 'is', mean(values), '\n')
@@ -96,7 +96,7 @@
 #' # alternatively, we could use `items`
 #' # to unpack the iris data set
 #' for (col in items(iris)) {
-#'   .(nm, values) %<-% col
+#'   nm: values %<-% col
 #'
 #'   if (nm != 'Species') {
 #'     cat(nm, 'mean is', mean(values), '\n')
