@@ -24,12 +24,8 @@ test_that('%<-% unpacks vector', {
   expect_equal(b, 'world')
 })
 
-test_that('%<-% unpacks list of vectors as list of lists', {
-  {{a: b}: {c: d}} %<-% list(c(1, 2), c(3, 4))
-  expect_equal(a, 1)
-  expect_equal(b, 2)
-  expect_equal(c, 3)
-  expect_equal(d, 4)
+test_that('%<-% cannot unpack nested vectors', {
+  expect_error({{a: b}: {c: d}} %<-% list(c(1, 2), c(3, 4)), 'expecting 2 values, but found 1')
 })
 
 test_that('%<-% unpacks list', {
@@ -47,7 +43,7 @@ test_that('%<-% unpacks list of lists', {
 test_that('%<-% unpacks internal vector to list', {
   {a: b} %<-% list(list('hello', 'world'), 1:5)
   expect_equal(a, list('hello', 'world'))
-  expect_equal(b, as.list(1:5))
+  expect_equal(b, 1:5)
 })
 
 test_that('%<-% assigns nested names', {
@@ -75,8 +71,10 @@ test_that('%<-% handles S3 objects with underlying list structure', {
   expect_equal(b, 'red')
 
   {c: d} %<-% list(shape(3, 'green'), shape(1, 'blue'))
-  expect_equal(c, list(sides = 3, color = 'green'))
-  expect_equal(d, list(sides = 1, color = 'blue'))
+  expect_equal(c$sides, 3)
+  expect_equal(c$color, 'green')
+  expect_equal(d$sides, 1)
+  expect_equal(d$color, 'blue')
 })
 
 test_that('%<-% skips values using .', {

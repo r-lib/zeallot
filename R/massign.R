@@ -15,6 +15,10 @@ massign <- function(x, values, envir = parent.frame(), inherits = FALSE) {
 }
 
 do_multi_assign <- function(x, values, envir) {
+  if (is_list(x) && !is_list(values)) {
+    stop('expecting ', length(x), ' values, but found 1', call. = FALSE)
+  }
+
   if (is_list(x) && is_list(values) && length(values) != length(x) &&
       (length(singletons(x)) && !any(grepl('^\\.\\.\\.', singletons(x)))) ) {
 

@@ -6,14 +6,6 @@
 #'
 #' @param x An \R object.
 #'
-#' @details
-#'
-#' If \code{n} is less than the number of elements in \code{x} than the first
-#' \code{n} elements are unpacked as well as an additional value. This final
-#' value is a list of the remaining unpacked elements of \code{x}. If \code{n}
-#' is greater than the number of elements in \code{x} all elements are unpacked.
-#' See below for examples.
-#'
 #' @return
 #'
 #' For \code{items} a list of name, value pairs, one pair for each element of
@@ -49,11 +41,6 @@
 #' for (col in enumerate(iris)) {
 #'   {i: values} %<-% col
 #'
-#'   # remember, each column will be coerced
-#'   # to a list, so take measures to
-#'   # get the data in order
-#'   values <- unlist(values)
-#'
 #'   if (i != 5) {
 #'     cat('mean', i, 'is', mean(values), '\n')
 #'   }
@@ -64,22 +51,20 @@
 #' for (col in items(iris)) {
 #'   {nm: values} %<-% col
 #'
-#'   values <- unlist(values)
-#'
 #'   if (nm != 'Species') {
 #'     cat(nm, 'mean is', mean(values), '\n')
 #'   }
 #' }
 #'
 enumerate <- function(x) {
-  unpacked <- lapply(x, identity)
+  unpacked <- as_list(x)
   lapply(seq_along(unpacked), function(i) list(i, unpacked[[i]]))
 }
 
 #' @rdname enumerate
 #' @export
 items <- function(x) {
-  unpacked <- lapply(x, identity)
+  unpacked <- as_list(x)
   tags <- names(x) %||% rep('', length(unpacked))
   lapply(seq_along(unpacked), function(i) list(tags[[i]], unpacked[[i]]))
 }

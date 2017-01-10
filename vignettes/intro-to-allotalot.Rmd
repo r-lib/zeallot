@@ -84,7 +84,7 @@ We cannot separate variable names with commas or nest them using parentheses bec
 
 ### right-hand side
 
-The right-hand side of the assignment expression is a list, vector, or other object. It is important to note that the right-hand side value is recursively coerced to a list structure. Singleton values are not coerced to lists of length 1. As we will see, different syntax is used to unpack vectors and lists, but the difference is minor. 
+The right-hand side of the assignment expression is a list, vector, or other object. If an object other than a list or vector is unpacked, the object is first coerced to a list. As we will see, different syntax is used to unpack vectors and lists, but the difference is minor. 
 
 ## Examples
 
@@ -168,10 +168,10 @@ fcall
 
 fterms
 
-head(resids)
+resids
 
-# `rest` is rather long, but feel free to run the example
-# and look at the remaining contents of `rest`
+# `rest` is not printed here to save space, but feel
+# free to run the example and look at `rest`
 class(rest)
 length(rest)
 ```
@@ -181,8 +181,6 @@ As `...` in an argument list collects extra values passed to a function, a varia
 ```{R, error = TRUE}
 {fcall: fterms: resids: rest} %<-% summary(f)
 ```
-
-As mentioned above, the right-hand side value is recursively coerced to a list structure. So, in the above example `resids` is a named list not a named vector as `summary.lm` returns. Be mindful of this coercion when unpacking values. 
 
 ### Unpack nested values
 

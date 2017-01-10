@@ -118,9 +118,6 @@
   }
 
   rhs <- as_list(value)
-  if (!is_list(rhs)) {
-    rhs <- list(rhs)
-  }
 
   massign(lhs, rhs, envir = cenv)
 

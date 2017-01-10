@@ -17,6 +17,13 @@ singletons <- function(x) {
   Filter(Negate(is_list), x)
 }
 
+as_list <- function(x) {
+  if (is.null(x)) {
+    return(list(NULL))
+  }
+  lapply(x, identity)
+}
+
 as_lang <- function(x) {
   if (class(x) == 'formula') {
     x[[2]]
@@ -27,18 +34,6 @@ as_lang <- function(x) {
   } else {
     stop('cannot coerce ', class(x), ' to language', call. = FALSE)
   }
-}
-
-as_list <- function(x) {
-  if (is_vector(x) && length(x) > 1) {
-    return(lapply(x, identity))
-  }
-
-  if (!is.list(x)) {
-    return(x)
-  }
-
-  lapply(x, as_list)
 }
 
 tree <- function(x) {
@@ -107,11 +102,6 @@ variables <- function(x) {
   }
 
   if (is_list(x) && length(x) == 2) {
-    # this <- variables(cadr(x))
-    # if (is.character(this)) {
-    #   this <- list(list(this))
-    # }
-    # return(list(this))
     return(list(variables(cadr(x))))
   }
 
