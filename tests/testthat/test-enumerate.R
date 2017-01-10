@@ -1,13 +1,12 @@
 context(' * testing enumerate')
 
 test_that('enumerate preserves length', {
-  skip('skip while testing massign')
   my_list <- list('cat', 'dog', 'rabbit', 'sheep')
 
   expect_equal(length(my_list), length(enumerate(my_list)))
   expect_equal(1:4, vapply(enumerate(my_list), `[[`, numeric(1), 1))
 
-  {{i: animal}: {..: ..}: {..: ..}: {..: ..}} %<-% enumerate(my_list)
+  {{i: animal}: ...rest} %<-% enumerate(my_list)
   expect_equal(i, 1)
   expect_equal(animal, 'cat')
 })

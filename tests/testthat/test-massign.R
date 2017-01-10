@@ -37,10 +37,6 @@ test_that('massign will not unpack flat list', {
   expect_equal(e, 'buzz')
 })
 
-test_that('massign throws error when unpacking non-flat list', {
-  expect_error(massign(list('a', 'b'), list(1, list(2, list(3, 4)))), 'too many values to unpack')
-})
-
 test_that('massign does not assign .', {
   massign(list('.'), list('pick me, pick me'))
   expect_false(exists('.', inherits = FALSE))
@@ -54,6 +50,14 @@ test_that('massign does not assign .', {
 test_that('massign does not unpack when using rest prefix', {
   massign(list('...rest'), list(1, list(2, 3)))
   expect_equal(rest, list(1, list(2, 3)))
+
+  massign(list('a', '...all'), list(1, list('a', 'b')))
+  expect_equal(a, 1)
+  expect_equal(all, list('a', 'b'))
+
+  massign(list('f', '...rest'), list('foo', 'bar', 'baz'))
+  expect_equal(f, 'foo')
+  expect_equal(rest, list('bar', 'baz'))
 })
 
 test_that('massign throws error for invalid rest prefix', {

@@ -48,7 +48,6 @@ In the above example we see `a` and `b` assigned on a single line, likewise `c` 
 a <- b <- c(0, 1)
 
 a
-
 b
 ```
 
@@ -56,7 +55,6 @@ b
 c <- d <- c('red', 'fish')
 
 c
-
 d
 ```
 
@@ -78,15 +76,15 @@ When we talk about a parallel assignment expression there are three components w
 
 ### operator
 
-As we saw, R's standard `<-` operator will allow us to assign a single value to multiple variables at once. Rather than jump the shark and overload the `<-` operator, *allotalot* provides an infix function `%<-%` to serve as the operator of our parallel assignment expresssions.
+As we saw, R's standard `<-` operator will allow us to assign a single value to multiple variables at once. Rather than jump the shark and overload the `<-` operator, *allotalot* provides an infix function `%<-%` to serve as the operator of our parallel assignment expressions.
 
 ### left-hand side
 
-To build the left-hand side of our expressions *allotalot* provides the `.` function. `.` allows us to build a flat or nested structure of variables names on the left-hand side of an expression. As we will see, nesting variable names on the left-hand side of an expression allows us to unpack nested values on the right-hand side.
+We cannot separate variable names with commas or nest them using parentheses because of R's syntactic restrictions. Instead, to build the left-hand side of our assignment expressions we use colons and braces as a stand-in for commas and paraentheses. This syntax allows us to build a flat or nested structure of variable names on the left-hand side of an expression. As we will see, nesting variable names on the left-hand side of an expression allows us to unpack nested values on the right-hand side.
 
 ### right-hand side
 
-The right-hand side of the assignment expression must be a list object. *allotalot* includes a function `unpack` which forces destructuring of vectors or list-based custom objects. As we will see, these objects are not automatically unpacked.
+The right-hand side of the assignment expression is a list, vector, or other object. It is important to note that the right-hand side value is recursively coerced to a list structure. Singleton values are not coerced to lists of length 1. As we will see, different syntax is used to unpack vectors and lists, but the difference is minor. 
 
 ## Examples
 
@@ -118,16 +116,15 @@ coords <- function() {
   list(38.061944, -122.643889)
 }
 
-lat: lng %<-% coords()
+{lat: lng} %<-% coords()
 
 lat
-
 lng
 ```
 
-Notice the use of `.` on the left-hand side of the assignment expression. To work around the syntax imposed by R we use `.` to list multiple variable names. We also see the `%<-%` operator used in place of `<-`. Otherwise, the expression is straightforward and worthy of a shrug. Good! *allotalot* is not here to add more complexity to our code and lives.
+Notice the use of the colon and braces on the left-hand side of the assignment expression. Based on the left-hand side structure, the assignment operator expects `coords()` to return a list of two values. Those two values are then assigned to `lat` and `lng`.
 
-Let's make a small change to the example and see what happens. We will also change the function name to distinguish between our original `coords` function and this new `coords2` function.
+Let's try rerunning the `coords` example, but this time without the braces.
 
 ```{R, include = FALSE} 
 rm(lat)
@@ -135,70 +132,57 @@ rm(lng)
 ```
 
 ```{R, error = TRUE}
+lat: lng %<-% coords()
+
+lat
+lng
+```
+
+To unpack a list of values, the left-hand side must be enclosed in braces. Without the braces the assignment operator expects and tries to unpack a vector of values. If we create a new function `coords2` which returns a vector, the error is fixed.
+
+```{R}
 #' Get Coordinates (again)
 #' 
 #' A function which returns a numeric vector of length 2, the coordinates.
 #'
 coords2 <- function() {
-  c(38.061944, -122.643889) 
+  c(-36.85, 174.77)
 }
 
 lat: lng %<-% coords2()
 
 lat
-
 lng
 ```
 
-Remember, vectors are not automatically unpacked. This is because `%<-%` may be used for standard assignment.
+### Consume extra values
 
-```{R}
-x %<-% c(30, 30)
-
-x
-```
-
-```{R}
-{y} %<-% c('blue', 'fish')
-
-y
-```
-
-### Force object to unpack
-
-To fix our `coords2` example, without changing the `coords2` function, we can use the right-hand side function `unpack`. 
-
-```{R}
-lat: lng %<-% unpack(coords2())
-
-lat
-
-lng
-```
-
-In addition to vectors we can use `unpack` on S3 objects. For example, `unpack` will allow us to unpack the return of `summary.lm`. Unfortunately for us, and our example, `summary.lm` unpacks into 11 values. In practice, unpacking 11 values is not advised. Fortunately,
-we can specify the `unpack` argument `n`. By default `n` is `NULL`, in which case all values of an object are unpacked. But, by specifying `n` we can unpack the first `n` values of our object as well as an additional value, a list containing the remaining unpacked object values.
+In some cases, there are many right-hand side values, but we only want to unpack the first couple values. `summary.lm`, for example, unpacks into 11 values. In practice, unpacking 11 values into 11 different variables is not advised. Fortunately, there is a way to assign a couple values and handle the remaining values.
 
 ```{R}
 f <- lm(mpg ~ cyl, data = mtcars)
 
-fcall: fterms: rest %<-% unpack(summary(f), n = 2)
+{fcall: fterms: resids: ...rest} %<-% summary(f)
 
 fcall
 
 fterms
 
-is.list(rest)
-length(rest)  # the number of remaining values from `summary(f)`
-names(rest)
+head(resids)
 
-# unpack 2 more values, ignore list of remaining values using ".."
-resids: coeffs: .. %<-% unpack(rest, n = 2)
-
-resids
-
-coeffs
+# `rest` is rather long, but feel free to run the example
+# and look at the remaining contents of `rest`
+class(rest)
+length(rest)
 ```
+
+As `...` in an argument list collects extra values passed to a function, a variable prefixed with `...` in an assignment expression collects extra values. If we left off the `...` we would get an error.
+
+```{R, error = TRUE}
+{fcall: fterms: resids: rest} %<-% summary(f)
+```
+
+As mentioned above, the right-hand side value is recursively coerced to a list structure. So, in the above example `resids` is a named list not a named vector as `summary.lm` returns. Be mindful of this coercion when unpacking values. 
 
 ### Unpack nested values
 
@@ -225,7 +209,7 @@ print(b)
 print(c)
 ```
 
-Using nested calls to the `.` function we can mimic this syntax. Here is the example redone in R.
+We can mimic this syntax using braces instead of parentheses. Here is the example redone in R.
 
 ```{R}
 nested <- list(4, list(0, 1))
@@ -233,13 +217,11 @@ nested <- list(4, list(0, 1))
 {a: {b: c}} %<-% nested
 
 a
-
 b
-
 c
 ```
 
-### Swapping values
+### Swap values
 
 One of the simple benefits of parallel assignment is swapping variable values without the use of a temporary variable.
 
@@ -247,10 +229,9 @@ One of the simple benefits of parallel assignment is swapping variable values wi
 first <- 'Genly'
 last <- 'Ai'
 
-first: last %<-% list(last, first)
+{first: last} %<-% list(last, first)
 
 first
-
 last
 ```
 
@@ -260,18 +241,16 @@ or
 cat <- 'meow'
 dog <- 'bark'
 
-cat: dog: fish %<-% list(dog, cat, dog)
+{cat: dog: fish} %<-% list(dog, cat, dog)
 
 cat
-
 dog
-
 fish
 ```
 
-### Unpacking safe function values
+### Parallel assignment and *purrr*
 
-This next example requires the purrr package. From purrr we will use the `safely` function. By passing a function to `safely`, we can create a new "safe" version of a function. This safe version always returns a list of two values. The first list item is the result of calling the original function, if no error occurred, or `NULL`. The second list item is an error, if an error occurred, or `NULL`. Whether or not the original function would have thrown an error, the safe version will never throw an error. To run the example make sure you have purrr installed.
+This next example requires the *purrr* package. From *purrr* we will use the `safely` function. By passing a function to `safely`, we can create a new "safe" version of a function. This safe version always returns a list of two values. The first list item is the result of calling the original function, if no error occurred, or `NULL`. The second list item is an error, if an error occurred, or `NULL`. Whether or not the original function would have thrown an error, the safe version will never throw an error. To run the example make sure you have *purrr* installed.
 
 ```{R, eval = require('purrr')}
 safe_log <- purrr::safely(log)
@@ -286,10 +265,9 @@ pair$error
 The example code is no deal breaker. But, using *allotalot* we can specify clear variable names and cut down on repititions, such as the repeated extractions from `pair`. Here is the example reworked using *allotalot*.
 
 ```{R, eval = require('purrr')}
-res: err %<-% safe_log(10)
+{res: err} %<-% safe_log(10)
 
 res
-
 err
 ```
 
