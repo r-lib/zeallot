@@ -16,18 +16,24 @@ A first example,
 ```R
 library(allotalot)
 
-.(a, b) %<-% list(0, 1)
+a: b %<-% c(0, 1)
 a
 #> 0
 b
 #> 1
+
+{c: d} %<-% list('first', 'second')
+c
+#> "first"
+d
+#> "second"
 ```
 
 A few interesting or more demonstrative examples,
 
 ```R
 # assign more than 2 values
-.(one, two, three, four) %<-% list(1, 2, 3, 4)
+{one: two: three: four} %<-% list(1, 2, 3, 4)
 one 
 #> 1
 two
@@ -37,8 +43,15 @@ three
 four
 #> 4
 
-# use nested calls to `.()`
-.(a, .(c, d), b) %<-% list('hello', list('goodnight', 'moon'), 'world')
+# combine extra values
+{one: ...rest} %<-% list(1, 2, 3, 4)
+one
+#> 1
+rest
+#> list(2, 3, 4)
+
+# use nested braces
+{a: {c: d}: b} %<-% list('hello', list('goodnight', 'moon'), 'world')
 a
 #> "hello"
 b
@@ -49,36 +62,18 @@ d
 #> "moon"
 
 # unpack the dimensions of an object
-.(nrows, ncols) %<-% unpack(dim(mtcars))
+nrows: ncols %<-% dim(mtcars)
 nrows
 #> 32
 ncols
 #> 11
 
 # swap values without using a temporary variable
-.(nrows, ncols) %<-% list(ncols, nrows)
+{nrows: ncols} %<-% list(ncols, nrows)
 nrows
 #> 11
 ncols
 #> 32
-```
-
-The `%<-%` operator can stand in for the standard assignment operator `<-`. Because of this, vectors and objects with an underlying list structure are not unpacked. Use the `unpack()` function provided in allotalot to force unpacking of vectors or list-like objects.
-
-```R
-# standard assignment
-groceries %<-% list('eggs', 'spinach', 'carrots', 'kiwis')
-
-smry %<-% summary(lm(mpg ~ disp, data = mtcars))
-
-# trivial "unpacking"
-.(fear1) %<-% 'The sea in storm'
-
-# this will throw an error
-.(a, b) %<-% c('whoops', 'error')
-
-# use `unpack()` to fix the problem
-.(a, b) %<-% unpack(c('whoops', 'error'))
 ```
 
 ## Installation
@@ -91,7 +86,7 @@ devtools::install_github('nteetor/allotalot')
 
 ## Vignette
 
-For more on *allotalot* checkout the [introductory vignette](vignettes/intro-to-allotalot.Rmd).
+For more about how to use *allotalot* checkout the [introductory vignette](vignettes/intro-to-allotalot.Rmd).
 
 ---
 
