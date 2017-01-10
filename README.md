@@ -1,6 +1,6 @@
 # allotalot
 
-Parallel <strike>allotment</strike> assignment in R
+Parallel assignment in R
 
 [travis]: https://travis-ci.org/nteetor/allotalot.svg?branch=master "lots o' building"
 [appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/allotalot?branch=master&svg=true "lots o' 'veyors"
@@ -95,4 +95,4 @@ For more on *allotalot* checkout the [introductory vignette](vignettes/intro-to-
 
 ---
 
-Enjoy alloting a lot of values!
+Inspiration for this package goes to Paul Teetor. Without his encouragement nothing would have gotten off the ground. Enjoy alloting a lot of values!
