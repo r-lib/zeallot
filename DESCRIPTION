@@ -15,5 +15,3 @@ Suggests:
     knitr,
     rmarkdown,
     purrr
-Imports:
-    R6

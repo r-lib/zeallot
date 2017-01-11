@@ -1,5 +1,9 @@
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
+all_equal <- function(x, y) {
+  isTRUE(all.equal(x, y))
+}
+
 is_vector <- function(x) {
   attributes(x) <- NULL
   is.vector(x) && !is_list(x)
@@ -15,6 +19,32 @@ is_flat_list <- function(x) {
 
 singletons <- function(x) {
   Filter(Negate(is_list), x)
+}
+
+non_list_indices <- function(x) {
+  if (!length(x)) {
+    return(NULL)
+  }
+
+  indices <- which(!vapply(x, is_list, logical(1)))
+  if (!length(indices)) {
+    return(NULL)
+  }
+
+  indices
+}
+
+list_indices <- function(x) {
+  if (!length(x)) {
+    return(NULL)
+  }
+
+  indices <- which(vapply(x, is_list, logical(1)))
+  if (!length(indices)) {
+    return(NULL)
+  }
+
+  indices
 }
 
 as_list <- function(x) {
