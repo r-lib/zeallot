@@ -52,17 +52,17 @@ test_that('pair_off heavily nested list', {
 test_that('pair_off collects values when ... specified', {
   expect_equalish(
     pair_off(list('a', '...mid', 'd'), list(1, 2, 3, 4)),
-    list(list('a', 1), list('mid', 2:3), list('d', 4))
+    list(list('a', 1), list('mid', list(2, 3)), list('d', 4))
   )
 
   expect_equalish(
     pair_off(list('a', 'b', '...rest'), list(1, 2, 3, 4)),
-    list(list('a', 1), list('b', 2), list('rest', 3:4))
+    list(list('a', 1), list('b', 2), list('rest', list(3, 4)))
   )
 
   expect_equalish(
     pair_off(list('a', '...rest'), list(1, 2, 3, 4)),
-    list(list('a', 1), list('rest', 2:4))
+    list(list('a', 1), list('rest', list(2, 3, 4)))
   )
 })
 
@@ -81,7 +81,10 @@ test_that('pair_off unpacks strings and data frames', {
 })
 
 test_that('pair_off throws error for atomic vector of length > 1', {
-
+  expect_error(
+    pair_off(list('a', 'b'), list(character(2))),
+    'cannot unpack character vector of length greater than 1'
+  )
 })
 
 test_that('pair_off throws error for flat lists of different lengths', {
@@ -89,7 +92,23 @@ test_that('pair_off throws error for flat lists of different lengths', {
     pair_off(list('a', 'b'), list(1)),
     'expecting 2 values, but found 1'
   )
+  expect_error(
+    pair_off(list('a', 'b'), list(1, 2, 3)),
+    'too many values to unpack'
+  )
 })
 
+test_that('pair_off throws error for nested lists of different lengths, depths', {
+  expect_error(
+    pair_off(list(list('a'), list('b', 'c')), list(list(1), list(2), list(3))),
+    'too many values to unpack'
+  )
+})
 
-
+test_that('pair_off throws error for extra names, including a collector', {
+  expect_error(
+    pair_off(list('a', '...mid', 'b'), list(1, 2)),
+    'after collecting ...mid, expecting 1 values, but found 0',
+    fixed = TRUE
+  )
+})

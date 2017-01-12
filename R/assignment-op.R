@@ -104,7 +104,7 @@
     if (internals[1] == ':' && is_list(value)) {
       stop('expecting vector of values, but found list', call. = FALSE)
     }
-    if (internals[1] == '{' && is_vector(value)) {
+    if (internals[1] == '{' && is.vector(value) && !is_list(value)) {
       stop('expecting list of values, but found vector', call. = FALSE)
     }
 
@@ -117,7 +117,12 @@
     lhs <- list(lhs)
   }
 
-  rhs <- as_list(value)
+  rhs <- lapply(value, identity)
+  if (is.null(value)) {
+    rhs <- list(NULL)
+  } else if (!is_list(rhs)) {
+    rhs <- list(rhs)
+  }
 
   massign(lhs, rhs, envir = cenv)
 

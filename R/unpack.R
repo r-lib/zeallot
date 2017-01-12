@@ -3,27 +3,27 @@ unpack <- function(x) {
 }
 
 unpack.character <- function(x) {
-  assert_length_of_1(x)
+  assert_unpackable(x)
   as.list(strsplit(x, '')[[1]])
 }
 
 unpack.numeric <- function(x) {
-  assert_length_of_1(x)
+  assert_unpackable(x)
   x
 }
 
 unpack.logical <- function(x) {
-  assert_length_of_1(x)
+  assert_unpackable(x)
   x
 }
 
 unpack.complex <- function(x) {
-  assert_length_of_1(x)
+  assert_unpackable(x)
   list(Re(x), Im(x))
 }
 
 unpack.raw <- function(x) {
-  assert_length_of_1(x)
+  assert_unpackable(x)
   x
 }
 
@@ -32,9 +32,7 @@ unpack.NULL <- function(x) {
 }
 
 unpack.Date <- function(x) {
-  if (length(x) > 1) {
-    stop('cannot unpack Date with length greater than 1', call. = FALSE)
-  }
+  assert_unpackable(x)
   as.list(strsplit(format(x, '%Y-%m-%d'), '-', fixed = TRUE)[[1]])
 }
 
@@ -50,7 +48,7 @@ unpack.default <- function(x) {
   stop('cannot unpack object of class ', class(x), call. = FALSE)
 }
 
-assert_length_of_1 <- function(x) {
+assert_unpackable <- function(x) {
   if (length(x) > 1) {
     stop('cannot unpack ', class(x), ' vector of length greater than 1',
          call. = FALSE)
