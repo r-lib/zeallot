@@ -18,6 +18,11 @@ unpack.default <- function(x) {
   }
 }
 
+can_unpack <- function(object) {
+  class(object) %in% vapply(utils::methods('unpack'), sub, character(1),
+                            pattern = '^unpack\\.', replacement = '')
+}
+
 is_collector <- function(x) {
   if (!is.character(x)) {
     return(FALSE)
@@ -41,9 +46,9 @@ pair_off <- function(names, values) {
     return(list(list(name = names, value = values)))
   }
 
-  if (!is_list(values)) {
-    return(pair_off(names, unpack(values)))
-  }
+  # if (!is_list(values)) {
+  #   return(pair_off(names, unpack(values)))
+  # }
 
   if (is_list(names) && length(names) == 0) {
     if (is_list(values) && length(values) != 0 || !is_list(values)) {
@@ -60,10 +65,17 @@ pair_off <- function(names, values) {
     stop('too many values to unpack', call. = FALSE)
   }
 
-  if (length(names) != length(values) &&
-      !any(vapply(names, is_collector, logical(1)))) {
-    stop('expecting ', length(names), ' values, but found ', length(values),
-         call. = FALSE)
+  if (length(names) != length(values)) {
+
+    if (is_list(values) && length(values) == 1 &&
+        can_unpack(car(values))) {
+      return(pair_off(names, unpack(car(values))))
+    }
+
+    if (!any(vapply(names, is_collector, logical(1)))) {
+      stop('expecting ', length(names), ' values, but found ', length(values),
+           call. = FALSE)
+    }
   }
 
   if (is_collector(car(names))) {
