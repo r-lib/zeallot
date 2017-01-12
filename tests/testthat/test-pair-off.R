@@ -80,6 +80,10 @@ test_that('pair_off unpacks strings and data frames', {
   )
 })
 
+test_that('pair_off throws error for atomic vector of length > 1', {
+
+})
+
 test_that('pair_off throws error for flat lists of different lengths', {
   expect_error(
     pair_off(list('a', 'b'), list(1)),

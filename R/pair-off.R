@@ -1,23 +1,3 @@
-unpack <- function(x) {
-  UseMethod('unpack')
-}
-
-unpack.character <- function(x) {
-  as.list(strsplit(x, '')[[1]])
-}
-
-unpack.data.frame <- function(x) {
-  as.list(x)
-}
-
-unpack.default <- function(x) {
-  if (is.object(x) && !isS4(x)) {
-    lapply(x, identity)
-  } else {
-    stop('not enough values to unpack', call. = FALSE)
-  }
-}
-
 can_unpack <- function(object) {
   class(object) %in% vapply(utils::methods('unpack'), sub, character(1),
                             pattern = '^unpack\\.', replacement = '')
