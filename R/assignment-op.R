@@ -26,8 +26,6 @@
 #'
 #' \code{\%<-\%} invisibly returns \code{value}.
 #'
-#' @seealso \code{\link{items}}, \code{\link{enumerate}}
-#'
 #' @rdname parallel-assign
 #' @export
 #' @examples

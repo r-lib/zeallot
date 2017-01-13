@@ -91,7 +91,4 @@ now    # "make lunch"
 later  # our other two TODOs
 
 }
-\seealso{
-\code{\link{items}}, \code{\link{enumerate}}
-}
 
