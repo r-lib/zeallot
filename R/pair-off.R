@@ -6,18 +6,43 @@ is_collector <- function(x) {
 }
 
 collect <- function(names, values) {
-  if (length(names) == length(values)) {
-    return(as.list(values))
+  if (!any(grepl('^\\.\\.\\.', names))) {
+    stop('no collector variable specified', call. = FALSE)
   }
 
-  values[[1]] <- c(values[[1]], values[2])
-  values[[2]] <- NULL
+  if (length(names) == length(values)) {
+    return(values)
+  }
 
-  collect(names, values)
+  if (length(names) == 1) {
+    # ...alone
+    return(list(values))
+  }
+
+  c_index <- which(grepl('^\\.\\.\\.', names))
+
+  if (c_index == 1) {
+    # ...firsts, a, b
+    post <- rev(seq.int(from = length(values), length.out = length(names) - 1,
+                        by = -1))
+
+    c(list(values[-post]), values[post])
+  } else if (c_index == length(names)) {
+    # a, b, ...rest
+    pre <- seq.int(1, c_index - 1)
+
+    c(values[pre], list(values[-pre]))
+  } else {
+    # a, ...mid, b
+    pre <- seq.int(1, c_index - 1)
+    post <- rev(seq.int(from = length(values),
+                        length.out = length(names) - length(pre) - 1, by = -1))
+
+    c(values[pre], list(values[-c(pre, post)]), values[post])
+  }
 }
 
 pair_off <- function(names, values) {
-  # browser()
   if (is.character(names)) {
     if (names == '.') {
       return()
@@ -26,24 +51,10 @@ pair_off <- function(names, values) {
     return(list(list(name = names, value = values)))
   }
 
-  # if (!is_list(values)) {
-  #   return(pair_off(names, unpack(values)))
-  # }
-
-  if (is_list(names) && length(names) == 0) {
-    # if (is_list(values) && length(values) != 0 || !is_list(values)) {
-    #   stop('too many values to unpack', call. = FALSE)
-    # }
-
-    if (is_list(values) && length(values) == 0) {
-      return()
-    }
+  if (is_list(names) && length(names) == 0 &&
+      is_list(values) && length(values) == 0) {
+    return()
   }
-
-  # if (is_list(names) && length(names) == 0 &&
-  #     (is_list(values) && length(values) > 0 || !is_list(values))) {
-  #   stop('too many values to unpack', call. = FALSE)
-  # }
 
   if (length(names) != length(values)) {
 

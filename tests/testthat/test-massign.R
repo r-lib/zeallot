@@ -64,4 +64,3 @@ test_that('massign throws error for invalid rest prefix', {
   expect_error(massign(list('a', '...'), list(1, 2)),
                'invalid collector variable')
 })
-

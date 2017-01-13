@@ -1,11 +1,5 @@
-`%||%` <- function(a, b) if (is.null(a)) b else a
-
 is_list <- function(x) {
   class(x) == 'list'
-}
-
-is_flat_list <- function(x) {
-  is_list(x) && all(!vapply(x, is_list, logical(1)))
 }
 
 car <- function(cons) {
@@ -20,10 +14,6 @@ cdr <- function(cons) {
 
 cadr <- function(cons) {
   car(cdr(cons))
-}
-
-cddr <- function(cons) {
-  cdr(cdr(cons))
 }
 
 caddr <- function(cons) {

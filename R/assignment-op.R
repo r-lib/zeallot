@@ -120,8 +120,8 @@
   rhs <- lapply(value, identity)
   if (is.null(value)) {
     rhs <- list(NULL)
-  } else if (!is_list(rhs)) {
-    rhs <- list(rhs)
+  } else if (length(value) == 0) {
+    rhs <- list(value)
   }
 
   massign(lhs, rhs, envir = cenv)
