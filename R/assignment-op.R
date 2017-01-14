@@ -167,13 +167,14 @@
     if (internals[1] == '{' && is.vector(value) && !is_list(value)) {
       stop('expecting list of values, but found vector', call. = FALSE)
     }
+
+  } else {
+    stop('for standard assignment use `<-`', call. = FALSE)
   }
 
   lhs <- variables(ast)
-  if (is_list(lhs) && length(lhs) == 1) {
-    lhs <- lhs[[1]]
-  } else if (!is_list(lhs)) {
-    lhs <- list(lhs)
+  if (is_list(lhs) && is_list(car(lhs))) {
+    lhs <- car(lhs)
   }
 
   rhs <- value

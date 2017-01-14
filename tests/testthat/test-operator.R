@@ -1,18 +1,18 @@
 context(' * testing assignment operator')
 
-test_that('%<-% acts like <- if bare variable on lhs', {
-  a %<-% 1
-  expect_equal(a, 1)
+test_that('%<-% does *not* act like <-', {
+  expect_error(a %<-% 1, 'for standard assignment use `<-`', fixed = TRUE)
+  expect_error(b %<-% NULL, 'for standard assignment use `<-`', fixed = TRUE)
 })
 
-test_that('%<-% assigns NULL', {
-  a %<-% NULL
-  expect_null(a)
-})
+test_that('%<-% handles list of 1 name and list of 1 value', {
+  {a} %<-% list('foo')
+  expect_equal(a, 'foo')
 
-test_that('%<-% assign value of length 0', {
-  a %<-% numeric()
-  expect_equal(a, numeric())
+  expect_error(
+    {a} %<-% 'foo',
+    'expecting list of values, but found vector'
+  )
 })
 
 test_that('%<-% throws error if value is list, but no braces on lhs', {
@@ -69,8 +69,7 @@ test_that('%<-% handles S3 objects with underlying list structure', {
     )
   }
 
-  a %<-% shape()
-  expect_equal(a, shape())
+  expect_error(a %<-% shape(), 'for standard assignment use `<-`', fixed = TRUE)
 
   expect_error({a: b} %<-% shape(), 'cannot unpack object of class shape')
 })
