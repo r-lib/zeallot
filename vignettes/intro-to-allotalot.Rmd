@@ -269,23 +269,4 @@ res
 err
 ```
 
-In this example we could go a step further naming our variables. `result` and `error` are clearer and potentially better than `res` and `err`. In either case, we have the choice to use explicit variable names. Let's continue our purrr examples. In the example below, we will also use the `enumerate` helper function from *allotalot*. 
-
-```{R, eval = require('purrr')}
-x <- list(20, 'N/A', 17)
-
-log_x <- purrr::map(x, safe_log)
-
-log_x
-
-for (triple in enumerate(log_x)) {
-  {i: {res: err}} %<-% triple
-  
-  if (!is.null(err)) {
-    message('problem with result ', i)
-    next
-  }
-  
-  message('result ', i, ' is ', res)
-}
-```
+In this example we could go a step further naming our variables. `result` and `error` are clearer and potentially better than `res` and `err`. In either case, we have the choice to use explicit variable names. 

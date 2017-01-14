@@ -10,6 +10,11 @@ test_that('%<-% assigns NULL', {
   expect_null(a)
 })
 
+test_that('%<-% assign value of length 0', {
+  a %<-% numeric()
+  expect_equal(a, numeric())
+})
+
 test_that('%<-% throws error if value is list, but no braces on lhs', {
   expect_error(a: b %<-% list(1, 2), 'expecting vector of values, but found list')
 })
@@ -64,17 +69,10 @@ test_that('%<-% handles S3 objects with underlying list structure', {
     )
   }
 
-  expect_error(a %<-% shape(), 'too many values to unpack')
+  a %<-% shape()
+  expect_equal(a, shape())
 
-  {a: b} %<-% shape()
-  expect_equal(a, 4)
-  expect_equal(b, 'red')
-
-  {c: d} %<-% list(shape(3, 'green'), shape(1, 'blue'))
-  expect_equal(c$sides, 3)
-  expect_equal(c$color, 'green')
-  expect_equal(d$sides, 1)
-  expect_equal(d$color, 'blue')
+  expect_error({a: b} %<-% shape(), 'cannot unpack object of class shape')
 })
 
 test_that('%<-% skips values using .', {
@@ -99,4 +97,11 @@ test_that('%<-% throws error if unequal nesting', {
 
   expect_error({{a: b}: {c: d: e}} %<-% list(list(1, 2), list(3, 4)),
                'expecting 3 values, but found 2')
+})
+
+test_that('%<-% throws error if invalid calls used on LHS', {
+  expect_error({a + b} %<-% list(1), 'unexpected call `+`', fixed = TRUE)
+  expect_error({a: {quote(d): c}} %<-% list(1, list(2, 3)),
+               'unexpected call `quote`')
+  expect_error({mean(1, 2): a} %<-% list(1, 2), 'unexpected call `mean`')
 })
