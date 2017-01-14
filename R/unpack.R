@@ -94,7 +94,7 @@ unpack.NULL <- function(x) {
 #' @export
 unpack.Date <- function(x) {
   assert_unpackable(x)
-  as.list(strsplit(format(x, '%Y-%m-%d'), '-', fixed = TRUE)[[1]])
+  as.list(as.numeric(strsplit(format(x, '%Y-%m-%d'), '-', fixed = TRUE)[[1]]))
 }
 
 #' @rdname unpack

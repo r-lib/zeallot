@@ -35,8 +35,8 @@
 #' collect multiple or remaining values into a variable, prefix the variable
 #' with \code{...}. These two special cases can be combined, \code{....}, to
 #' skip multiple values without raising an error. It is important to note that
-#' a single collector variable may be used per value depth, otherwise the number
-#' of values to collect in each collector is unknown and an error is raised.
+#' a single collector variable may be used per name depth, otherwise an error
+#' is raised.
 #'
 #' For concrete examples see below.
 #'

@@ -24,9 +24,9 @@ test_that('unpack data.frame converts data.frame to list', {
 
 test_that('unpack converts Date to list of year, month, day', {
   today <- Sys.Date()
-  year <- format(today, '%Y')
-  month <- format(today, '%m')
-  day <- format(today, '%d')
+  year <- as.numeric(format(today, '%Y'))
+  month <- as.numeric(format(today, '%m'))
+  day <- as.numeric(format(today, '%d'))
   expect_equal(unpack(today), list(year, month, day))
 })
 

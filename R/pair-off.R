@@ -21,6 +21,11 @@ collect <- function(names, values) {
 
   c_index <- which(grepl('^\\.\\.\\.', names))
 
+  if (length(c_index) != 1) {
+    stop(length(c_index), ' collector variables specified, use 1 per depth',
+         call. = FALSE)
+  }
+
   if (c_index == 1) {
     # ...firsts, a, b
     post <- rev(seq.int(from = length(values), length.out = length(names) - 1,
