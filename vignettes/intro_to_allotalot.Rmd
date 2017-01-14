@@ -57,7 +57,7 @@ maxWt
 
 If the left-hand side and right-hand sides don't match,
 an error is raised.
-This lets you guard against missing or unexpected values.
+This guards against missing or unexpected values.
 
 ```{r, error=TRUE}
 { stg1 : stg2 : stg3 } %<-% list("Moe", "Donald")
