@@ -20,75 +20,137 @@ from the right-hand side values, \code{value}, to left-hand side names,
 \code{x}.
 }
 \details{
-Separate names in \code{x} using \code{:}, e.g. \code{a: b \%<-\% c(0, 1)}.
-To unpack a list of values names must be surrounded with braces, e.g.
-\code{\{c: d\} \%<-\% list(0, 1)}.
+To separate names on the left-hand side of an expression use \code{:}. To
+construct a nested set of names on the left-hand side of an expression use
+braces, \code{\{} and \code{\}}.
 
-\code{value} is recursively coerced to a list structure during assignment.
-Singleton values are not coerced to lists of length 1. It is important to be
-mindful of this when unpacking values. This includes S3 objects. For example,
-the output of \code{\link{summary.lm}} would be recursively coerced to a
-list. In this case the residuals component would be a named list instead of a
-name vector.
+To begin simply, parallel assignment occurs one-to-one between names on the
+left-hand side of the expressiona and values on the right-hand side of the
+expression. If there are three names on the left side, three values are
+expected on the right side. Values on the right-hand side may be listed as a
+list or vector.
+
+It is important to understand what happens when there is, intentionally, a
+many-to-one ratio of names and values. If many names are specified, but only
+a single value is specified then the value is unpacked before assignment. For
+example, a data frame is unpacked into a list of columns or a character
+string is unpacked into a list of individual characters. For more information
+about how a particular class is unpacked see \code{\link{unpack}}.
+\code{unpack} is a generic function and may be implemented for custom
+classes. After a value is unpacked a one-to-one ratio of names and values is
+expected, otherwise an error is raised.
+
+To skip a value without raising an error, use the special name \code{.}. To
+collect multiple or remaining values into a variable, prefix the variable
+with \code{...}. These two special cases can be combined, \code{....}, to
+skip multiple values without raising an error. It is important to note that
+a single collector variable may be used per value depth, otherwise the number
+of values to collect in each collector is unknown and an error is raised.
+
+For concrete examples see below.
 }
 \examples{
-a: b \%<-\% c(0, 1)
+# basic usage
+{a: b} \%<-\% list(0, 1)
+
 a  # 0
 b  # 1
 
-{c: d} \%<-\% list(2, 3)
-c  # 2
-d  # 3
+# no braces when unpacking vectors
+c: d  \%<-\% c(0, 1)
 
-# tackle a heavily nested list ...
+c  # 0
+d  # 1
+
+# unpack and assign nested values
+{{e: f}: {g: h}} \%<-\% list(list(2, 3), list(3, 4))
+
+e  # 2
+f  # 3
+g  # 4
+h  # 5
+
+# can assign more than 2 values
+{j: k: l} \%<-\% list(6, 7, 8)
+
+# assign columns of data frame
+{sep_len: sep_wdth: pet_len: pet_wdth: spcs} \%<-\% iris
+
+# assign only some of values
+{mpg: cyl: disp: ...rest} \%<-\% mtcars
+
+mpg   # first column
+cyl   # second column
+disp  # third column
+rest  # the rest of the mtcars columns,
+      # *as a list*
+
+# assign values at end of list
+TODOs <- list('make food', 'pack lunch', 'save the world')
+
+{...skipped: do_it} \%<-\% TODOs
+
+skipped  # c('make food', 'pack lunch')
+do_it    # 'save the world'
+
+# assign first name, skip middle initial without
+# error, assign last name
+first: .: last \%<-\% c('Ursula', 'K', 'Le Guin')
+
+first  # "Ursula"
+last   # "Le Guin"
+
+# setup a simple model and get
+# a summary
+f <- lm(hp ~ gear, data = mtcars)
+fsum <- summary(f)
+
+# extract call and fstatistic from
+# the summary
+{fcall: ....: fstat: .} \%<-\% fsum
+
+fcall  # hp ~ gear
+fstat  # named vector of length 3
+
+# tackle a heavily nested list with
+# equally heavily nested names
 fibs <- list(0, list(1, list(1, list(2, list(3)))))
 
-# ... with an equally heavily nested
-# name structure
 {f0: {f1: {f2: {f3: {f4}}}}} \%<-\% fibs
 
 f0  # 0
 f1  # 1
 f2  # 1
 f3  # 2
-f4  # note that f4 is list(3)
+f4  # list(3) *!!*
 
-# unpack only the first element
+# unpack only first and second values
+# no error because second value is a list
 {f0: fcdr} \%<-\% fibs
 
 f0    # 0
 fcdr  # list(1, list(1, list(2, list(3))))
 
-# unpack first name, skip value without error,
-# get last name
-{first: .: last} \%<-\% list('Ursula', 'K', 'Le Guin')
+# swap values without using a
+# temporary variable
+a: b \%<-\% c('eh', 'bee')
+a  # 'eh'
+b  # 'bee'
 
-first  # "Ursula"
-last   # "Le Guin"
+a: b \%<-\% c(b, a)
+a  # 'bee'
+b  # 'eh'
 
-# swap values without a temporary variable
-{a: b} \%<-\% list('A', 'B')
-a  # "A"
-b  # "B"
-
-{a: b} \%<-\% list(b, a)
-a  # "B"
-b  # "A"
-
+# strsplit example
 guests <- c('Nathan,Allison,Matt,Polly', 'Smith,Peterson,Williams,Jones')
 
 {firsts: lasts} \%<-\% strsplit(guests, ',')
 
-firsts  # "Nathan", "Allison", ..
-lasts   # "Smith", "Peterson", ..
+firsts  # c("Nathan", "Allison", ..
+lasts   # c("Smith", "Peterson", ..
 
-# consume extra values
-TODOs <- list('make lunch', 'defeat chandrian', 'save the world')
-
-{now: ...later} \%<-\% TODOs
-
-now    # "make lunch"
-later  # our other two TODOs
-
+}
+\seealso{
+\code{\link{unpack}}
 }
 

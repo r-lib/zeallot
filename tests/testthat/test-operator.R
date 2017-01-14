@@ -69,17 +69,10 @@ test_that('%<-% handles S3 objects with underlying list structure', {
     )
   }
 
-  expect_error(a %<-% shape(), 'too many values to unpack')
+  a %<-% shape()
+  expect_equal(a, shape())
 
-  {a: b} %<-% shape()
-  expect_equal(a, 4)
-  expect_equal(b, 'red')
-
-  {c: d} %<-% list(shape(3, 'green'), shape(1, 'blue'))
-  expect_equal(c$sides, 3)
-  expect_equal(c$color, 'green')
-  expect_equal(d$sides, 1)
-  expect_equal(d$color, 'blue')
+  expect_error({a: b} %<-% shape(), 'cannot unpack object of class shape')
 })
 
 test_that('%<-% skips values using .', {
