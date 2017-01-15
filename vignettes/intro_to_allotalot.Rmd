@@ -184,7 +184,7 @@ aq_hd
 ```
 
 Here we assigned three truncated data frames to three variables,
-and the data frame are intact.
+and the data frames are intact.
 
 ### Unpacking nested values
 In addition to unpacking flat lists, we can unpack lists of lists.
