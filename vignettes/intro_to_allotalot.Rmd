@@ -19,7 +19,8 @@ library(allotalot)
 The *allotalot* package defines an operator for *parallel assignment*,
 sometimes called *unpacking assignment* or *destructuring assignment*
 in other programming languages.
-The operator is written as `%<-%` and used like this.
+The operator is written as `%<-%`
+and used like this.
 
 ```{r}
 { lat : lng } %<-% list(38.061944, -122.643889)
@@ -55,8 +56,7 @@ q3_wt
 max_wt
 ```
 
-If the left-hand side and right-hand sides don't match,
-an error is raised.
+If the left-hand side and right-hand sides do not match, an error is raised.
 This guards against missing or unexpected values.
 
 ```{r, error=TRUE}
@@ -107,7 +107,7 @@ angle
 ```
 
 ### Example: Intercept and slope of regression
-We can directly unpack the coefficients of a simple linear regression
+You can directly unpack the coefficients of a simple linear regression
 into the intercept and slope.
 
 ```{r}
@@ -143,7 +143,7 @@ pair$result
 pair$error
 ```
 
-We can tighten and clarify calls to the safe function by using `%<-%.
+You can tighten and clarify calls to the safe function by using `%<-%.
 
 ```{r, eval = require('purrr')}
 { res : err } %<-% safe_log(10)
@@ -174,7 +174,7 @@ The assignment will extract the list elements (which are data frames)
 but not unpack the data frames themselves.
 
 ```{R}
-{ mtc_hd : iris_hd: aq_hd } %<-% lapply(list(mtcars, iris, airquality), head, 3)
+{ mtc_hd : iris_hd : aq_hd } %<-% lapply(list(mtcars, iris, airquality), head, 3)
 
 mtc_hd
 
@@ -183,11 +183,11 @@ iris_hd
 aq_hd
 ```
 
-Here we assigned three truncated data frames to three variables,
-and the data frames are intact.
+The `%<-% operator assigned three data frames to three variables,
+leaving the data frames intact.
 
-### Unpacking nested values
-In addition to unpacking flat lists, we can unpack lists of lists.
+## Unpacking nested values
+In addition to unpacking flat lists, you can unpack lists of lists.
 
 ```{r}
 {a : { b : c } : d } %<-% list('begin', list('mid1', 'mid2'), 'end')
@@ -209,11 +209,11 @@ an error is raised.
 ## Splitting a value to its parts
 The previous examples dealt with unpacking a list or vector
 into its elements.
-We can also split certain kinds of individual values
+You can also split certain kinds of individual values
 into subvalues.
 
 ### Character vectors
-We can assign individual characters of a string to variables.
+You can assign individual characters of a string to variables.
 Since character strings are vectors, do not forget to exclude braces from the assignment expression.
 
 ```{R}
@@ -224,7 +224,7 @@ ch3
 ```
 
 ### Dates
-We can split a Date into its year, month, and day,
+You can split a Date into its year, month, and day,
 and assign the parts to variables.
 
 ```{r}
@@ -238,21 +238,23 @@ d
 (TBD)
 
 ### Class objects
-*allotalot* includes implementations of `unpack` for atomic objects (numerics, characters, etc.), data frames, date objects, and linear model summaries. However, because `unpack` is a generic function we can define new implementations for custom classes. When defining a new implementation keep in mind the implementation needs to return a list so that values are properly unpacked.
+*allotalot* includes implementations of `unpack` for atomic objects (numerics, characters, etc.), data frames, date objects, and linear model summaries.
+However, because `unpack` is a generic function, you can define new implementations for custom classes.
+When defining a new implementation keep in mind the implementation needs to return a list so that values are properly unpacked.
 
 ## Trailing values: the "everything else" clause
-In some cases, we want the first few elements of a list or vector
-but don't care about the trailing elements.
+In some cases, you want the first few elements of a list or vector
+but do not care about the trailing elements.
 The `summary` function of `lm`, for example,
 returns a list of 11 values,
-and we might want only the first few.
+and you might want only the first few.
 Fortunately, there is a way to capture those first few
 and say "don't worry about everything else".
 
 ```{r}
 f <- lm(mpg ~ cyl, data = mtcars)
 
-{fcall : fterms : resids : ...rest} %<-% summary(f)
+{ fcall : fterms : resids : ...rest } %<-% summary(f)
 
 fcall
 
@@ -268,41 +270,41 @@ str(rest)
 ```
 
 The assignment operator noticed that `...rest` is prefixed with `...`,
-and it created a varable called `rest` for the trailing values of the list.
-If we omitted the "everything else" prefix,
-there would be an error because
-the lengths of the left- and right-hand sides of the assignment would
+and it created a variable called `rest` for the trailing values of the list.
+If you omitted the "everything else" prefix,
+there would be an error
+because the lengths of the left- and right-hand sides of the assignment would
 be mismatched.
 
-```{R, error = TRUE}
-{fcall: fterms: resids: rest} %<-% summary(f)
+```{r, error = TRUE}
+{ fcall : fterms : resids : rest } %<-% summary(f)
 ```
 
 Only one collector variable may be specified at each depth of names. If multiple collectors are specified `%<-%` will raise an error.
 
 ## Leading values and middle values
-In addition to collecting trailing values, we can also collect initial values and assign remaining values.
+In addition to collecting trailing values, you can also collect initial values and assign specific remaining values.
 
-```{R}
+```{r}
 { ...skip : e : f } %<-% list(1, 2, 3, 4, 5)
 skip
 e
 f
 ```
 
-Or we can assign the first value, skip values, and then assign the last value.
+Or you can assign the first value, skip values, and then assign the last value.
 
-```{R}
+```{r}
 { init : ...middle : final } %<-% list(1, 2, 3, 4, 5)
 init
 middle
 final
 ```
 
-## Skipped values
-We can skip one or more values without raising an error
+## Skipped values: anonymous elements
+You can skip one or more values without raising an error
 by using a period (`.`) instead of a variable name.
-For example, we might care only about the min, mean, and max
+For example, you might care only about the min, mean, and max
 values of a vector's `summary`.
 
 ```{r}
@@ -313,7 +315,7 @@ max_wt
 ```
 
 By combining an anonymous element (`.`) with the collector prefix, (`...`),
-we can ignore whole sublists.
+you can ignore whole sublists.
 
 ```{R}
 {init: ....: final} %<-% list('hello', 'blah', list('blah'), 'blah', 'world!')
@@ -321,7 +323,7 @@ init
 final
 ```
 
-We can mix periods and collectors together
+You can mix periods and collectors together
 to selectively keep and discard elements.
 
 ```{R}
@@ -331,9 +333,8 @@ middle
 final
 ```
 
-### Swap values
-One of the simple benefits of parallel assignment is swapping values
-without the use of a temporary variable.
+### Swaping values
+A cool trick is swapping values without the use of a temporary variable.
 
 ```{r}
 first : last %<-% c('Ai', 'Genly')
