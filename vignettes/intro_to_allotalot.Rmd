@@ -46,13 +46,13 @@ You can unpack much longer structures, too, of course,
 such as the 6-part summary of a vector.
 
 ```{r}
-minWt : q1Wt : medWt : meanWt : q3Wt : maxWt %<-% summary(mtcars$wt)
-minWt
-q1Wt
-medWt
-meanWt
-q3Wt
-maxWt
+min_wt : q1_wt : med_wt : mean_wt : q3_wt : max_wt %<-% summary(mtcars$wt)
+min_wt
+q1_wt
+med_wt
+mean_wt
+q3_wt
+max_wt
 ```
 
 If the left-hand side and right-hand sides don't match,
@@ -70,18 +70,18 @@ This guards against missing or unexpected values.
 ### Unpacking a returned value
 A common use-case is when a function returns a list of values
 and you want to extract the individual values.
-In this example, the list of values returned by `coordsList()` is unpacked
+In this example, the list of values returned by `coords_list()` is unpacked
 into the variables `lat` and `lng`.
 
 ```{r}
 #
 # A function which returns a list of 2 numeric values.
 # 
-coordsList <- function() {
+coords_list <- function() {
   list(38.061944, -122.643889)
 }
 
-{ lat : lng } %<-% coordsList()
+{ lat : lng } %<-% coords_list()
 lat
 lng
 ```
@@ -97,11 +97,11 @@ Now we omit the braces.
 #
 # Convert cartesian coordinates to polar
 #
-toPolar = function(x, y) {
+to_polar = function(x, y) {
   c(sqrt(x^2 + y^2), atan(y/x))
 }
 
-radius : angle %<-% toPolar(12, 5)
+radius : angle %<-% to_polar(12, 5)
 radius
 angle
 ```
@@ -137,7 +137,7 @@ pair$result
 pair$error
 ```
 
-```{r}
+```{r, eval = require('purrr')}
 pair <- safe_log('donald')
 pair$result
 pair$error
@@ -306,10 +306,10 @@ For example, we might care only about the min, mean, and max
 values of a vector's `summary`.
 
 ```{r}
-minWt : . : . : meanWt : . : maxWt %<-% summary(mtcars$wt)
-minWt
-meanWt
-maxWt
+min_wt : . : . : mean_wt : . : max_wt %<-% summary(mtcars$wt)
+min_wt
+mean_wt
+max_wt
 ```
 
 By combining an anonymous element (`.`) with the collector prefix, (`...`),
