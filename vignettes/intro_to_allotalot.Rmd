@@ -16,159 +16,165 @@ library(allotalot)
 ```
 
 ## Parallel Assignment
+The *allotalot* package defines an operator for *parallel assignment*,
+sometimes called *unpacking assignment* or *destructuring assignment*
+in other programming languages.
+The operator is written as `%<-%`
+and used like this.
 
-Parallel assignment is the assignment of multiple variables at once. Languages, such as Python or Go, allow parallel or unpacking assignment with syntax similar to the following.
-
-```{python, comment = '#>>>'}
-a, b = 0, 1
-print(a)
-print(b)
-```
-```{python, comment = '#>>>'}
-c, d = 'red', 'fish'
-print(c)
-print(d)
-```
-```{python, comment = '#>>>'}
-values = ['a', 'simple', 'list']
-e, f, g = values
-print(e)
-print(f)
-print(g)
+```{r}
+{ lat : lng } %<-% list(38.061944, -122.643889)
 ```
 
-In the above examples we see *a* and *b* assigned on one line, likewise *c* and *d*, and in the final example we unpack a list of values into *e*, *f*, and *g*. R allows a watered-down version of these examples, but variables must be assigned the same value. 
+The result is that the list is unpacked into its elements,
+and the elements are assigned to `lat` and `lng`.
 
-```{R}
-a <- b <- c(0, 1)
-a
-b
+```{r}
+lat
+lng
 ```
 
-```{R}
-c <- d <- c('red', 'fish')
-c
-d
+You can also unpack the elements of a vector.
+Omit the braces ({}) in that case.
+
+```{r}
+lat : lng %<-% c(38.061944, -122.643889)
+lat
+lng
 ```
 
-```{R}
-e <- f <- g <- list('a', 'simple', 'list')
-e
+You can unpack much longer structures, too, of course,
+such as the 6-part summary of a vector.
+
+```{r}
+min_wt : q1_wt : med_wt : mean_wt : q3_wt : max_wt %<-% summary(mtcars$wt)
+min_wt
+q1_wt
+med_wt
+mean_wt
+q3_wt
+max_wt
 ```
 
-Now that we have seen a couple initial examples and touched on the current limitations of R, we will quickly preview the tools *allotalot* provides and then look at a series of more complex and practical parallel assignment examples.
+If the left-hand side and right-hand sides do not match, an error is raised.
+This guards against missing or unexpected values.
 
-## Toolset
-
-When we talk about a parallel assignment expression there are three components we often refer to,
-
-1. The operator
-2. The left-hand side, i.e. the variable names
-3. The right-hand side, i.e. the values to assign
-
-### operator
-
-As we saw, R's standard `<-` operator will allow us to assign a single value to multiple variables at once. Rather than jump the shark and overload the `<-` operator, *allotalot* provides an infix function `%<-%` to serve as the operator of our parallel assignment expressions. Like `<-`, `%<-%` expects names on the left-hand side and values on the right-hand side.
-
-### left-hand side
-
-Unfortunately, we cannot separate variable names with commas or nest them using parentheses because of R's syntactic restrictions. Instead, to build the left-hand side of our assignment expressions we use colons and braces as stand-ins for commas and paraentheses. This syntax allows us to build a flat or nested structure of variable names on the left-hand side of an expression. As we will see, nesting variable names on the left-hand side of an expression allows us to unpack nested values on the right-hand side.
-
-### right-hand side
-
-The right-hand side of the assignment expression is a list, vector, or other object. For each name on the left-hand side our assignment operator expects to find a corresponding value on the right-hand side. There are some exceptions to this rule as we will see further down.
-
-## Examples
-
-### Assign a function return value
-
-The simple Python function `coords()` returns a static list of latitude, longitude coordinates. 
-
-```{python}
-def coords():
-  '''A function which returns a list of 2 numbers (coordinates)'''
-  return [38.061944, -122.643889]
-  
-lat, lng = coords()
-print(lat)
-print(lng)
+```{r, error=TRUE}
+{ stg1 : stg2 : stg3 } %<-% list("Moe", "Donald")
 ```
 
-In the example, the list of values returned by `coords()` is unpacked into the variables `lat` and `lng`. This instance of parallel assignment is commonly referred to as *unpacking assignment* or *destructuring assignment*.
+```{r, error=TRUE}
+{ stg1 : stg2 : stg3 } %<-% list("Moe", "Larry", "Curley", "Donald")
+```
 
-Here is the same coordinates example redone in R.
+### Unpacking a returned value
+A common use-case is when a function returns a list of values
+and you want to extract the individual values.
+In this example, the list of values returned by `coords_list()` is unpacked
+into the variables `lat` and `lng`.
 
-```{R}
-#' Get a Pair of Coordinates
-#' 
-#' A function which returns a list of 2 numeric values.
-#' 
-coords <- function() {
+```{r}
+#
+# A function which returns a list of 2 numeric values.
+# 
+coords_list <- function() {
   list(38.061944, -122.643889)
 }
 
-{lat: lng} %<-% coords()
+{ lat : lng } %<-% coords_list()
 lat
 lng
 ```
 
-Notice the use of the colon and braces on the left-hand side of the assignment expression. Based on the left-hand side structure, the assignment operator expects `coords()` to return a list of two values. Those two values are then assigned to `lat` and `lng`.
+As in the earlier example,
+colon and braces on the left-hand side of the assignment
+tell the assignment operator to expect a list.
 
-Let's try rerunning the `coords` example, but this time without the braces.
+In this example, we call a function that returns a vector.
+Now we omit the braces.
 
-```{R, include = FALSE} 
-rm(lat)
-rm(lng)
-```
-
-```{R, error = TRUE}
-lat: lng %<-% coords()
-lat
-lng
-```
-
-To unpack a list of values, the left-hand side must be enclosed in braces. Without the braces the assignment operator expects and tries to unpack a vector of values. If we create a new function `coords2` which returns a vector, the error is fixed.
-
-```{R}
-#' Get Another Pair of Coordinates
-#' 
-#' A function which returns a numeric vector of length 2, the coordinates.
-#'
-coords2 <- function() {
-  c(-36.85, 174.77)
+```{r}
+#
+# Convert cartesian coordinates to polar
+#
+to_polar = function(x, y) {
+  c(sqrt(x^2 + y^2), atan(y/x))
 }
 
-lat: lng %<-% coords2()
-lat
-lng
+radius : angle %<-% to_polar(12, 5)
+radius
+angle
 ```
 
-### One value to many names
+### Example: Intercept and slope of regression
+You can directly unpack the coefficients of a simple linear regression
+into the intercept and slope.
 
-When unpacking a list of values we can more easily correspond names to values. However, during parallel assignment `%<-%` will try to unpack a single object on the right-hand side if multiple names are found on the left-hand side. 
-
-#### data frames
-
-In the following example because `%<-%` finds a single object on the right-hand side, but finds four names on the left-hand side, the data frame is unpacked into a list of columns.
-
-```{R}
-mt_1_4 <- mtcars[, 1:4, drop = FALSE]
-
-{mpg: cyl: disp: hp} %<-% mt_1_4
-
-mpg
-
-cyl
-
-disp
-
-hp
+```{r}
+inter : slope %<-% coef(lm(mpg ~ cyl, data = mtcars))
+inter
+slope
 ```
 
-Remember, `%<-%` will first try to assign an object as is before resorting to unpacking the object.
+### Example: Unpacking the result of `safely`
+The *purrr* package includes the `safely` function.
+It wraps a given function to create a new, "safe" version of the original function.
+
+```{R, eval = require('purrr')}
+safe_log <- purrr::safely(log)
+```
+
+The safe version returns a list of two items.
+The first item is the result of calling the original function,
+assuming no error occurred;
+or `NULL` if an error did occur.
+The second item is the error (if an error occurred) or `NULL` (if not).
+Whether or not the original function would have thrown an error, the safe version will never throw an error.
+
+```{r, eval = require('purrr')}
+pair <- safe_log(10)
+pair$result
+pair$error
+```
+
+```{r, eval = require('purrr')}
+pair <- safe_log('donald')
+pair$result
+pair$error
+```
+
+You can tighten and clarify calls to the safe function by using `%<-%.
+
+```{r, eval = require('purrr')}
+{ res : err } %<-% safe_log(10)
+res
+err
+```
+
+## Unpacking a data frame
+A data frame is simply a list of columns,
+so the *allotalot* assignment does what you expect.
+It unpacks the data frame into individual columns.
+
+```{r}
+{ mpg : cyl : disp : hp } %<-% mtcars[,1:4]
+
+head(mpg)
+
+head(cyl)
+
+head(disp)
+
+head(hp)
+```
+
+### Example: List of data frames
+Bear in mind that a list of data frames is still just a list.
+The assignment will extract the list elements (which are data frames)
+but not unpack the data frames themselves.
 
 ```{R}
-{mtc_hd: iris_hd: aq_hd} %<-% lapply(list(mtcars, iris, airquality), head)
+{ mtc_hd : iris_hd : aq_hd } %<-% lapply(list(mtcars, iris, airquality), head, 3)
 
 mtc_hd
 
@@ -177,90 +183,139 @@ iris_hd
 aq_hd
 ```
 
-Here we assigned three truncated data frames to three variables, no unpacking.
+The `%<-% operator assigned three data frames to three variables,
+leaving the data frames intact.
 
-#### character strings
+## Unpacking nested values
+In addition to unpacking flat lists, you can unpack lists of lists.
 
-We can assign each individual character of a string to variables. Since character objects are vectors, do not forget to exlcude braces from the assignment expression.
-
-```{R}
-char1: char2: char3 %<-% 'abc'
-char1
-char2
-char3
+```{r}
+{a : { b : c } : d } %<-% list('begin', list('mid1', 'mid2'), 'end')
+a
+b
+c
+d
 ```
 
-#### dates
+Not only does this simplify extracting individual elements,
+it also adds a level of checking.
+If the described list structure does not match the actual list structure,
+an error is raised.
 
-We can assign the year, month, and day of a date object to variables.
+```{r, error=TRUE}
+{a : { b : c : x} : d } %<-% list('begin', list('mid1', 'mid2'), 'end')
+```
+
+## Splitting a value to its parts
+The previous examples dealt with unpacking a list or vector
+into its elements.
+You can also split certain kinds of individual values
+into subvalues.
+
+### Character vectors
+You can assign individual characters of a string to variables.
+Since character strings are vectors, do not forget to exclude braces from the assignment expression.
 
 ```{R}
-y: m: d %<-% Sys.Date()
+ch1 : ch2 : ch3 %<-% 'abc'
+ch1
+ch2
+ch3
+```
+
+### Dates
+You can split a Date into its year, month, and day,
+and assign the parts to variables.
+
+```{r}
+y : m : d %<-% Sys.Date()
 y
 m
 d
 ```
 
-#### other classes
+### `lm` summary
+(TBD)
 
-*allotalot* includes implementations of `unpack` for atomic objects (numerics, characters, etc.), data frames, date objects, and linear model summaries. However, because `unpack` is a generic function we can define new implementations for custom classes. When defining a new implementation keep in mind the implementation needs to return a list so that values are properly unpacked.
+### Class objects
+*allotalot* includes implementations of `unpack` for atomic objects (numerics, characters, etc.), data frames, date objects, and linear model summaries.
+However, because `unpack` is a generic function, you can define new implementations for custom classes.
+When defining a new implementation keep in mind the implementation needs to return a list so that values are properly unpacked.
 
-### Consume extra values
+## Trailing values: the "everything else" clause
+In some cases, you want the first few elements of a list or vector
+but do not care about the trailing elements.
+The `summary` function of `lm`, for example,
+returns a list of 11 values,
+and you might want only the first few.
+Fortunately, there is a way to capture those first few
+and say "don't worry about everything else".
 
-In some cases, there are many right-hand side values, but we only want to unpack the first couple values, the last couple values, or both. `summary.lm`, for example, unpacks into 11 values. In practice, unpacking 11 values into 11 different variables is not advised. Fortunately, there is a way to assign a couple values and handle the remaining values.
-
-```{R}
+```{r}
 f <- lm(mpg ~ cyl, data = mtcars)
 
-{fcall: fterms: resids: ...rest} %<-% summary(f)
+{ fcall : fterms : resids : ...rest } %<-% summary(f)
 
 fcall
 
 fterms
 
-resids
+head(resids)
+```
 
-# `rest` is not fully printed here to save space, but feel
-# free to run the example and look at `rest`
+Here, `rest` will capture everything else.
+
+```{r}
 str(rest)
 ```
 
-As `...` in an argument list collects extra values passed to a function, a variable prefixed with `...` in an assignment expression collects extra values. If we left off the `...` we would get an error.
+The assignment operator noticed that `...rest` is prefixed with `...`,
+and it created a variable called `rest` for the trailing values of the list.
+If you omitted the "everything else" prefix,
+there would be an error
+because the lengths of the left- and right-hand sides of the assignment would
+be mismatched.
 
-```{R, error = TRUE}
-{fcall: fterms: resids: rest} %<-% summary(f)
+```{r, error = TRUE}
+{ fcall : fterms : resids : rest } %<-% summary(f)
 ```
 
-Note that only one collector variable may be specified at each depth of names. If multiple collectors are specified `%<-%` will raise an error.
+Only one collector variable may be specified at each depth of names. If multiple collectors are specified `%<-%` will raise an error.
 
-In addition to collecting trailing values, we can also collect initial values and assign remaining values.
+## Leading values and middle values
+In addition to collecting trailing values, you can also collect initial values and assign specific remaining values.
 
-```{R}
-{...skip: e: f} %<-% list(1, 2, 3, 4, 5)
+```{r}
+{ ...skip : e : f } %<-% list(1, 2, 3, 4, 5)
 skip
 e
 f
 ```
 
-Or we can assign the first value, skip values, and then assign the last value.
+Or you can assign the first value, skip values, and then assign the last value.
 
-```{R}
-{init: ...middle: final} %<-% as.list(1:10)
+```{r}
+{ init : ...middle : final } %<-% list(1, 2, 3, 4, 5)
 init
 middle
 final
 ```
 
-We can skip a value without raising an error using the `.` name.
+## Skipped values: anonymous elements
+You can skip one or more values without raising an error
+by using a period (`.`) instead of a variable name.
+For example, you might care only about the min, mean, and max
+values of a vector's `summary`.
 
-```{R}
-{init: .: .: .: ...middle: final} %<-% as.list(1:10)
-init
-middle
-final
+```{r}
+min_wt : . : . : mean_wt : . : max_wt %<-% summary(mtcars$wt)
+min_wt
+mean_wt
+max_wt
 ```
 
-We can use the collector prefix and the special dot name to collect values without assigning them.
+By combining an anonymous element (`.`) with the collector prefix, (`...`),
+you can ignore whole sublists.
 
 ```{R}
 {init: ....: final} %<-% list('hello', 'blah', list('blah'), 'blah', 'world!')
@@ -268,84 +323,37 @@ init
 final
 ```
 
-### Unpack nested values
-
-In addition to unpacking flat lists, we can unpack values in nested lists. Based on previous examples the following example illustrates what we might expect from a first attempt at unpacking a nested list.
-
-```{python, comment = '#>>>'}
-nested = [4, [0, 1]]
-a, b = nested
-print(a)
-print(b)
-```
-
-But, if we add a variable `c` and nest `b` and `c` on the left-hand side we get a different result.
-
-```{python, comment = '#>>>'}
-nested = [4, [0, 1]]
-a, (b, c) = nested
-print(a)
-print(b)
-print(c)
-```
-
-We can mimic this syntax using braces instead of parentheses. Here is the example redone in R.
+You can mix periods and collectors together
+to selectively keep and discard elements.
 
 ```{R}
-nested <- list(4, list('zero', 'one'))
-{a: {b: c}} %<-% nested
-a
-b
-c
+{ init : . : ...middle : final } %<-% as.list(1:5)
+init
+middle
+final
 ```
 
-### Swap values
+### Swaping values
+A cool trick is swapping values without the use of a temporary variable.
 
-One of the simple benefits of parallel assignment is swapping variable values without the use of a temporary variable.
-
-```{R}
-first: last %<-% c('Ai', 'Genly')
+```{r}
+first : last %<-% c('Ai', 'Genly')
 first
 last
 
-first: last %<-% c(last, first)
+first : last %<-% c(last, first)
 first
 last
 ```
 
 or
 
-```{R}
+```{r}
 cat <- 'meow'
 dog <- 'bark'
 
-cat: dog: fish %<-% c(dog, cat, dog)
+cat : dog : fish %<-% c(dog, cat, dog)
 cat
 dog
 fish
 ```
-
-### Parallel assignment and *purrr*
-
-This next example requires the *purrr* package. From *purrr* we will use the `safely` function. By passing a function to `safely`, we can create a new "safe" version of a function. This safe version always returns a list of two values. The first list item is the result of calling the original function, if no error occurred, or `NULL`. The second list item is an error, if an error occurred, or `NULL`. Whether or not the original function would have thrown an error, the safe version will never throw an error. To run the example make sure you have *purrr* installed.
-
-```{R, eval = require('purrr')}
-safe_log <- purrr::safely(log)
-
-pair <- safe_log(10)
-
-pair$result
-
-pair$error
-```
-
-The example code is no deal breaker. But, using *allotalot* we can specify clear variable names and cut down on repititions, such as the repeated extractions from `pair`. Here is the example reworked using *allotalot*.
-
-```{R, eval = require('purrr')}
-{res: err} %<-% safe_log(10)
-
-res
-err
-```
-
-In this example we could go a step further naming our variables. `result` and `error` are clearer and potentially better than `res` and `err`. In either case, we have the choice to use explicit variable names. 
