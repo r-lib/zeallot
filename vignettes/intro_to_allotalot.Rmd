@@ -1,6 +1,8 @@
 ---
-title: "Parallel, Multiple, and Unpacking Assignment"
-author: "Nathan Teetor"
+title: "Unpacking Assignment"
+author: 
+  - "Paul Teetor"
+  - "Nathan Teetor"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -15,9 +17,9 @@ knitr::opts_chunk$set(collapse = TRUE, comment = '#>')
 library(allotalot)
 ```
 
-## Parallel Assignment
-The *allotalot* package defines an operator for *parallel assignment*,
-sometimes called *unpacking assignment* or *destructuring assignment*
+## Unpacking Assignment
+The *allotalot* package defines an operator for *unpacking assignment*,
+sometimes called *parallel assignment* or *destructuring assignment*
 in other programming languages.
 The operator is written as `%<-%`
 and used like this.
@@ -43,8 +45,8 @@ lat
 lng
 ```
 
-You can unpack much longer structures, too, of course,
-such as the 6-part summary of a vector.
+You can unpack much longer structures, too, of course, such as the 6-part
+summary of a vector.
 
 ```{r}
 min_wt : q1_wt : med_wt : mean_wt : q3_wt : max_wt %<-% summary(mtcars$wt)
@@ -86,9 +88,8 @@ lat
 lng
 ```
 
-As in the earlier example,
-colon and braces on the left-hand side of the assignment
-tell the assignment operator to expect a list.
+As in the earlier example, colon and braces on the left-hand side of the
+assignment tell the assignment operator to expect a list.
 
 In this example, we call a function that returns a vector.
 Now we omit the braces.
@@ -124,12 +125,11 @@ It wraps a given function to create a new, "safe" version of the original functi
 safe_log <- purrr::safely(log)
 ```
 
-The safe version returns a list of two items.
-The first item is the result of calling the original function,
-assuming no error occurred;
-or `NULL` if an error did occur.
-The second item is the error (if an error occurred) or `NULL` (if not).
-Whether or not the original function would have thrown an error, the safe version will never throw an error.
+The safe version returns a list of two items. The first item is the result of
+calling the original function, assuming no error occurred; or `NULL` if an error
+did occur. The second item is the error (if an error occurred) or `NULL` (if
+not). Whether or not the original function would have thrown an error, the safe
+version will never throw an error.
 
 ```{r, eval = require('purrr')}
 pair <- safe_log(10)
@@ -152,9 +152,8 @@ err
 ```
 
 ## Unpacking a data frame
-A data frame is simply a list of columns,
-so the *allotalot* assignment does what you expect.
-It unpacks the data frame into individual columns.
+A data frame is simply a list of columns, so the *allotalot* assignment does
+what you expect. It unpacks the data frame into individual columns.
 
 ```{r}
 { mpg : cyl : disp : hp } %<-% mtcars[,1:4]
@@ -169,25 +168,32 @@ head(hp)
 ```
 
 ### Example: List of data frames
-Bear in mind that a list of data frames is still just a list.
-The assignment will extract the list elements (which are data frames)
-but not unpack the data frames themselves.
+Bear in mind that a list of data frames is still just a list. The assignment
+will extract the list elements (which are data frames) but not unpack the data
+frames themselves.
 
 ```{R}
-{ mtc_hd : iris_hd : aq_hd } %<-% lapply(list(mtcars, iris, airquality), head, 3)
+an1 <- data.frame(x = anscombe$x1, y = anscombe$y1)
+an2 <- data.frame(x = anscombe$x2, y = anscombe$y2)
+an3 <- data.frame(x = anscombe$x3, y = anscombe$y3)
+an4 <- data.frame(x = anscombe$x4, y = anscombe$y4)
 
-mtc_hd
+{ hd1 : hd2 : hd3 : hd4 } %<-% lapply(list(an1, an2, an3, an4), head, n = 3)
 
-iris_hd
+hd1
 
-aq_hd
+hd2
+
+hd3
+
+hd4
 ```
 
-The `%<-% operator assigned three data frames to three variables,
-leaving the data frames intact.
+The `%<-% operator assigned three data frames to three variables, leaving the
+data frames intact.
 
-## Unpacking nested values
-In addition to unpacking flat lists, you can unpack lists of lists.
+## Unpacking nested values In addition to unpacking flat lists, you can unpack
+lists of lists.
 
 ```{r}
 {a : { b : c } : d } %<-% list('begin', list('mid1', 'mid2'), 'end')
@@ -197,24 +203,21 @@ c
 d
 ```
 
-Not only does this simplify extracting individual elements,
-it also adds a level of checking.
-If the described list structure does not match the actual list structure,
-an error is raised.
+Not only does this simplify extracting individual elements, it also adds a level
+of checking. If the described list structure does not match the actual list
+structure, an error is raised.
 
 ```{r, error=TRUE}
 {a : { b : c : x} : d } %<-% list('begin', list('mid1', 'mid2'), 'end')
 ```
 
 ## Splitting a value to its parts
-The previous examples dealt with unpacking a list or vector
-into its elements.
-You can also split certain kinds of individual values
-into subvalues.
+The previous examples dealt with unpacking a list or vector into its elements. 
+You can also split certain kinds of individual values into subvalues.
 
-### Character vectors
-You can assign individual characters of a string to variables.
-Since character strings are vectors, do not forget to exclude braces from the assignment expression.
+### Character vectors You can assign individual characters of a string to
+variables. Since character strings are vectors, do not forget to exclude braces
+from the assignment expression.
 
 ```{R}
 ch1 : ch2 : ch3 %<-% 'abc'
@@ -224,8 +227,8 @@ ch3
 ```
 
 ### Dates
-You can split a Date into its year, month, and day,
-and assign the parts to variables.
+You can split a Date into its year, month, and day, and assign the parts to
+variables.
 
 ```{r}
 y : m : d %<-% Sys.Date()
@@ -234,22 +237,20 @@ m
 d
 ```
 
-### `lm` summary
-(TBD)
-
 ### Class objects
-*allotalot* includes implementations of `unpack` for atomic objects (numerics, characters, etc.), data frames, date objects, and linear model summaries.
-However, because `unpack` is a generic function, you can define new implementations for custom classes.
-When defining a new implementation keep in mind the implementation needs to return a list so that values are properly unpacked.
+*allotalot* includes implementations of `destructure` for character strings,
+complex numbers, data frames, date objects, and linear model summaries.
+However, because `destructure` is a generic function, you can define new
+implementations for custom classes. When defining a new implementation keep in
+mind the implementation needs to return a list so that values are properly
+unpacked.
 
 ## Trailing values: the "everything else" clause
-In some cases, you want the first few elements of a list or vector
-but do not care about the trailing elements.
-The `summary` function of `lm`, for example,
-returns a list of 11 values,
-and you might want only the first few.
-Fortunately, there is a way to capture those first few
-and say "don't worry about everything else".
+In some cases, you want the first few elements of a list or vector but do not
+care about the trailing elements. The `summary` function of `lm`, for example, 
+returns a list of 11 values, and you might want only the first few. Fortunately,
+there is a way to capture those first few and say "don't worry about everything
+else".
 
 ```{r}
 f <- lm(mpg ~ cyl, data = mtcars)
@@ -269,21 +270,21 @@ Here, `rest` will capture everything else.
 str(rest)
 ```
 
-The assignment operator noticed that `...rest` is prefixed with `...`,
-and it created a variable called `rest` for the trailing values of the list.
-If you omitted the "everything else" prefix,
-there would be an error
-because the lengths of the left- and right-hand sides of the assignment would
-be mismatched.
+The assignment operator noticed that `...rest` is prefixed with `...`, and it
+created a variable called `rest` for the trailing values of the list. If you
+omitted the "everything else" prefix, there would be an error because the
+lengths of the left- and right-hand sides of the assignment would be mismatched.
 
 ```{r, error = TRUE}
 { fcall : fterms : resids : rest } %<-% summary(f)
 ```
 
-Only one collector variable may be specified at each depth of names. If multiple collectors are specified `%<-%` will raise an error.
+Only one collector variable may be specified at each depth of names. If multiple
+collectors are specified `%<-%` will raise an error.
 
-## Leading values and middle values
-In addition to collecting trailing values, you can also collect initial values and assign specific remaining values.
+## Leading values and middle values 
+In addition to collecting trailing values, you can also collect initial values
+and assign specific remaining values.
 
 ```{r}
 { ...skip : e : f } %<-% list(1, 2, 3, 4, 5)
@@ -302,10 +303,9 @@ final
 ```
 
 ## Skipped values: anonymous elements
-You can skip one or more values without raising an error
-by using a period (`.`) instead of a variable name.
-For example, you might care only about the min, mean, and max
-values of a vector's `summary`.
+You can skip one or more values without raising an error by using a period (`.`)
+instead of a variable name. For example, you might care only about the min,
+mean, and max values of a vector's `summary`.
 
 ```{r}
 min_wt : . : . : mean_wt : . : max_wt %<-% summary(mtcars$wt)
@@ -314,27 +314,27 @@ mean_wt
 max_wt
 ```
 
-By combining an anonymous element (`.`) with the collector prefix, (`...`),
-you can ignore whole sublists.
+By combining an anonymous element (`.`) with the collector prefix, (`...`), you
+can ignore whole sublists.
 
-```{R}
+```{r}
 {init: ....: final} %<-% list('hello', 'blah', list('blah'), 'blah', 'world!')
 init
 final
 ```
 
-You can mix periods and collectors together
-to selectively keep and discard elements.
+You can mix periods and collectors together to selectively keep and discard
+elements.
 
-```{R}
+```{r}
 { init : . : ...middle : final } %<-% as.list(1:5)
 init
 middle
 final
 ```
 
-### Swaping values
-A cool trick is swapping values without the use of a temporary variable.
+### Swapping values
+A handy trick is swapping values without the use of a temporary variable.
 
 ```{r}
 first : last %<-% c('Ai', 'Genly')

@@ -1,14 +1,18 @@
 #' Assign Values to a Name or Names
 #'
-#' Using two lists of names and values, assign values to names in an
-#' environment.
+#' Using two lists of names and values, assign values to names in the specified
+#' environment, defaults to calling environment.
 #'
-#' @param x a list of variable name(s), see details.
-#' @param values values to be assigned, see details.
+#' @param x a list of variable name(s).
+#' @param values values to be assigned, usually a list of values or an object
+#'   with a \code{destructure} implementation.
 #'
 #' @details
 #'
-#' \code{massign} expects \code{x} and \code{values}
+#' For more information about how \code{massign} and \code{\%<-\%} assign values
+#' to names, refer to the introductory vignette.
+#'
+#' \code{browseVignettes('allotalot')}
 #'
 #' @keywords internal
 #' @export

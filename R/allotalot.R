@@ -1,8 +1,8 @@
-#' Parallel Assignment in R
+#' Unpacking Assignment in R
 #'
 #' allotalot provides an infix function \code{\link{\%<-\%}} to perform
-#' unpacking and parallel assignment in R. To get started with allotalot check
-#' out the introductory vignette, \code{?intro_to_allotalot}.
+#' unpacking assignment in R. To get started with allotalot check out the
+#' introductory vignette, \code{browseVignettes('allotalot')}.
 #'
 #' @seealso \code{\link{\%<-\%}}
 #'

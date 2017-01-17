@@ -83,14 +83,14 @@ test_that('pair_off unpacks strings and data frames', {
 test_that('pair_off throws error for atomic vector of length > 1', {
   expect_error(
     pair_off(list('a', 'b'), list(character(2))),
-    'cannot unpack character vector of length greater than 1'
+    'cannot de-structure character vector of length greater than 1'
   )
 })
 
 test_that('pair_off throws error for flat lists of different lengths', {
   expect_error(
     pair_off(list('a', 'b'), list(1)),
-    'expecting 2 values, but found 1'
+    'cannot de-structure numeric'
   )
   expect_error(
     pair_off(list('a', 'b'), list(1, 2, 3)),
@@ -108,7 +108,6 @@ test_that('pair_off throws error for nested lists of different lengths, depths',
 test_that('pair_off throws error for extra names, including a collector', {
   expect_error(
     pair_off(list('a', '...mid', 'b'), list(1, 2)),
-    'after collecting ...mid, expecting 1 values, but found 0',
-    fixed = TRUE
+    'expecting at least 3 values, but found 2'
   )
 })

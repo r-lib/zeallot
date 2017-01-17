@@ -4,11 +4,11 @@
 \name{allotalot}
 \alias{allotalot}
 \alias{allotalot-package}
-\title{Parallel Assignment in R}
+\title{Unpacking Assignment in R}
 \description{
 allotalot provides an infix function \code{\link{\%<-\%}} to perform
-unpacking and parallel assignment in R. To get started with allotalot check
-out the introductory vignette, \code{?intro_to_allotalot}.
+unpacking assignment in R. To get started with allotalot check out the
+introductory vignette, \code{browseVignettes('allotalot')}.
 }
 \seealso{
 \code{\link{\%<-\%}}

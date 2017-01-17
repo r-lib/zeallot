@@ -7,16 +7,20 @@
 massign(x, values, envir = parent.frame(), inherits = FALSE)
 }
 \arguments{
-\item{x}{a list of variable name(s), see details.}
+\item{x}{a list of variable name(s).}
 
-\item{values}{values to be assigned, see details.}
+\item{values}{values to be assigned, usually a list of values or an object
+with a \code{destructure} implementation.}
 }
 \description{
-Using two lists of names and values, assign values to names in an
-environment.
+Using two lists of names and values, assign values to names in the specified
+environment, defaults to calling environment.
 }
 \details{
-\code{massign} expects \code{x} and \code{values}
+For more information about how \code{massign} and \code{\%<-\%} assign values
+to names, refer to the introductory vignette.
+
+\code{browseVignettes('allotalot')}
 }
 \keyword{internal}
 

@@ -1,12 +1,14 @@
 Package: allotalot
 Type: Package
-Title: Parallel Assignment
+Title: Unpacking Assignment
 Version: 0.0.1
 Authors@R: c(
     person(given = 'Nathan', family = 'Teetor', email = 'nathanteetor@gmail.com', role = c('aut', 'cre')),
     person(given = 'Paul', family = 'Teetor', role = 'ctb'))
-Description: A set of tools to perform unpacking or destructuring,
-    multiple, and parallel assignment in R.
+Description: Provides a %<-% operator to perform multiple 
+    or unpacking assignment in R. The operator unpacks a
+    list of values and assigns these values to specified
+    corresponding names.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

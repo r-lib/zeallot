@@ -27,7 +27,7 @@ test_that('massign handles nested lists', {
   expect_equal(j, 'jey')
 })
 
-test_that('massign will not unpack flat list', {
+test_that('massign will not destructure flat list', {
   massign(list('a', 'b'), list(1, list(2, 3)))
   expect_equal(a, 1)
   expect_equal(b, list(2, 3))
@@ -47,7 +47,7 @@ test_that('massign does not assign .', {
   expect_equal(b, 3)
 })
 
-test_that('massign does not unpack when using rest prefix', {
+test_that('massign does not destructure when using rest prefix', {
   massign(list('...rest'), list(1, list(2, 3)))
   expect_equal(rest, list(1, list(2, 3)))
 

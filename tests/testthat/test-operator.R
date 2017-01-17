@@ -23,29 +23,29 @@ test_that('%<-% throws error if value is vector, but lhs has braces', {
   expect_error({a: b} %<-% c(1, 2), 'expecting list of values, but found vector')
 })
 
-test_that('%<-% unpacks vector', {
+test_that('%<-% destructures vector', {
   a: b %<-% c('hello', 'world')
   expect_equal(a, 'hello')
   expect_equal(b, 'world')
 })
 
-test_that('%<-% cannot unpack nested vectors', {
+test_that('%<-% cannot destructure nested vectors', {
   expect_error({{a: b}: {c: d}} %<-% list(c(1, 2), c(3, 4)), 'expecting 2 values, but found 1')
 })
 
-test_that('%<-% unpacks list', {
+test_that('%<-% destructure list', {
   {a: b} %<-% list('hello', 3030)
   expect_equal(a, 'hello')
   expect_equal(b, 3030)
 })
 
-test_that('%<-% unpacks list of lists', {
+test_that('%<-% destructure list of lists', {
   {a: b} %<-% list(list('hello', 'world'), list('goodnight', 'moon'))
   expect_equal(a, list('hello', 'world'))
   expect_equal(b, list('goodnight', 'moon'))
 })
 
-test_that('%<-% unpacks internal vector to list', {
+test_that('%<-% destructure internal vector to list', {
   {a: b} %<-% list(list('hello', 'world'), 1:5)
   expect_equal(a, list('hello', 'world'))
   expect_equal(b, 1:5)
@@ -71,7 +71,7 @@ test_that('%<-% handles S3 objects with underlying list structure', {
 
   expect_error(a %<-% shape(), 'for standard assignment use `<-`', fixed = TRUE)
 
-  expect_error({a: b} %<-% shape(), 'cannot unpack object of class shape')
+  expect_error({a: b} %<-% shape(), 'cannot de-structure shape')
 })
 
 test_that('%<-% skips values using .', {
@@ -90,8 +90,8 @@ test_that('%<-% skips values using .', {
 })
 
 test_that('%<-% throws error if unequal nesting', {
-  expect_error({a: b} %<-% list(1), 'expecting 2 values, but found 1')
-  expect_error({a: b: c} %<-% list(1), 'expecting 3 values, but found 1')
+  expect_error({a: b} %<-% list(1), 'cannot de-structure numeric')
+  expect_error({a: b: c} %<-% list(1), 'cannot de-structure numeric')
   expect_error({a: b: c} %<-% list(1, 2), 'expecting 3 values, but found 2')
 
   expect_error({{a: b}: {c: d: e}} %<-% list(list(1, 2), list(3, 4)),
