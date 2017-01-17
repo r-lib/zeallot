@@ -164,6 +164,7 @@
       stop('expecting vector of values, but found list', call. = FALSE)
     }
 
+    # NULL as a value slips through here, bug or feature?
     if (internals[1] == '{' && is.vector(value) && !is_list(value)) {
       stop('expecting list of values, but found vector', call. = FALSE)
     }

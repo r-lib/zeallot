@@ -26,7 +26,7 @@ collect <- function(names, values) {
   c_index <- which(grepl('^\\.\\.\\.', names))
 
   if (length(c_index) != 1) {
-    stop(length(c_index), ' collector variables specified, use 1 per depth',
+    stop('assignment ambiguity due to multiple collector variables at one depth',
          call. = FALSE)
   }
 
@@ -68,10 +68,6 @@ pair_off <- function(names, values) {
   if (length(names) != length(values)) {
     if (is_list(values) && length(values) == 1) {
       return(pair_off(names, destructure(car(values))))
-    }
-
-    if (!is_list(values)) {
-      return(pair_off(names, destructure(values)))
     }
 
     if (!has_collector(names)) {
