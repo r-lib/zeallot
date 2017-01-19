@@ -69,7 +69,7 @@ destructure <- function(x) {
 
 #' Included Implementations of \code{destructure}
 #'
-#' \code{allotalot} includes \code{destructure} methods for the following
+#' \code{zorcher} includes \code{destructure} methods for the following
 #' classes: \code{character}, \code{complex}, \code{Date}, \code{data.frame},
 #' and \code{summary.lm}. See details for how each object is transformed into a
 #' list.

@@ -1,3 +1,3 @@
-# allotalot 0.0.1
+# zorcher 0.0.1
 
 * Initial release

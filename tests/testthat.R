@@ -1,4 +1,4 @@
 library(testthat)
-library(allotalot)
+library(zorcher)
 
-test_check("allotalot")
+test_check("zorcher")

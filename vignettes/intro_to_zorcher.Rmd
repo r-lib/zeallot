@@ -14,15 +14,13 @@ vignette: >
 ```{R, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = '#>')
 
-library(allotalot)
+library(zorcher)
 ```
 
 ## Unpacking Assignment
-The *allotalot* package defines an operator for *unpacking assignment*,
-sometimes called *parallel assignment* or *destructuring assignment*
-in other programming languages.
-The operator is written as `%<-%`
-and used like this.
+The *zorcher* package defines an operator for *unpacking assignment*, sometimes
+called *parallel assignment* or *destructuring assignment* in other programming
+languages. The operator is written as `%<-%` and used like this.
 
 ```{r}
 { lat : lng } %<-% list(38.061944, -122.643889)
@@ -152,7 +150,7 @@ err
 ```
 
 ## Unpacking a data frame
-A data frame is simply a list of columns, so the *allotalot* assignment does
+A data frame is simply a list of columns, so the *zorcher* assignment does
 what you expect. It unpacks the data frame into individual columns.
 
 ```{r}
@@ -186,7 +184,7 @@ an3
 an4
 ```
 
-The `%<-% operator assigned four data frames to four variables, leaving the
+The `%<-%` operator assigned four data frames to four variables, leaving the
 data frames intact.
 
 ## Unpacking nested values
@@ -236,7 +234,7 @@ d
 ```
 
 ### Class objects
-*allotalot* includes implementations of `destructure` for character strings,
+*zorcher* includes implementations of `destructure` for character strings,
 complex numbers, data frames, date objects, and linear model summaries.
 However, because `destructure` is a generic function, you can define new
 implementations for custom classes. When defining a new implementation keep in

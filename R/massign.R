@@ -9,10 +9,10 @@
 #'
 #' @details
 #'
-#' For more information about how \code{massign} and \code{\%<-\%} assign values
-#' to names, refer to the introductory vignette.
+#' Refer to examples in the introductory vignette to see how \code{massign} and
+#' \code{\%<-\%} associate values with names.
 #'
-#' \code{browseVignettes('allotalot')}
+#' \code{browseVignettes('zorcher')}
 #'
 #' @keywords internal
 #' @export

@@ -1,11 +1,11 @@
-# allotalot
+# zorcher
 
 Parallel assignment in R
 
-[travis]: https://travis-ci.org/nteetor/allotalot.svg?branch=master "lots o' building"
-[appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/allotalot?branch=master&svg=true "lots o' 'veyors"
-[coverage]: https://codecov.io/gh/nteetor/allotalot/branch/master/graph/badge.svg "lots o' coverage"
-[cran]: https://www.r-pkg.org/badges/version/allotalot "getting there"
+[travis]: https://travis-ci.org/nteetor/zorcher.svg?branch=master "shake and bake"
+[appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/zorcher?branch=master&svg=true "frappe"
+[coverage]: https://codecov.io/gh/nteetor/zorcher/branch/master/graph/badge.svg "deep fat fry"
+[cran]: https://www.r-pkg.org/badges/version/zorcher "getting there"
 
 ![alt text][travis] ![alt text][appveyor] ![alt text][coverage] ![alt text][cran]
 
@@ -14,7 +14,7 @@ Parallel assignment in R
 A first example,
 
 ```R
-library(allotalot)
+library(zorcher)
 
 a: b %<-% c(0, 1)
 a
@@ -78,16 +78,16 @@ ncols
 
 ## Installation
 
-allotalot can be installed using devtools:
+zorcher can be installed using devtools:
 ```R
 # install.packages('devtools')
-devtools::install_github('nteetor/allotalot')
+devtools::install_github('nteetor/zorcher')
 ```
 
 ## Vignette
 
-For more about how to use *allotalot* checkout the [introductory vignette](vignettes/intro-to-allotalot.Rmd).
+For more about how to use *zorcher* checkout the [introductory vignette](vignettes/intro_to_zorcher.Rmd).
 
 ---
 
-Inspiration for this package goes to Paul Teetor. Without his encouragement nothing would have gotten off the ground. Enjoy alloting a lot of values!
+Inspiration for this package goes to Paul Teetor. Without his encouragement nothing would have gotten off the ground.
