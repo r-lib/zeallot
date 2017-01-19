@@ -1,6 +1,6 @@
 # zorcher
 
-Parallel assignment in R
+Multiple and unpacking assignment in R
 
 [travis]: https://travis-ci.org/nteetor/zorcher.svg?branch=master "shake and bake"
 [appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/zorcher?branch=master&svg=true "frappe"
