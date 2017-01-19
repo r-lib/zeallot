@@ -1,8 +1,8 @@
 context(' * testing assignment operator')
 
 test_that('%<-% does *not* act like <-', {
-  expect_error(a %<-% 1, 'for standard assignment use `<-`', fixed = TRUE)
-  expect_error(b %<-% NULL, 'for standard assignment use `<-`', fixed = TRUE)
+  expect_error(a %<-% 1, 'use `<-` for standard assignment', fixed = TRUE)
+  expect_error(b %<-% NULL, 'use `<-` for standard assignment', fixed = TRUE)
 })
 
 test_that('%<-% handles list of 1 name and list of 1 value', {
@@ -21,6 +21,14 @@ test_that('%<-% throws error if value is list, but no braces on lhs', {
 
 test_that('%<-% throws error if value is vector, but lhs has braces', {
   expect_error({a: b} %<-% c(1, 2), 'expecting list of values, but found vector')
+})
+
+test_that('%<-% requires braces when destructuring single object', {
+  {a: b} %<-% faithful
+  expect_equal(a, faithful[[1]])
+  expect_equal(b, faithful[[2]])
+
+  expect_error(c: d %<-% faithful, 'expecting vector of values, but found data.frame')
 })
 
 test_that('%<-% destructures vector', {
@@ -69,7 +77,7 @@ test_that('%<-% handles S3 objects with underlying list structure', {
     )
   }
 
-  expect_error(a %<-% shape(), 'for standard assignment use `<-`', fixed = TRUE)
+  expect_error(a %<-% shape(), 'use `<-` for standard assignment', fixed = TRUE)
 
   expect_error({a: b} %<-% shape(), 'cannot de-structure shape')
 })

@@ -1,52 +1,65 @@
-#' Parallel, Multiple, and Unpacking Assignment
+#' zorcher Assignment Operator
 #'
-#' The \code{\%<-\%} operator performs parallel assignment by assigning values
-#' from the right-hand side values, \code{value}, to left-hand side names,
-#' \code{x}.
+#' Assign values to name(s).
 #'
 #' @usage x \%<-\% value
 #'
 #' @param x A bare name or name structure, see details.
-#' @param value A list or vectors of values or \R object to assign, see details.
+#' @param value A list of values, vector of values, or \R object to assign.
 #'
 #' @details
 #'
-#' To separate names on the left-hand side of an expression use \code{:}. To
-#' construct a nested set of names on the left-hand side of an expression use
-#' braces, \code{\{} and \code{\}}.
+#' \bold{variable names}
 #'
-#' To begin simply, parallel assignment occurs one-to-one between names on the
-#' left-hand side of the expressiona and values on the right-hand side of the
-#' expression. If there are three names on the left side, three values are
-#' expected on the right side. Values on the right-hand side may be listed as a
-#' list or vector.
+#' To separate variable names use colons, \code{a: b: c}.
 #'
-#' It is important to understand what happens when there is, intentionally, a
-#' many-to-one ratio of names and values. If many names are specified, but only
-#' a single value is specified then the value is unpacked before assignment. For
-#' example, a data frame is unpacked into a list of columns or a character
-#' string is unpacked into a list of individual characters. For more information
-#' about how a particular class is unpacked see \code{\link{unpack}}.
-#' \code{unpack} is a generic function and may be implemented for custom
-#' classes. After a value is unpacked a one-to-one ratio of names and values is
-#' expected, otherwise an error is raised.
+#' To nest variable names use braces, \code{\{a: \{b: c\}\}}.
 #'
-#' To skip a value without raising an error, use the special name \code{.}. To
-#' collect multiple or remaining values into a variable, prefix the variable
-#' with \code{...}. These two special cases can be combined, \code{....}, to
-#' skip multiple values without raising an error. It is important to note that
-#' a single collector variable may be used per name depth, otherwise an error
-#' is raised.
+#' \bold{values}
 #'
-#' For concrete examples see below.
+#' To unpack a vector of variables do not include braces, \code{a: b \%<-\% c(1,
+#' 2)}.
+#'
+#' Include braces to unpack a list of values, \code{\{a: b\} \%<-\% list(1,
+#' 2)}.
+#'
+#' When \code{value} is neither a vector nor a list, the zorcher operator will
+#' try to de-structure \code{value} into a list, see \code{\link{destructure}}.
+#'
+#' Nesting names will unpack nested values, \code{\{a: \{b: c\}\} \%<-\% list(1,
+#' list(2, 3))}.
+#'
+#' \bold{collector variables}
+#'
+#' To gather extra values from the beginning, middle, or end of \code{value}
+#' use a collector variable. Collector variables are indicated with a \code{...}
+#' prefix.
+#'
+#' Collect starting values, \code{\{...a: b: c\} \%<-\% list(1, 2, 3, 4)}
+#'
+#' Collect middle values, \code{\{a: ...b: c\} \%<-\% list(1, 2, 3, 4)}
+#'
+#' Collect ending values, \code{\{a: b: ...c\} \%<-\% list(1, 2, 3, 4)}
+#'
+#' \bold{skipping values}
+#'
+#' Use a period \code{.} in place of a variable name to skip a value without
+#' raising an error, \code{\{a: .: c\} \%<-\% list(1, 2, 3)}. Values will not be
+#' assigned to \code{.}.
+#'
+#' Skip multiple values by combining the collector prefix and a period,
+#' \code{\{a: ....: e\} \%<-\% list(1, NA, NA, NA, 5)}.
 #'
 #' @return
 #'
 #' \code{\%<-\%} invisibly returns \code{value}.
 #'
-#' @seealso \code{\link{unpack}}
+#' \code{\%<-\%} is used primarily for its assignment side-effect. \code{\%<-\%}
+#' assigns into the environment in which it is evaluated.
 #'
-#' @rdname parallel-assign
+#' @seealso \code{\link{destructure}}
+#'
+#' @rdname unpacking-op
 #' @export
 #' @examples
 #' # basic usage
@@ -73,62 +86,61 @@
 #' {j: k: l} %<-% list(6, 7, 8)
 #'
 #' # assign columns of data frame
-#' {sep_len: sep_wdth: pet_len: pet_wdth: spcs} %<-% iris
+#' {num_erupts: till_next} %<-% faithful
 #'
-#' # assign only some of values
-#' {mpg: cyl: disp: ...rest} %<-% mtcars
+#' num_erupts  # 3.600 1.800 3.333 ..
+#' till_next   # 79 54 74 ..
 #'
-#' mpg   # first column
-#' cyl   # second column
-#' disp  # third column
-#' rest  # the rest of the mtcars columns,
-#'       # *as a list*
+#' # assign only specific columns, skip
+#' # other columns
+#' {mpg: cyl: disp: ....} %<-% mtcars
 #'
-#' # assign values at end of list
-#' TODOs <- list('make food', 'pack lunch', 'save the world')
+#' mpg   # 21.0 21.0 22.8 ..
+#' cyl   # 6 6 4 ..
+#' disp  # 160.0 160.0 108.0 ..
 #'
-#' {...skipped: do_it} %<-% TODOs
+#' # skip initial values, assign final value
+#' TODOs <- list('make food', 'pack lunch', 'save world')
 #'
-#' skipped  # c('make food', 'pack lunch')
-#' do_it    # 'save the world'
+#' {....: task} %<-% TODOs
 #'
-#' # assign first name, skip middle initial without
-#' # error, assign last name
+#' task  # 'save world'
+#'
+#' # assign first name, skip middle initial,
+#' # assign last name
 #' first: .: last %<-% c('Ursula', 'K', 'Le Guin')
 #'
-#' first  # "Ursula"
-#' last   # "Le Guin"
+#' first  # 'Ursula'
+#' last   # 'Le Guin'
 #'
-#' # setup a simple model and get
-#' # a summary
+#' # simple model and summary
 #' f <- lm(hp ~ gear, data = mtcars)
 #' fsum <- summary(f)
 #'
 #' # extract call and fstatistic from
 #' # the summary
-#' {fcall: ....: fstat: .} %<-% fsum
+#' {fcall: ....: ffstat: .} %<-% fsum
 #'
-#' fcall  # hp ~ gear
-#' fstat  # named vector of length 3
+#' fcall
+#' ffstat
 #'
-#' # tackle a heavily nested list with
-#' # equally heavily nested names
-#' fibs <- list(0, list(1, list(1, list(2, list(3)))))
+#' # unpack nested values with
+#' # nested names
+#' fibs <- list(1, list(2, list(3, list(5))))
 #'
-#' {f0: {f1: {f2: {f3: {f4}}}}} %<-% fibs
+#' {f2: {f3: {f4: {f5}}}} %<-% fibs
 #'
-#' f0  # 0
-#' f1  # 1
 #' f2  # 1
 #' f3  # 2
-#' f4  # list(3) *!!*
+#' f4  # 3
+#' f5  # list(5) *!!*
 #'
-#' # unpack only first and second values
-#' # no error because second value is a list
-#' {f0: fcdr} %<-% fibs
+#' # unpack first value (a numeric) and
+#' # second value (a list)
+#' {f2: fcdr} %<-% fibs
 #'
-#' f0    # 0
-#' fcdr  # list(1, list(1, list(2, list(3))))
+#' f2    # 1
+#' fcdr  # list(2, list(3, list(5)))
 #'
 #' # swap values without using a
 #' # temporary variable
@@ -140,13 +152,13 @@
 #' a  # 'bee'
 #' b  # 'eh'
 #'
-#' # strsplit example
-#' guests <- c('Nathan,Allison,Matt,Polly', 'Smith,Peterson,Williams,Jones')
+#' # unpack strsplit return value
+#' names <- c('Nathan,Maria,Matt,Polly', 'Smith,Peterson,Williams,Jones')
 #'
-#' {firsts: lasts} %<-% strsplit(guests, ',')
+#' {firsts: lasts} %<-% strsplit(names, ',')
 #'
-#' firsts  # c("Nathan", "Allison", ..
-#' lasts   # c("Smith", "Peterson", ..
+#' firsts  # c('Nathan', 'Maria', ..
+#' lasts   # c('Smith', 'Peterson', ..
 #'
 `%<-%` <- function(x, value) {
   ast <- tree(substitute(x))
@@ -160,8 +172,9 @@
       stop('unexpected call `', name, '`', call. = FALSE)
     }
 
-    if (internals[1] == ':' && is_list(value)) {
-      stop('expecting vector of values, but found list', call. = FALSE)
+    if (internals[1] == ':' && !(is.atomic(value) || is_Date(value))) {
+      stop('expecting vector of values, but found ', class(value),
+           call. = FALSE)
     }
 
     # NULL as a value slips through here, bug or feature?
@@ -170,7 +183,7 @@
     }
 
   } else {
-    stop('for standard assignment use `<-`', call. = FALSE)
+    stop('use `<-` for standard assignment', call. = FALSE)
   }
 
   lhs <- variables(ast)
