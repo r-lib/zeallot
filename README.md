@@ -3,7 +3,7 @@
 Multiple and unpacking assignment in R
 
 [travis]: https://travis-ci.org/nteetor/zorcher.svg?branch=master "shake and bake"
-[appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/zorcher?branch=master&svg=true "frappe"
+[appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/zorcher?branch=master&svg=true "frappe!"
 [coverage]: https://codecov.io/gh/nteetor/zorcher/branch/master/graph/badge.svg "deep fat fry"
 [cran]: https://www.r-pkg.org/badges/version/zorcher "getting there"
 
