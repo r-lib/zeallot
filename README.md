@@ -155,7 +155,7 @@ This is where I will conclude the README for now.
 ## Package Vignette
 
 If you are intrigued by any of what is above I highly suggest you read through 
-the [introductory vignette](vignettes/packing-assignment.Rmd). This README hopes
+the [introductory vignette](vignettes/unpacking-assignment.Rmd). This README hopes
 to get your attention, but the vignette focuses on walking you through and 
 teaching you all of zeallot.
 
