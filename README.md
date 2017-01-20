@@ -1,6 +1,6 @@
 # zeallot
 
-Multiple and unpacking assignment in R
+Adding zeal to variable assignment in R
 
 [travis]: https://travis-ci.org/nteetor/zeallot.svg?branch=master "shake and bake"
 [appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/zeallot?branch=master&svg=true "frappe!"
