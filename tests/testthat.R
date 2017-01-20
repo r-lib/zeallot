@@ -1,4 +1,4 @@
 library(testthat)
-library(zorcher)
+library(zeallot)
 
-test_check("zorcher")
+test_check("zeallot")

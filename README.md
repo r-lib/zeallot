@@ -1,11 +1,11 @@
-# zorcher
+# zeallot
 
 Multiple and unpacking assignment in R
 
-[travis]: https://travis-ci.org/nteetor/zorcher.svg?branch=master "shake and bake"
-[appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/zorcher?branch=master&svg=true "frappe!"
-[coverage]: https://codecov.io/gh/nteetor/zorcher/branch/master/graph/badge.svg "deep fat fry"
-[cran]: https://www.r-pkg.org/badges/version/zorcher "getting there"
+[travis]: https://travis-ci.org/nteetor/zeallot.svg?branch=master "shake and bake"
+[appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/zeallot?branch=master&svg=true "frappe!"
+[coverage]: https://codecov.io/gh/nteetor/zeallot/branch/master/graph/badge.svg "deep fat fry"
+[cran]: https://www.r-pkg.org/badges/version/zeallot "getting there"
 
 ![alt text][travis] ![alt text][appveyor] ![alt text][coverage] ![alt text][cran]
 
@@ -14,7 +14,7 @@ Multiple and unpacking assignment in R
 A first example,
 
 ```R
-library(zorcher)
+library(zeallot)
 
 a: b %<-% c(0, 1)
 a
@@ -78,15 +78,15 @@ ncols
 
 ## Installation
 
-zorcher can be installed using devtools:
+zeallot can be installed using devtools:
 ```R
 # install.packages('devtools')
-devtools::install_github('nteetor/zorcher')
+devtools::install_github('nteetor/zeallot')
 ```
 
 ## Vignette
 
-For more about how to use *zorcher* checkout the [introductory vignette](vignettes/intro_to_zorcher.Rmd).
+For more about how to use *zeallot* checkout the [introductory vignette](vignettes/intro_to_zeallot.Rmd).
 
 ---
 

@@ -8,9 +8,9 @@
 #'
 #' @details
 #'
-#' When de-structuring a vector, \code{destructure} expects \code{x} is a single
-#' values. If a vector of length greater than 1 is passed to \code{destructure}
-#' an error is raised.
+#' If \code{x} is atomic \code{destructure} expects \code{length(x)} to be 1. If
+#' a vector with length greater than 1 is passed to \code{destructure} an error
+#' is raised.
 #'
 #' New implementations of \code{destructure} can be very simple. A new
 #' \code{destructure} function might only strip away the class of a custom
@@ -69,9 +69,9 @@ destructure <- function(x) {
 
 #' Included Implementations of \code{destructure}
 #'
-#' \code{zorcher} includes \code{destructure} methods for the following
-#' classes: \code{character}, \code{complex}, \code{Date}, \code{data.frame},
-#' and \code{summary.lm}. See details for how each object is transformed into a
+#' zeallot includes \code{destructure} methods for the following classes:
+#' \code{character}, \code{complex}, \code{Date}, \code{data.frame}, and
+#' \code{summary.lm}. See details for how each object is transformed into a
 #' list.
 #'
 #' @inheritParams destructure

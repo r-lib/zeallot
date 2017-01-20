@@ -20,7 +20,7 @@ environment, defaults to calling environment.
 Refer to examples in the introductory vignette to see how \code{massign} and
 \code{\%<-\%} associate values with names.
 
-\code{browseVignettes('zorcher')}
+\code{browseVignettes('zeallot')}
 }
 \keyword{internal}
 

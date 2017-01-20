@@ -2,7 +2,7 @@
 % Please edit documentation in R/assignment-op.R
 \name{\%<-\%}
 \alias{\%<-\%}
-\title{zorcher Assignment Operator}
+\title{zeallot Assignment Operator}
 \usage{
 x \%<-\% value
 }
@@ -35,7 +35,7 @@ To unpack a vector of variables do not include braces, \code{a: b \%<-\% c(1,
 Include braces to unpack a list of values, \code{\{a: b\} \%<-\% list(1,
 2)}.
 
-When \code{value} is neither a vector nor a list, the zorcher operator will
+When \code{value} is neither a vector nor a list, the zeallot operator will
 try to de-structure \code{value} into a list, see \code{\link{destructure}}.
 
 Nesting names will unpack nested values, \code{\{a: \{b: c\}\} \%<-\% list(1,
@@ -125,8 +125,8 @@ fsum <- summary(f)
 fcall
 ffstat
 
-# tackle a heavily nested list with an
-# equally heavily nested names
+# unpack nested values with
+# nested names
 fibs <- list(1, list(2, list(3, list(5))))
 
 {f2: {f3: {f4: {f5}}}} \%<-\% fibs
@@ -136,12 +136,12 @@ f3  # 2
 f4  # 3
 f5  # list(5) *!!*
 
-# unpack only first and second values
-# no error because second value is a list
-{f0: fcdr} \%<-\% fibs
+# unpack first value (a numeric) and
+# second value (a list)
+{f2: fcdr} \%<-\% fibs
 
-f0    # 0
-fcdr  # list(1, list(1, list(2, list(3))))
+f2    # 1
+fcdr  # list(2, list(3, list(5)))
 
 # swap values without using a
 # temporary variable
@@ -153,13 +153,13 @@ a: b \%<-\% c(b, a)
 a  # 'bee'
 b  # 'eh'
 
-# strsplit example
-guests <- c('Nathan,Allison,Matt,Polly', 'Smith,Peterson,Williams,Jones')
+# unpack strsplit return value
+names <- c('Nathan,Maria,Matt,Polly', 'Smith,Peterson,Williams,Jones')
 
-{firsts: lasts} \%<-\% strsplit(guests, ',')
+{firsts: lasts} \%<-\% strsplit(names, ',')
 
-firsts  # c("Nathan", "Allison", ..
-lasts   # c("Smith", "Peterson", ..
+firsts  # c('Nathan', 'Maria', ..
+lasts   # c('Smith', 'Peterson', ..
 
 }
 \seealso{

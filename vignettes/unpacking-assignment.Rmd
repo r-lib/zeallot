@@ -1,12 +1,9 @@
 ---
 title: "Unpacking Assignment"
-author: 
-  - "Paul Teetor"
-  - "Nathan Teetor"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Parallel, Multiple, and Unpacking Assignment}
+  %\VignetteIndexEntry{Unpacking Assignment}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,11 +11,11 @@ vignette: >
 ```{R, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = '#>')
 
-library(zorcher)
+library(zeallot)
 ```
 
-## Unpacking Assignment
-The *zorcher* package defines an operator for *unpacking assignment*, sometimes
+## Getting Started
+The *zeallot* package defines an operator for *unpacking assignment*, sometimes
 called *parallel assignment* or *destructuring assignment* in other programming
 languages. The operator is written as `%<-%` and used like this.
 
@@ -150,7 +147,7 @@ err
 ```
 
 ## Unpacking a data frame
-A data frame is simply a list of columns, so the *zorcher* assignment does
+A data frame is simply a list of columns, so the *zeallot* assignment does
 what you expect. It unpacks the data frame into individual columns.
 
 ```{r}
@@ -234,7 +231,7 @@ d
 ```
 
 ### Class objects
-*zorcher* includes implementations of `destructure` for character strings,
+*zeallot* includes implementations of `destructure` for character strings,
 complex numbers, data frames, date objects, and linear model summaries.
 However, because `destructure` is a generic function, you can define new
 implementations for custom classes. When defining a new implementation keep in

@@ -15,9 +15,9 @@ into a list. Individual elements of the list are assigned to names on the
 left-hand side of the unpacking assignment expression.
 }
 \details{
-When de-structuring a vector, \code{destructure} expects \code{x} is a single
-values. If a vector of length greater than 1 is passed to \code{destructure}
-an error is raised.
+If \code{x} is atomic \code{destructure} expects \code{length(x)} to be 1. If
+a vector with length greater than 1 is passed to \code{destructure} an error
+is raised.
 
 New implementations of \code{destructure} can be very simple. A new
 \code{destructure} function might only strip away the class of a custom

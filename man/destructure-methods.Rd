@@ -29,9 +29,9 @@
 A list of elements from \code{x}.
 }
 \description{
-\code{zorcher} includes \code{destructure} methods for the following
-classes: \code{character}, \code{complex}, \code{Date}, \code{data.frame},
-and \code{summary.lm}. See details for how each object is transformed into a
+zeallot includes \code{destructure} methods for the following classes:
+\code{character}, \code{complex}, \code{Date}, \code{data.frame}, and
+\code{summary.lm}. See details for how each object is transformed into a
 list.
 }
 \details{

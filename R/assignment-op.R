@@ -1,4 +1,4 @@
-#' zorcher Assignment Operator
+#' zeallot Assignment Operator
 #'
 #' Assign values to name(s).
 #'
@@ -23,7 +23,7 @@
 #' Include braces to unpack a list of values, \code{\{a: b\} \%<-\% list(1,
 #' 2)}.
 #'
-#' When \code{value} is neither a vector nor a list, the zorcher operator will
+#' When \code{value} is neither a vector nor a list, the zeallot operator will
 #' try to de-structure \code{value} into a list, see \code{\link{destructure}}.
 #'
 #' Nesting names will unpack nested values, \code{\{a: \{b: c\}\} \%<-\% list(1,

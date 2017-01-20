@@ -1,6 +1,6 @@
-Package: zorcher
+Package: zeallot
 Type: Package
-Title: Multiple And Unpacking Assignment
+Title: Add Zeal to Variable Assignment
 Version: 0.0.1
 Authors@R: c(
     person(given = 'Nathan', family = 'Teetor', email = 'nathanteetor@gmail.com', role = c('aut', 'cre')),

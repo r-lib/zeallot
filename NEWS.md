@@ -1,3 +1,3 @@
-# zorcher 0.0.1
+# zeallot 0.0.1
 
 * Initial release
