@@ -35,8 +35,7 @@ devtools::install_github('nteetor/zeallot')
 
 3. Make sure zeallot was successfully installed,
 ```R
-isTRUE(require(zeallot))
-#> TRUE, hopefully
+library(zeallot)  # No error? You're good to go!
 ```
 
 ## Getting Started
