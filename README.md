@@ -1,4 +1,4 @@
-<h1 align="center"> <img alt="zeallot" src="inst/logo.png"></h1>
+<h1 align="center"> <img alt="zeallot" src="inst/logo.png" height="250"></h1>
 
 Variable assignment with zeal!
 
