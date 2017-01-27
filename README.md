@@ -2,18 +2,20 @@
 
 Variable assignment with zeal!
 
-[travis]: https://travis-ci.org/nteetor/zeallot.svg?branch=master "shake and
-bake" [appveyor]:
-https://ci.appveyor.com/api/projects/status/github/nteetor/zeallot?branch=master&svg=true
-"frappe!" [coverage]:
-https://codecov.io/gh/nteetor/zeallot/branch/master/graph/badge.svg "deep fat
-fry" [cran]: https://www.r-pkg.org/badges/version/zeallot "getting there"
+[travis]: https://travis-ci.org/nteetor/zeallot.svg?branch=master "shake and bake"
+[appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/zeallot?branch=master&svg=true "frappe!" 
+[coverage]: https://codecov.io/gh/nteetor/zeallot/branch/master/graph/badge.svg "deep fat fry" 
+[cran]: https://www.r-pkg.org/badges/version/zeallot "getting there"
 
-![alt text][travis] ![alt text][appveyor] ![alt text][coverage] ![alt
-text][cran]
+![alt text][travis] ![alt text][appveyor] ![alt text][coverage] ![alt text][cran]
 
+Below is the zeallot syntax in action.
 ```R
 x: y %<-% c(0, 1)
+x
+#> 0
+y
+#> 1
 ```
 
 ## What's to be excited about?
