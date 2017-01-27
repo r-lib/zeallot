@@ -9,6 +9,8 @@ Description: Provides a %<-% operator to perform multiple
     or unpacking assignment in R. The operator unpacks a
     list of values and assigns these values to a single
     or multiple corresponding names.
+URL: https://github.com/nteetor/zeallot
+BugReports: https://github.com/nteetor/zeallot/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
