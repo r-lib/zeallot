@@ -1,4 +1,4 @@
-#' zeallot Assignment Operator
+#' Unpacking Operator
 #'
 #' Assign values to name(s).
 #'

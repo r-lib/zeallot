@@ -6,14 +6,14 @@ Authors@R: c(
     person(given = 'Nathan', family = 'Teetor', email = 'nathanteetor@gmail.com', role = c('aut', 'cre')),
     person(given = 'Paul', family = 'Teetor', role = 'ctb'))
 Description: Provides a %<-% operator to perform multiple 
-    or unpacking assignment in R. The operator unpacks a
-    list of values and assigns these values to a single
-    or multiple corresponding names.
+    or unpacking assignment in R. The operator unpacks
+    the right-hand side of an assignment into multiple 
+    values and assigns these values to variables on the
+    left-hand side of the assignment.
 URL: https://github.com/nteetor/zeallot
 BugReports: https://github.com/nteetor/zeallot/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
 Suggests:

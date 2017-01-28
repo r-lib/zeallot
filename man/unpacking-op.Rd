@@ -2,7 +2,7 @@
 % Please edit documentation in R/assignment-op.R
 \name{\%<-\%}
 \alias{\%<-\%}
-\title{zeallot Assignment Operator}
+\title{Unpacking Operator}
 \usage{
 x \%<-\% value
 }

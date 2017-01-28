@@ -5,15 +5,18 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 notes
+0 errors | 0 warnings | 0 notes
 
 ### Notes
 
-* This is a new release.
+* Added missing fields to DESCRIPTION
+* Fixed broken badges in README
+* Minor edits to README, DESCRIPTION, and unpacking-op.Rd
+* Package code is unchanged
 
 ## Reverse dependencies
 
-This is a new release, so there are no reverse dependencies.
+There are no reverse dependencies.
 
 ---
 
