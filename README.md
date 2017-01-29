@@ -35,7 +35,7 @@ You can install zeallot from CRAN.
 ```R
 install.packages('zeallot')
 ```
-Use devtools to install the latest, development version of zeallot.
+Use devtools to install the latest, development version of zeallot from GitHub.
 
 ```R
 devtools::install_github('nteetor/zeallot')
