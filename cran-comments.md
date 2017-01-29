@@ -1,4 +1,11 @@
+## Resubmission
+
+This is a resubmission. Fixes,
+
+* Bumped DESCRIPTION version field from 0.0.2 to 0.0.2.1
+
 ## Test environments
+
 * local OS X install, R 3.3.2
 * ubuntu 12.04 (on travis-ci), R 3.3.2
 * win-builder (devel and release)
