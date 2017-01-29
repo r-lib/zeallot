@@ -9,8 +9,6 @@ Variable assignment with zeal!
 
 ![alt text][travis] ![alt text][appveyor] ![alt text][coverage] ![alt text][cran]
 
----
-
 ## What's there to be excited about?
 
 zeallot allows multiple or unpacking assignment in R. With zeallot you can 
