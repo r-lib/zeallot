@@ -2,12 +2,12 @@
 % Please edit documentation in R/destructure.R
 \name{destructure-methods}
 \alias{destructure-methods}
-\alias{destructure.Date}
 \alias{destructure.character}
 \alias{destructure.complex}
+\alias{destructure.Date}
 \alias{destructure.data.frame}
-\alias{destructure.default}
 \alias{destructure.summary.lm}
+\alias{destructure.default}
 \title{Included Implementations of \code{destructure}}
 \usage{
 \method{destructure}{character}(x)
@@ -52,4 +52,3 @@ each of the eleven values returned by \code{summary.lm}.
 \code{\link{destructure}}
 }
 \keyword{internal}
-

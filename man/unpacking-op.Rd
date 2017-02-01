@@ -165,4 +165,3 @@ lasts   # c('Smith', 'Peterson', ..
 \seealso{
 \code{\link{destructure}}
 }
-

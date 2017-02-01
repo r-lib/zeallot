@@ -71,4 +71,3 @@ color  # 'green'
 \seealso{
 \code{\link{\%<-\%}}
 }
-

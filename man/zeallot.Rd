@@ -4,6 +4,7 @@
 \name{zeallot}
 \alias{zeallot}
 \alias{zeallot-package}
+\alias{zeallot-package}
 \title{Multiple and Unpacking Assignment in R}
 \description{
 zeallot provides a \code{\link{\%<-\%}} operator to perform unpacking
@@ -14,4 +15,12 @@ introductory vignette on unpacking assignment,
 \seealso{
 \code{\link{\%<-\%}}
 }
+\author{
+\strong{Maintainer}: Nathan Teetor \email{nathanteetor@gmail.com}
 
+Other contributors:
+\itemize{
+  \item Paul Teetor [contributor]
+}
+
+}

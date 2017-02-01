@@ -23,4 +23,3 @@ Refer to examples in the introductory vignette to see how \code{massign} and
 \code{browseVignettes('zeallot')}
 }
 \keyword{internal}
-
