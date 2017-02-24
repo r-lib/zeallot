@@ -115,6 +115,6 @@ test_that('pair_off throws error for extra names, including a collector', {
 test_that('pair_off throws error for multiple collectors at one depth', {
   expect_error(
     pair_off(list('a', '...b', '...c'), list(1, 2, 3, 4)),
-    'assignment ambiguity due to multiple collector variables at one depth'
+    'assignment ambiguity due to multiple collector variables at the same depth'
   )
 })
