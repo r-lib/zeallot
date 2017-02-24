@@ -1,3 +1,12 @@
+# zeallot 0.0.3
+
+* see 0.0.2.1 for documentation updates
+
+## Bug Fixes
+
+* Collector variables, when unpacking an atomic vector, no longer collect values
+  into a list, instead the vector class is preserved. 
+
 # zeallot 0.0.2.1
 
 * Not initially accepted by CRAN, changes will appear in 0.0.3

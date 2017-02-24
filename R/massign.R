@@ -20,11 +20,28 @@ massign <- function(x, values, envir = parent.frame(), inherits = FALSE) {
   lhs <- x
   rhs <- values
 
+  if (length(values) == 0) {
+    rhs <- list(values)
+  } else if (is.atomic(values)) {
+    rhs <- as.list(values)
+  } else if (!is_list(values)) {
+    rhs <- list(values)
+  }
+
   tuples <- pair_off(lhs, rhs)
 
   for (t in tuples) {
     name <- t[['name']]
     value <- t[['value']]
+
+    if (is_collector(name)) {
+      name <- sub('^\\.\\.\\.', '', name)
+
+      if (is.atomic(values)) {
+        value <- unlist(value)
+      }
+    }
+
     assign(name, value, envir = envir, inherits = inherits)
   }
 

@@ -23,6 +23,16 @@ test_that('%<-% throws error if value is vector, but lhs has braces', {
   expect_error({a: b} %<-% c(1, 2), 'expecting list of values, but found vector')
 })
 
+test_that('%<-% preserves class when collecting atomic vectors', {
+  a : ...b %<-% 1:5
+  expect_equal(a, 1)
+  expect_equal(b, 2:5)
+
+  ...c : d %<-% c(TRUE, FALSE, FALSE)
+  expect_equal(c, c(TRUE, FALSE))
+  expect_equal(d, FALSE)
+})
+
 test_that('%<-% requires braces when destructuring single object', {
   {a: b} %<-% faithful
   expect_equal(a, faithful[[1]])

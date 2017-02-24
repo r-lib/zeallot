@@ -52,17 +52,17 @@ test_that('pair_off heavily nested list', {
 test_that('pair_off collects values when ... specified', {
   expect_equalish(
     pair_off(list('a', '...mid', 'd'), list(1, 2, 3, 4)),
-    list(list('a', 1), list('mid', list(2, 3)), list('d', 4))
+    list(list('a', 1), list('...mid', list(2, 3)), list('d', 4))
   )
 
   expect_equalish(
     pair_off(list('a', 'b', '...rest'), list(1, 2, 3, 4)),
-    list(list('a', 1), list('b', 2), list('rest', list(3, 4)))
+    list(list('a', 1), list('b', 2), list('...rest', list(3, 4)))
   )
 
   expect_equalish(
     pair_off(list('a', '...rest'), list(1, 2, 3, 4)),
-    list(list('a', 1), list('rest', list(2, 3, 4)))
+    list(list('a', 1), list('...rest', list(2, 3, 4)))
   )
 })
 

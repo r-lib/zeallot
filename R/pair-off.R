@@ -26,7 +26,7 @@ collect <- function(names, values) {
   c_index <- which(grepl('^\\.\\.\\.', names))
 
   if (length(c_index) != 1) {
-    stop('assignment ambiguity due to multiple collector variables at one depth',
+    stop('assignment ambiguity due to multiple collector variables at the same depth',
          call. = FALSE)
   }
 
@@ -88,9 +88,9 @@ pair_off <- function(names, values) {
 
   if (is_collector(car(names))) {
     collected <- collect(names, values)
-    name <- sub('...', '', car(names))
+    name <- car(names)
 
-    if (name == '') {
+    if (name == '...') {
       stop('invalid collector variable', call. = FALSE)
     }
 

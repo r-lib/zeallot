@@ -191,16 +191,7 @@
     lhs <- car(lhs)
   }
 
-  rhs <- value
-  if (length(value) == 0) {
-    rhs <- list(value)
-  } else if (is.atomic(value)) {
-    rhs <- as.list(value)
-  } else if (!is_list(value)) {
-    rhs <- list(value)
-  }
-
-  massign(lhs, rhs, envir = cenv)
+  massign(lhs, value, envir = cenv)
 
   invisible(value)
 }
