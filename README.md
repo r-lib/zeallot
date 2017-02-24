@@ -17,15 +17,15 @@ the entirety of a small list, de-structure and assign object elements, or do
 it all at once.
 
 ```R
-x: y %<-% c(0, 1)
+x : y %<-% c(0, 1)
 
-{r: d} %<-% list(2, 2)
+{r : d} %<-% list(2, 2)
 
-{duration: wait} %<-% faithful
+{duration : wait} %<-% faithful
 
-{{a: b}: {c: d}} %<-% list(list(1, 2), list(3, 4))
+{{a : b} : {c : d}} %<-% list(list(1, 2), list(3, 4))
 
-{first: ...rest} %<-% as.list(letters)
+{first : ...rest} %<-% as.list(letters)
 ```
 
 ### Installation
@@ -85,7 +85,7 @@ value into two explicit variables and avoid dealing with the list return value
 all together.
 
 ```R
-{res: err} %<-% safe_log(10)
+{res : err} %<-% safe_log(10)
 res
 #> [1] 2.302585
 err

@@ -46,7 +46,7 @@
 #'
 #' \dontrun{
 #' # cannot destructure the shape object yet
-#' {sides: color} %<-% shape()
+#' {sides : color} %<-% shape()
 #' }
 #'
 #' # implement a new destructure function
@@ -55,11 +55,11 @@
 #' }
 #'
 #' # now we can destructure shape objects
-#' {sides: color} %<-% destructure(shape())
+#' {sides : color} %<-% destructure(shape())
 #' sides  # 4
 #' color  # 'red'
 #'
-#' {sides: color} %<-% destructure(shape(3, 'green'))
+#' {sides : color} %<-% destructure(shape(3, 'green'))
 #' sides  # 3
 #' color  # 'green'
 #'

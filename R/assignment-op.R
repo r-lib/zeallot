@@ -63,19 +63,19 @@
 #' @export
 #' @examples
 #' # basic usage
-#' {a: b} %<-% list(0, 1)
+#' {a : b} %<-% list(0, 1)
 #'
 #' a  # 0
 #' b  # 1
 #'
 #' # no braces when unpacking vectors
-#' c: d  %<-% c(0, 1)
+#' c : d  %<-% c(0, 1)
 #'
 #' c  # 0
 #' d  # 1
 #'
 #' # unpack and assign nested values
-#' {{e: f}: {g: h}} %<-% list(list(2, 3), list(3, 4))
+#' {{e : f} : {g : h}} %<-% list(list(2, 3), list(3, 4))
 #'
 #' e  # 2
 #' f  # 3
@@ -83,17 +83,17 @@
 #' h  # 5
 #'
 #' # can assign more than 2 values
-#' {j: k: l} %<-% list(6, 7, 8)
+#' {j : k : l} %<-% list(6, 7, 8)
 #'
 #' # assign columns of data frame
-#' {num_erupts: till_next} %<-% faithful
+#' {num_erupts : till_next} %<-% faithful
 #'
 #' num_erupts  # 3.600 1.800 3.333 ..
 #' till_next   # 79 54 74 ..
 #'
 #' # assign only specific columns, skip
 #' # other columns
-#' {mpg: cyl: disp: ....} %<-% mtcars
+#' {mpg : cyl : disp : ....} %<-% mtcars
 #'
 #' mpg   # 21.0 21.0 22.8 ..
 #' cyl   # 6 6 4 ..
@@ -102,13 +102,13 @@
 #' # skip initial values, assign final value
 #' TODOs <- list('make food', 'pack lunch', 'save world')
 #'
-#' {....: task} %<-% TODOs
+#' {.... : task} %<-% TODOs
 #'
 #' task  # 'save world'
 #'
 #' # assign first name, skip middle initial,
 #' # assign last name
-#' first: .: last %<-% c('Ursula', 'K', 'Le Guin')
+#' first : . : last %<-% c('Ursula', 'K', 'Le Guin')
 #'
 #' first  # 'Ursula'
 #' last   # 'Le Guin'
@@ -119,7 +119,7 @@
 #'
 #' # extract call and fstatistic from
 #' # the summary
-#' {fcall: ....: ffstat: .} %<-% fsum
+#' {fcall : .... : ffstat : .} %<-% fsum
 #'
 #' fcall
 #' ffstat
@@ -128,7 +128,7 @@
 #' # nested names
 #' fibs <- list(1, list(2, list(3, list(5))))
 #'
-#' {f2: {f3: {f4: {f5}}}} %<-% fibs
+#' {f2 : {f3 : {f4 : {f5}}}} %<-% fibs
 #'
 #' f2  # 1
 #' f3  # 2
@@ -137,25 +137,25 @@
 #'
 #' # unpack first value (a numeric) and
 #' # second value (a list)
-#' {f2: fcdr} %<-% fibs
+#' {f2 : fcdr} %<-% fibs
 #'
 #' f2    # 1
 #' fcdr  # list(2, list(3, list(5)))
 #'
 #' # swap values without using a
 #' # temporary variable
-#' a: b %<-% c('eh', 'bee')
+#' a : b %<-% c('eh', 'bee')
 #' a  # 'eh'
 #' b  # 'bee'
 #'
-#' a: b %<-% c(b, a)
+#' a : b %<-% c(b, a)
 #' a  # 'bee'
 #' b  # 'eh'
 #'
 #' # unpack strsplit return value
 #' names <- c('Nathan,Maria,Matt,Polly', 'Smith,Peterson,Williams,Jones')
 #'
-#' {firsts: lasts} %<-% strsplit(names, ',')
+#' {firsts : lasts} %<-% strsplit(names, ',')
 #'
 #' firsts  # c('Nathan', 'Maria', ..
 #' lasts   # c('Smith', 'Peterson', ..
