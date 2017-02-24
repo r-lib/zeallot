@@ -4,7 +4,7 @@
 
 ## Bug Fixes
 
-* Collector variables, when unpacking an atomic vector, no longer collect values
+* When unpacking an atomic vector, collector variables no longer collect values
   into a list, instead the vector class is preserved. 
 
 # zeallot 0.0.2.1
