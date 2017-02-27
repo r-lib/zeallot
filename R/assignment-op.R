@@ -4,29 +4,29 @@
 #'
 #' @usage x \%<-\% value
 #'
-#' @param x A bare name or name structure, see details.
+#' @param x A name structure, see details.
 #' @param value A list of values, vector of values, or \R object to assign.
 #'
 #' @details
 #'
 #' \bold{variable names}
 #'
-#' To separate variable names use colons, \code{a: b: c}.
+#' To separate variable names use colons, \code{a : b : c}.
 #'
-#' To nest variable names use braces, \code{\{a: \{b: c\}\}}.
+#' To nest variable names use braces, \code{\{a : \{b : c\}\}}.
 #'
 #' \bold{values}
 #'
-#' To unpack a vector of variables do not include braces, \code{a: b \%<-\% c(1,
+#' To unpack a vector of variables do not include braces, \code{a : b \%<-\% c(1,
 #' 2)}.
 #'
-#' Include braces to unpack a list of values, \code{\{a: b\} \%<-\% list(1,
+#' Include braces to unpack a list of values, \code{\{a : b\} \%<-\% list(1,
 #' 2)}.
 #'
 #' When \code{value} is neither a vector nor a list, the zeallot operator will
 #' try to de-structure \code{value} into a list, see \code{\link{destructure}}.
 #'
-#' Nesting names will unpack nested values, \code{\{a: \{b: c\}\} \%<-\% list(1,
+#' Nesting names will unpack nested values, \code{\{a : \{b : c\}\} \%<-\% list(1,
 #' list(2, 3))}.
 #'
 #' \bold{collector variables}
@@ -35,20 +35,20 @@
 #' use a collector variable. Collector variables are indicated with a \code{...}
 #' prefix.
 #'
-#' Collect starting values, \code{\{...a: b: c\} \%<-\% list(1, 2, 3, 4)}
+#' Collect starting values, \code{\{...a : b : c\} \%<-\% list(1, 2, 3, 4)}
 #'
-#' Collect middle values, \code{\{a: ...b: c\} \%<-\% list(1, 2, 3, 4)}
+#' Collect middle values, \code{\{a : ...b : c\} \%<-\% list(1, 2, 3, 4)}
 #'
-#' Collect ending values, \code{\{a: b: ...c\} \%<-\% list(1, 2, 3, 4)}
+#' Collect ending values, \code{\{a : b : ...c\} \%<-\% list(1, 2, 3, 4)}
 #'
 #' \bold{skipping values}
 #'
 #' Use a period \code{.} in place of a variable name to skip a value without
-#' raising an error, \code{\{a: .: c\} \%<-\% list(1, 2, 3)}. Values will not be
+#' raising an error, \code{\{a : . : c\} \%<-\% list(1, 2, 3)}. Values will not be
 #' assigned to \code{.}.
 #'
 #' Skip multiple values by combining the collector prefix and a period,
-#' \code{\{a: ....: e\} \%<-\% list(1, NA, NA, NA, 5)}.
+#' \code{\{a : .... : e\} \%<-\% list(1, NA, NA, NA, 5)}.
 #'
 #' @return
 #'
