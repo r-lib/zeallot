@@ -18,14 +18,49 @@ it all at once.
 
 ```R
 x : y %<-% c(0, 1)
+#> x
+# [1] 0
+#> y
+# [1] 1
 
 {r : d} %<-% list(2, 2)
+#> r
+# [1] 2
+#> d
+# [1] 2
 
 {duration : wait} %<-% faithful
 
+# duration  (first column of `faithful`)
+# wait      (second column)
+
 {{a : b} : {c : d}} %<-% list(list(1, 2), list(3, 4))
+#> a
+# [1] 1
+#> b  
+# [1] 2
+#> c
+# [1] 3
+#> d
+# [1] 4
 
 {first : ...rest} %<-% as.list(letters)
+#> first
+# [1] "a"
+#> rest  # the remaining values of `letters`
+# [[1]]
+# [1] "b"
+# 
+# [[2]]
+# [1] "c"
+#
+# ..
+# 
+# [[24]]
+# [1] "y"
+# 
+# [[25]]
+# [1] "z"
 ```
 
 ### Installation
@@ -35,6 +70,7 @@ You can install zeallot from CRAN.
 ```R
 install.packages('zeallot')
 ```
+
 Use devtools to install the latest, development version of zeallot from GitHub.
 
 ```R
@@ -100,7 +136,7 @@ unpacked values, and then assigns each unpacked value to a variable. The result,
 instead of dealing with a list of values there are two distinct variables, `res`
 and `err`.
 
-### Further Reading
+### Further Reading and Examples
 
 For more on the above example, other examples, and a thorough introduction to
 zeallot check out the vignette on [unpacking
