@@ -6,7 +6,12 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 notes
+
+### Notes
+
+* 1 note on Windows, R version 3.3.2, regarding license components with 
+  restrictions
 
 ## Reverse dependencies
 

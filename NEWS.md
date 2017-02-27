@@ -1,15 +1,21 @@
 # zeallot 0.0.3
 
-* see 0.0.2.1 for documentation updates
+* see 0.0.2.1 notes for additional updates
+
+## Minor Improvements
+
+* Examples now consistently put spaces around colons separating left-hand side
+  variables, e.g. `a : b` instead of `a: b`.
 
 ## Bug Fixes
 
-* When unpacking an atomic vector, collector variables no longer collect values
-  into a list, instead the vector class is preserved. 
+* When unpacking an atomic vector, a collector variable will now collect values
+  as a vector. Previously, values were collected as a list (#14). 
 
 # zeallot 0.0.2.1
 
-* Not initially accepted by CRAN, changes will appear in 0.0.3
+* Not on CRAN, changes will appear under version 0.0.3
+
 * Added missing URL and BugReports fields to DESCRIPTION
 * Fixed broken badges in README
 
