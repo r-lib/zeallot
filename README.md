@@ -11,10 +11,10 @@ Variable assignment with zeal!
 
 ## What's there to be excited about?
 
-zeallot allows multiple or unpacking assignment in R. With zeallot you can 
-tighten code with explicit variable names, unpack pieces of a lengthy list or 
-the entirety of a small list, de-structure and assign object elements, or do 
-it all at once.
+zeallot allows multiple or unpacking assignment in R by providing the `%<-%`
+operator. With zeallot you can tighten code with explicit variable names, unpack
+pieces of a lengthy list or the entirety of a small list, de-structure and
+assign object elements, or do it all at once.
 
 ```R
 x : y %<-% c(0, 1)
