@@ -6,8 +6,9 @@ Variable assignment with zeal!
 [appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/zeallot?branch=master&svg=true "frappe!" 
 [coverage]: https://codecov.io/gh/nteetor/zeallot/branch/master/graph/badge.svg "deep fat fry" 
 [cran]: https://www.r-pkg.org/badges/version/zeallot "green means go!"
+[downloads]: https://cranlogs.r-pkg.org/badges/last-month/zeallot "[====] 100%"
 
-![alt text][travis] ![alt text][appveyor] ![alt text][coverage] ![alt text][cran]
+![alt text][travis] ![alt text][appveyor] ![alt text][coverage] ![alt text][cran] ![alt text][downloads]
 
 ## What's there to be excited about?
 
