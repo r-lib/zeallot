@@ -180,18 +180,34 @@
     return(invisible(value))
   }
 
-    if (internals[1] == ':' && !(is.atomic(value) || is_Date(value))) {
-      stop('expecting vector of values, but found ', class(value),
-           call. = FALSE)
-    }
+  if (!all(internals == ":" | internals == "{")) {
+    name <- internals[which(!(internals == ":" | internals == "{"))][1]
+    stop(
+      "invalid `%<-%` left-hand side, unexpected call `", name, "`",
+      call. = FALSE
+    )
+  }
 
-    # NULL as a value slips through here, bug or feature?
-    if (internals[1] == '{' && is.vector(value) && !is_list(value)) {
-      stop('expecting list of values, but found vector', call. = FALSE)
-    }
+  #
+  # only when unpacking an atomic or date are `{` and `}` not required
+  #
+  if (internals[1] == ":" && !(is.atomic(value) || is_Date(value))) {
+    stop(
+      "invalid `%<-%` right-hand side, expecting vector of values, ",
+      "but found ", class(value),
+      call. = FALSE
+    )
+  }
 
-  } else {
-    stop('use `<-` for standard assignment', call. = FALSE)
+  #
+  # use `{`s only for non-vector values
+  #
+  if (internals[1] == "{" && is.vector(value) && !is_list(value)) {
+    stop(
+      "invalid `%<-%` right-hand side, expecting list of values, ",
+      "but found vector",
+      call. = FALSE
+    )
   }
 
   lhs <- variables(ast)

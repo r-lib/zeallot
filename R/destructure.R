@@ -135,12 +135,18 @@ destructure.summary.lm <- function(x) {
 #' @rdname destructure-methods
 #' @export
 destructure.default <- function(x) {
-  stop('cannot de-structure ', class(x), call. = FALSE)
+  stop(
+    "invalid `%<-%` right-hand side, incorrect number of values",
+    call. = FALSE
+  )
 }
 
 assert_destruction <- function(x) {
   if (length(x) > 1) {
-    stop('cannot de-structure ', class(x), ' vector of length greater than 1',
-         call. = FALSE)
+    stop(
+      "invalid `destructure` argument, cannot de-structure ", class(x),
+      " vector of length greater than 1",
+      call. = FALSE
+    )
   }
 }
