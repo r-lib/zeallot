@@ -32,9 +32,9 @@ tree <- function(x) {
   append(tree(x[[1]]), lapply(x[-1], tree))
 }
 
-calls <- function(x, exclude = '') {
+calls <- function(x, exclude = "") {
   if (!is.character(exclude)) {
-    stop('argument `exclude` must be of class character', call. = FALSE)
+    stop("argument `exclude` must be of class character", call. = FALSE)
   }
 
   if (!is.list(x)) {
@@ -42,13 +42,13 @@ calls <- function(x, exclude = '') {
   }
 
   if (is.list(x) && length(x) == 2) {
-    subtree <- vector('list', 2)
+    subtree <- vector("list", 2)
     subtree[[1]] <- as.character(car(x))
     subtree[[2]] <- calls(cadr(x), exclude)
     return(subtree)
   }
 
-  subtree <- vector('list', 3)
+  subtree <- vector("list", 3)
   subtree[[1]] <- as.character(car(x))
   subtree[[2]] <- calls(cadr(x), exclude)
   subtree[[length(subtree)]] <- calls(caddr(x), exclude)

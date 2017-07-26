@@ -20,6 +20,9 @@ massign <- function(x, values, envir = parent.frame(), inherits = FALSE) {
   lhs <- x
   rhs <- values
 
+  #
+  # bundle values for calls like `a : ...b %<-% 1:5`
+  #
   if (length(values) == 0) {
     rhs <- list(values)
   } else if (is.atomic(values)) {
@@ -31,12 +34,19 @@ massign <- function(x, values, envir = parent.frame(), inherits = FALSE) {
   tuples <- pair_off(lhs, rhs)
 
   for (t in tuples) {
-    name <- t[['name']]
-    value <- t[['value']]
+    name <- t[["name"]]
+    value <- t[["value"]]
 
+    #
+    # collector variable names retain the leading "..."
+    #
     if (is_collector(name)) {
-      name <- sub('^\\.\\.\\.', '', name)
+      name <- sub("^\\.\\.\\.", "", name)
 
+      #
+      # if the original value was a vector make sure the assigned value is
+      # also a vector
+      #
       if (is.atomic(values)) {
         value <- unlist(value)
       }
