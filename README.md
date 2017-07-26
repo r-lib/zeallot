@@ -12,56 +12,70 @@ Variable assignment with zeal!
 
 ## What's there to be excited about?
 
-zeallot allows multiple or unpacking assignment in R by providing the `%<-%`
-operator. With zeallot you can tighten code with explicit variable names, unpack
-pieces of a lengthy list or the entirety of a small list, de-structure and
-assign object elements, or do it all at once.
+zeallot allows multiple, unpacking, or destructuring assignment in R by
+providing the `%<-%` operator. With zeallot you can tighten code with explicit
+variable names, unpack pieces of a lengthy list or the entirety of a small list,
+destructure and assign object elements, or do it all at once.
 
+Unpack a vector of values.
 ```R
 x : y %<-% c(0, 1)
 #> x
-# [1] 0
+#[1] 0
 #> y
-# [1] 1
+#[1] 1
+```
 
+Unpack a list of values. 
+```R
 {r : d} %<-% list(2, 2)
 #> r
-# [1] 2
+#[1] 2
 #> d
-# [1] 2
+#[1] 2
+```
 
-{duration : wait} %<-% faithful
+Destructure a data frame and assign its columns.
+```R
+{duration : wait} %<-% head(faithful)
 
-# duration  (first column of `faithful`)
-# wait      (second column)
+#> duration
+#[1] 3.600 1.800 3.333 2.283 4.533 2.883
+#> wait
+#[1] 79 54 74 62 85 55
+```
 
+Unpack a nested list into nested left-hand side variables.
+```R
 {{a : b} : {c : d}} %<-% list(list(1, 2), list(3, 4))
 #> a
-# [1] 1
+#[1] 1
 #> b  
-# [1] 2
+#[1] 2
 #> c
-# [1] 3
+#[1] 3
 #> d
-# [1] 4
+#[1] 4
+```
 
-{first : ...rest} %<-% as.list(letters)
+Destructure and partially unpack a list. "a" is assigned to `first`, but
+"b", "c", "d", and "e" are grouped and assigned to one variable.
+```R
+#> {first : ...rest} %<-% list("a", "b", "c", "d", "e")
 #> first
-# [1] "a"
-#> rest  # the remaining values of `letters`
-# [[1]]
-# [1] "b"
-# 
-# [[2]]
-# [1] "c"
+#[1] "a"
+#> rest
+#[[1]]
+#[1] "b"
 #
-# ..
-# 
-# [[24]]
-# [1] "y"
-# 
-# [[25]]
-# [1] "z"
+#[[2]]
+#[1] "c"
+#
+#[[3]]
+#[1] "d"
+#
+#[[4]]
+#[1] "e"
 ```
 
 ### Installation
@@ -92,18 +106,18 @@ safe version of the log function is created.
 ```R
 safe_log <- purrr::safely(log)
 safe_log(10)
-#> $result
-#> [1] 2.302585
-#>
-#> $error
-#> NULL
+#$result
+#[1] 2.302585
+#
+#$error
+#NULL
 
 safe_log("a")
-#> $result
-#> NULL
-#>
-#> $error
-#> <simpleError in .f(...): non-numeric argument to mathematical function>
+#$result
+#NULL
+#
+#$error
+#<simpleError in .f(...): non-numeric argument to mathematical function>
 ```
 
 A safe function always returns a list of two elements and will not throw an 
@@ -124,9 +138,9 @@ all together.
 ```R
 {res : err} %<-% safe_log(10)
 res
-#> [1] 2.302585
+#[1] 2.302585
 err
-#> NULL
+#NULL
 ```
 
 On the left-hand side of the operator is a list of bare variable names using
@@ -142,6 +156,22 @@ and `err`.
 For more on the above example, other examples, and a thorough introduction to
 zeallot check out the vignette on [unpacking
 assignment](vignettes/unpacking-assignment.Rmd).
+
+Below are links to discussions about multiple, unpacking, and destructuring
+assignment in R,
+
+* https://stackoverflow.com/questions/7519790/assign-multiple-new-variables-on-lhs-in-a-single-line-in-r
+* https://stackoverflow.com/questions/1826519/how-to-assign-from-a-function-which-returns-more-than-one-value
+
+## Related work
+
+The [vadr](https://github.com/crowding/vadr) package includes a
+[bind](https://github.com/crowding/vadr/blob/master/R/bind.R#L65) operation
+with much of the same functionality as `%<-%`. As the author states, "[they]
+strongly prefer there to be a `<-` anywhere that there is a modification to the
+environment." If you feel similarly I suggest looking at vadr. Unfortunately the
+vadr package is not on CRAN and will need to be downloaded using
+`devtools::install_github()`.
 
 ---
 
