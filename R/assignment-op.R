@@ -165,12 +165,20 @@
   internals <- unlist(calls(ast))
   cenv <- parent.frame()
 
-  if (!is.null(internals)) {
-
-    if (any(!(internals %in% c(':', '{')))) {
-      name <- internals[which(!(internals %in% c(':', '{')))][1]
-      stop('unexpected call `', name, '`', call. = FALSE)
+  #
+  # standard assignment
+  #
+  if (is.null(internals)) {
+    if (class(ast) != "name") {
+      stop(
+        "invalid `%<-%` left-hand side, expecting name, but found ",
+        class(ast),
+        call. = FALSE
+      )
     }
+    assign(as.character(ast), value, envir = cenv)
+    return(invisible(value))
+  }
 
     if (internals[1] == ':' && !(is.atomic(value) || is_Date(value))) {
       stop('expecting vector of values, but found ', class(value),
