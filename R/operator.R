@@ -154,7 +154,7 @@
   cenv <- parent.frame()
 
   if (length(ast) != 1 && ast[[1]] != "c") {
-    return(`old%<-%`(ast, value, cenv))
+    return(old_operator(ast, value, cenv))
   }
 
   internals <- calls(ast)

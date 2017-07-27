@@ -1,4 +1,4 @@
-`old%<-%` <- function(ast, value, env) {
+old_operator <- function(ast, value, env) {
   warning(
     "`%<-%` left-hand side { and : syntax is deprecated as of ",
     "zeallot 0.0.4 and will be removed in future versions.\n",
