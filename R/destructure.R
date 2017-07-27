@@ -134,10 +134,7 @@ destructure.summary.lm <- function(x) {
 #' @rdname destructure-methods
 #' @export
 destructure.default <- function(x) {
-  stop(
-    "invalid `%<-%` right-hand side, incorrect number of values",
-    call. = FALSE
-  )
+  stop_invalid_rhs(incorrect_number_of_values())
 }
 
 assert_destruction <- function(x) {
