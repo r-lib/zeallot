@@ -16,14 +16,6 @@ cdr <- function(cons) {
   cons[-1]
 }
 
-cadr <- function(cons) {
-  car(cdr(cons))
-}
-
-caddr <- function(cons) {
-  car(cdr(cdr(cons)))
-}
-
 tree <- function(x) {
   if (length(x) == 1) {
     return(x)
@@ -37,14 +29,7 @@ calls <- function(x) {
     return(NULL)
   }
 
-  #
-  # unpack immediately nested `c` calls
-  #
-  if (is_list(x) && length(x) == 2) {
-    return(c(as.character(car(x)), calls(cadr(x))))
-  }
-
-  c(as.character(car(x)), calls(cadr(x)), calls(caddr(x)))
+  c(as.character(car(x)), unlist(lapply(cdr(x), calls)))
 }
 
 variables <- function(x) {
@@ -56,12 +41,5 @@ variables <- function(x) {
     return(as.character(x))
   }
 
-  #
-  # unpack immediately nested `c` calls
-  #
-  if (is_list(x) && length(x) == 2) {
-    return(list(variables(cadr(x))))
-  }
-
-  return(list(variables(cadr(x)), variables(caddr(x))))
+  lapply(cdr(x), variables)
 }
