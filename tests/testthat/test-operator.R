@@ -141,6 +141,16 @@ test_that('%<-% throws error when invalid "variables" on LHS', {
     c(mean(1, 2), a) %<-% list(1, 2),
     "invalid `%<-%` left-hand side, expecting symbol, but found numeric"
   )
+
+  expect_error(
+    c(a, f()) %<-% list(1, 2),
+    "invalid `%<-%` left-hand side, expecting symbol, but found call"
+  )
+
+  expect_error(
+    f() %<-% list(1),
+    "invalid `%<-%` left-hand side, expecting symbol, but found call"
+  )
 })
 
 test_that("%<-% throws error when assigning empty list", {
