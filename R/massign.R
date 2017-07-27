@@ -12,7 +12,7 @@
 #' Refer to examples in the introductory vignette to see how \code{massign} and
 #' \code{\%<-\%} associate values with names.
 #'
-#' \code{browseVignettes('zeallot')}
+#' \code{browseVignettes("zeallot")}
 #'
 #' @keywords internal
 #' @export
