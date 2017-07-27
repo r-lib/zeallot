@@ -9,7 +9,7 @@ vignette: >
 ---
 
 ```{R, include = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = '#>')
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 library(zeallot)
 ```
@@ -20,7 +20,7 @@ called *parallel assignment* or *destructuring assignment* in other programming
 languages. The operator is written as `%<-%` and used like this.
 
 ```{r}
-{ lat : lng } %<-% list(38.061944, -122.643889)
+c(lat, lng) %<-% list(38.061944, -122.643889)
 ```
 
 The result is that the list is unpacked into its elements,
@@ -35,7 +35,7 @@ You can also unpack the elements of a vector.
 Omit the braces ({}) in that case.
 
 ```{r}
-lat : lng %<-% c(38.061944, -122.643889)
+c(lat, lng) %<-% c(38.061944, -122.643889)
 lat
 lng
 ```
@@ -44,7 +44,7 @@ You can unpack much longer structures, too, of course, such as the 6-part
 summary of a vector.
 
 ```{r}
-min_wt : q1_wt : med_wt : mean_wt : q3_wt : max_wt %<-% summary(mtcars$wt)
+c(min_wt, q1_wt, med_wt, mean_wt, q3_wt, max_wt) %<-% summary(mtcars$wt)
 min_wt
 q1_wt
 med_wt
@@ -57,11 +57,11 @@ If the left-hand side and right-hand sides do not match, an error is raised.
 This guards against missing or unexpected values.
 
 ```{r, error=TRUE}
-{ stg1 : stg2 : stg3 } %<-% list("Moe", "Donald")
+c(stg1, stg2, stg3) %<-% list("Moe", "Donald")
 ```
 
 ```{r, error=TRUE}
-{ stg1 : stg2 : stg3 } %<-% list("Moe", "Larry", "Curley", "Donald")
+c(stg1, stg2, stg3) %<-% list("Moe", "Larry", "Curley", "Donald")
 ```
 
 ### Unpacking a returned value
@@ -78,7 +78,7 @@ coords_list <- function() {
   list(38.061944, -122.643889)
 }
 
-{ lat : lng } %<-% coords_list()
+c(lat, lng) %<-% coords_list()
 lat
 lng
 ```
@@ -97,7 +97,7 @@ to_polar = function(x, y) {
   c(sqrt(x^2 + y^2), atan(y / x))
 }
 
-radius : angle %<-% to_polar(12, 5)
+c(radius, angle) %<-% to_polar(12, 5)
 radius
 angle
 ```
@@ -107,7 +107,7 @@ You can directly unpack the coefficients of a simple linear regression
 into the intercept and slope.
 
 ```{r}
-inter : slope %<-% coef(lm(mpg ~ cyl, data = mtcars))
+c(inter, slope) %<-% coef(lm(mpg ~ cyl, data = mtcars))
 inter
 slope
 ```
@@ -116,7 +116,7 @@ slope
 The *purrr* package includes the `safely` function.
 It wraps a given function to create a new, "safe" version of the original function.
 
-```{R, eval = require('purrr')}
+```{R, eval = require("purrr")}
 safe_log <- purrr::safely(log)
 ```
 
@@ -126,22 +126,22 @@ did occur. The second item is the error, if an error occurred; or `NULL` if no
 error occurred. Whether or not the original function would have thrown an error,
 the safe version will never throw an error.
 
-```{r, eval = require('purrr')}
+```{r, eval = require("purrr")}
 pair <- safe_log(10)
 pair$result
 pair$error
 ```
 
-```{r, eval = require('purrr')}
-pair <- safe_log('donald')
+```{r, eval = require("purrr")}
+pair <- safe_log("donald")
 pair$result
 pair$error
 ```
 
 You can tighten and clarify calls to the safe function by using `%<-%`.
 
-```{r, eval = require('purrr')}
-{ res : err } %<-% safe_log(10)
+```{r, eval = require("purrr")}
+c(res, err) %<-% safe_log(10)
 res
 err
 ```
@@ -151,7 +151,7 @@ A data frame is simply a list of columns, so the *zeallot* assignment does
 what you expect. It unpacks the data frame into individual columns.
 
 ```{r}
-{ mpg : cyl : disp : hp } %<-% mtcars[, 1:4]
+c(mpg, cyl, disp, hp) %<-% mtcars[, 1:4]
 
 head(mpg)
 
@@ -170,7 +170,7 @@ frames themselves.
 ```{R}
 quartet <- lapply(1:4, function(i) anscombe[, c(i, i + 4)])
 
-{ an1 : an2 : an3 : an4 } %<-% lapply(quartet, head, n = 3)
+c(an1, an2, an3, an4) %<-% lapply(quartet, head, n = 3)
 
 an1
 
@@ -188,11 +188,11 @@ data frames intact.
 In addition to unpacking flat lists, you can unpack lists of lists.
 
 ```{r}
-{a : { b : c } : d } %<-% list('begin', list('middle1', 'middle2'), 'end')
+c(a, c(b, d), e) %<-% list("begin", list("middle1", "middle2"), "end")
 a
 b
-c
 d
+e
 ```
 
 Not only does this simplify extracting individual elements, it also adds a level
@@ -200,7 +200,7 @@ of checking. If the described list structure does not match the actual list
 structure, an error is raised.
 
 ```{r, error=TRUE}
-{a : { b : c : x} : d } %<-% list('begin', list('middle1', 'middle2'), 'end')
+c(a, c(b, d, e), f) %<-% list("begin", list("middle1", "middle2"), "end")
 ```
 
 ## Splitting a value into its parts
@@ -212,8 +212,8 @@ You can assign individual characters of a string to variables. Since character
 strings are vectors, do not forget to exclude braces from the assignment
 expression.
 
-```{R}
-ch1 : ch2 : ch3 %<-% 'abc'
+```{r}
+c(ch1, ch2, ch3) %<-% "abc"
 ch1
 ch2
 ch3
@@ -224,7 +224,7 @@ You can split a Date into its year, month, and day, and assign the parts to
 variables.
 
 ```{r}
-y : m : d %<-% Sys.Date()
+c(y, m, d) %<-% Sys.Date()
 y
 m
 d
@@ -248,7 +248,7 @@ else".
 ```{r}
 f <- lm(mpg ~ cyl, data = mtcars)
 
-{ fcall : fterms : resids : ...rest } %<-% summary(f)
+c(fcall, fterms, resids, ...rest) %<-% summary(f)
 
 fcall
 
@@ -269,7 +269,7 @@ omitted the "everything else" prefix, there would be an error because the
 lengths of the left- and right-hand sides of the assignment would be mismatched.
 
 ```{r, error = TRUE}
-{ fcall : fterms : resids : rest } %<-% summary(f)
+c(fcall, fterms, resids, rest) %<-% summary(f)
 ```
 
 If multiple collector variables are specified at a particular depth it is 
@@ -280,7 +280,7 @@ In addition to collecting trailing values, you can also collect initial values
 and assign specific remaining values.
 
 ```{r}
-{ ...skip : e : f } %<-% list(1, 2, 3, 4, 5)
+c(...skip, e, f) %<-% list(1, 2, 3, 4, 5)
 skip
 e
 f
@@ -289,7 +289,7 @@ f
 Or you can assign the first value, skip values, and then assign the last value.
 
 ```{r}
-{ begin : ...middle : end } %<-% list(1, 2, 3, 4, 5)
+c(begin, ...middle, end) %<-% list(1, 2, 3, 4, 5)
 begin
 middle
 end
@@ -301,7 +301,7 @@ instead of a variable name. For example, you might care only about the min,
 mean, and max values of a vector's `summary`.
 
 ```{r}
-min_wt : . : . : mean_wt : . : max_wt %<-% summary(mtcars$wt)
+c(min_wt, ., ., mean_wt, ., max_wt) %<-% summary(mtcars$wt)
 min_wt
 mean_wt
 max_wt
@@ -311,7 +311,7 @@ By combining an anonymous element (`.`) with the collector prefix, (`...`), you
 can ignore whole sublists.
 
 ```{r}
-{begin: ....: end} %<-% list('hello', 'blah', list('blah'), 'blah', 'world!')
+c(begin, ..., end) %<-% list("hello", "blah", list("blah"), "blah", "world!")
 begin
 end
 ```
@@ -320,7 +320,7 @@ You can mix periods and collectors together to selectively keep and discard
 elements.
 
 ```{r}
-{ begin : . : ...middle : end } %<-% as.list(1:5)
+c(begin, ., ...middle, end) %<-% as.list(1:5)
 begin
 middle
 end
@@ -330,11 +330,11 @@ end
 A handy trick is swapping values without the use of a temporary variable.
 
 ```{r}
-first : last %<-% c('Ai', 'Genly')
+c(first, last) %<-% c("Ai", "Genly")
 first
 last
 
-first : last %<-% c(last, first)
+c(first, last) %<-% c(last, first)
 first
 last
 ```
@@ -342,10 +342,10 @@ last
 or
 
 ```{r}
-cat <- 'meow'
-dog <- 'bark'
+cat <- "meow"
+dog <- "bark"
 
-cat : dog : fish %<-% c(dog, cat, dog)
+c(cat, dog, fish) %<-% c(dog, cat, dog)
 cat
 dog
 fish
