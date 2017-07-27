@@ -21,149 +21,138 @@ assigns into the environment in which it is evaluated.
 \description{
 Assign values to name(s).
 }
-\details{
-\bold{variable names}
+\section{Left-hand side syntax}{
 
-To separate variable names use colons, \code{a : b : c}.
 
-To nest variable names use braces, \code{\{a : \{b : c\}\}}.
+At its simplest the left-hand side may be a single variable name, in which
+case \code{\%<-\%} performs regular assignment,
+\code{x \%<-\% list(1, 2, 3)}.
 
-\bold{values}
+To specify multiple variable names use a call to \code{c(), c(x, y, z)}.
 
-To unpack a vector of variables do not include braces, \code{a : b \%<-\% c(1,
-2)}.
+When \code{value} is neither a vector nor a list, \code{\%<-\%} will try to
+de-structure \code{value} into a list, see \link{destructure}.
 
-Include braces to unpack a list of values, \code{\{a : b\} \%<-\% list(1,
-2)}.
+\strong{nested names}
 
-When \code{value} is neither a vector nor a list, the zeallot operator will
-try to de-structure \code{value} into a list, see \code{\link{destructure}}.
+One can also nest calls to \code{c()} when needed, \code{c(x, c(y, z))}. This nested
+structure is used to unpack nested values on the right-hand side,
+\code{c(x, c(y, z)) \%<-\% list(1, list(2, 3))}.
 
-Nesting names will unpack nested values, \code{\{a : \{b : c\}\} \%<-\% list(1,
-list(2, 3))}.
+\strong{collector variables}
 
-\bold{collector variables}
-
-To gather extra values from the beginning, middle, or end of \code{value}
-use a collector variable. Collector variables are indicated with a \code{...}
+To gather extra values from the beginning, middle, or end of value use a
+collector variable. Collector variables are indicated with a \code{...}
 prefix.
 
-Collect starting values, \code{\{...a : b : c\} \%<-\% list(1, 2, 3, 4)}
+Collect starting values, \code{c(...start, z) \%<-\% list(1, 2, 3, 4)}.
 
-Collect middle values, \code{\{a : ...b : c\} \%<-\% list(1, 2, 3, 4)}
+Collect middle values, \code{c(x, ...mid, z) \%<-\% list(1, 2, 3, 4)}.
 
-Collect ending values, \code{\{a : b : ...c\} \%<-\% list(1, 2, 3, 4)}
+Collect ending values, \code{c(x, ...end) \%<-\% list(1, 2, 3, 4)}.
 
-\bold{skipping values}
+\strong{skipping values}
 
-Use a period \code{.} in place of a variable name to skip a value without
-raising an error, \code{\{a : . : c\} \%<-\% list(1, 2, 3)}. Values will not be
-assigned to \code{.}.
+Use \code{.} in place of a variable name to skip a value without raising an error
+or assigning the value, \code{c(x, ., z) \%<-\% list(1, 2, 3)}.
 
-Skip multiple values by combining the collector prefix and a period,
-\code{\{a : .... : e\} \%<-\% list(1, NA, NA, NA, 5)}.
+Use \code{...} to skip multiple values without raising an error or assigning the
+values, \code{c(w, ..., z) \%<-\% list(1, NA, NA, z)}.
 }
+
 \examples{
 # basic usage
-{a : b} \%<-\% list(0, 1)
+c(a, b) \%<-\% list(0, 1)
 
 a  # 0
 b  # 1
 
-# no braces when unpacking vectors
-c : d  \%<-\% c(0, 1)
-
-c  # 0
-d  # 1
-
 # unpack and assign nested values
-{{e : f} : {g : h}} \%<-\% list(list(2, 3), list(3, 4))
+c(c(e, f), c(g, h)) \%<-\% list(list(2, 3), list(3, 4))
 
 e  # 2
 f  # 3
 g  # 4
 h  # 5
 
-# can assign more than 2 values
-{j : k : l} \%<-\% list(6, 7, 8)
+# can assign more than 2 values at once
+c(j, k, l) \%<-\% list(6, 7, 8)
 
 # assign columns of data frame
-{num_erupts : till_next} \%<-\% faithful
+c(erupts, wait) \%<-\% faithful
 
-num_erupts  # 3.600 1.800 3.333 ..
-till_next   # 79 54 74 ..
+erupts  # 3.600 1.800 3.333 ..
+wait    # 79 54 74 ..
 
 # assign only specific columns, skip
 # other columns
-{mpg : cyl : disp : ....} \%<-\% mtcars
+c(mpg, cyl, disp, ...) \%<-\% mtcars
 
 mpg   # 21.0 21.0 22.8 ..
 cyl   # 6 6 4 ..
 disp  # 160.0 160.0 108.0 ..
 
 # skip initial values, assign final value
-TODOs <- list('make food', 'pack lunch', 'save world')
+TODOs <- list("make food", "pack lunch", "save world")
 
-{.... : task} \%<-\% TODOs
+c(..., task) \%<-\% TODOs
 
-task  # 'save world'
+task  # "save world"
 
 # assign first name, skip middle initial,
 # assign last name
-first : . : last \%<-\% c('Ursula', 'K', 'Le Guin')
+c(first, ., last) \%<-\% c("Ursula", "K", "Le Guin")
 
-first  # 'Ursula'
-last   # 'Le Guin'
+first  # "Ursula"
+last   # "Le Guin"
 
 # simple model and summary
-f <- lm(hp ~ gear, data = mtcars)
-fsum <- summary(f)
+mod <- lm(hp ~ gear, data = mtcars)
 
 # extract call and fstatistic from
 # the summary
-{fcall : .... : ffstat : .} \%<-\% fsum
+c(modcall, ..., modstat, .) \%<-\% summary(mod)
 
-fcall
-ffstat
+modcall
+modstat
 
-# unpack nested values with
-# nested names
+# unpack nested values w/ nested names
 fibs <- list(1, list(2, list(3, list(5))))
 
-{f2 : {f3 : {f4 : {f5}}}} \%<-\% fibs
+c(f2, c(f3, c(f4, c(f5)))) \%<-\% fibs
 
 f2  # 1
 f3  # 2
 f4  # 3
-f5  # list(5) *!!*
+f5  # 5
 
-# unpack first value (a numeric) and
-# second value (a list)
-{f2 : fcdr} \%<-\% fibs
+# unpack first numeric, leave rest
+c(f2, fibcdr) \%<-\% fibs
 
-f2    # 1
-fcdr  # list(2, list(3, list(5)))
+f2      # 1
+fibcdr  # list(2, list(3, list(5)))
 
-# swap values without using a
-# temporary variable
-a : b \%<-\% c('eh', 'bee')
-a  # 'eh'
-b  # 'bee'
+# swap values without using temporary variables
+c(a, b) \%<-\% c("eh", "bee")
 
-a : b \%<-\% c(b, a)
-a  # 'bee'
-b  # 'eh'
+a  # "eh"
+b  # "bee"
 
-# unpack strsplit return value
-names <- c('Nathan,Maria,Matt,Polly', 'Smith,Peterson,Williams,Jones')
+c(a, b) \%<-\% c(b, a)
 
-{firsts : lasts} \%<-\% strsplit(names, ',')
+a  # "bee"
+b  # "eh"
 
-firsts  # c('Nathan', 'Maria', ..
-lasts   # c('Smith', 'Peterson', ..
+# unpack `strsplit` return value
+names <- c("Nathan,Maria,Matt,Polly", "Smith,Peterson,Williams,Jones")
+
+c(firsts, lasts) \%<-\% strsplit(names, ",")
+
+firsts  # c("Nathan", "Maria", ..
+lasts   # c("Smith", "Peterson", ..
 
 }
 \seealso{
 For more on unpacking custom objects please refer to
-\code{\link{destructure}}.
+\link{destructure}.
 }

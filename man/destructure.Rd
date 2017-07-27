@@ -15,12 +15,11 @@ into a list. Individual elements of the list are assigned to names on the
 left-hand side of the unpacking assignment expression.
 }
 \details{
-If \code{x} is atomic \code{destructure} expects \code{length(x)} to be 1. If
-a vector with length greater than 1 is passed to \code{destructure} an error
-is raised.
+If \code{x} is atomic \code{destructure} expects \code{length(x)} to be 1. If a vector with
+length greater than 1 is passed to \code{destructure} an error is raised.
 
 New implementations of \code{destructure} can be very simple. A new
-\code{destructure} function might only strip away the class of a custom
+\code{destructure} implementation might only strip away the class of a custom
 object and return the underlying list structure. Alternatively, an object
 might de-structure into a nested set of values and may require a more
 complicated implementation. In either case, new implementations must return a
@@ -28,42 +27,42 @@ list object so \code{\%<-\%} can handle the returned value(s).
 }
 \examples{
 # data frames become a list of columns
-df <- data.frame(x = 0:4, y = 5:9)
+destructure(
+  data.frame(x = 0:4, y = 5:9)
+)
 
-destructure(df)
+# strings are split into list of characters
+destructure("abcdef")
 
-# strings are split into a list of
-# individual characters
-destructure('abcdef')
-
-# dates are destructureed into a list of year,
-# month, and day
+# dates become list of year, month, and day
 destructure(Sys.Date())
 
 # create a new destructure implementation
-shape <- function(sides = 4, color = 'red') {
+shape <- function(sides = 4, color = "red") {
   structure(
     list(sides = sides, color = color),
-    class = 'shape'
+    class = "shape"
   )
 }
 
 \dontrun{
 # cannot destructure the shape object yet
-{sides : color} \%<-\% shape()
+c(sides, color) \%<-\% shape()
 }
 
-# implement a new destructure function
+# implement `destructure` for shapes
 destructure.shape <- function(x) {
   list(x$sides, x$color)
 }
 
 # now we can destructure shape objects
-{sides : color} \%<-\% destructure(shape())
-sides  # 4
-color  # 'red'
+c(sides, color) \%<-\% destructure(shape())
 
-{sides : color} \%<-\% destructure(shape(3, 'green'))
+sides  # 4
+color  # "red"
+
+c(sides, color) \%<-\% destructure(shape(3, "green"))
+
 sides  # 3
 color  # 'green'
 
