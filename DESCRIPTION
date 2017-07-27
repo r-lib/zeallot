@@ -1,7 +1,7 @@
 Package: zeallot
 Type: Package
 Title: Multiple and Unpacking Variable Assignment
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: c(
     person(given = 'Nathan', family = 'Teetor', email = 'nathanteetor@gmail.com', role = c('aut', 'cre')),
     person(given = 'Paul', family = 'Teetor', role = 'ctb'))
