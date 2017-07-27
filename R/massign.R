@@ -1,21 +1,20 @@
-#' Assign Values to a Name or Names
-#'
-#' Using two lists of names and values, assign values to names in the specified
-#' environment, defaults to calling environment.
-#'
-#' @param x a list of variable name(s).
-#' @param values values to be assigned, usually a list of values or an object
-#'   with a \code{destructure} implementation.
-#'
-#' @details
-#'
-#' Refer to examples in the introductory vignette to see how \code{massign} and
-#' \code{\%<-\%} associate values with names.
-#'
-#' \code{browseVignettes("zeallot")}
-#'
-#' @keywords internal
-#' @export
+# Assign Values to a Name or Names
+#
+# Assigns values to names in a specified environment based on the nested list
+# structure of the names and values, defaults to calling environment.
+#
+# @param x A list of variable name(s).
+#
+# @param values Values to be assigned, usually a list of values or an object
+#   with a \code{destructure} implementation.
+#
+# @details
+#
+# Refer to examples in the introductory vignette to see how \code{massign} and
+# \code{\%<-\%} associate values with names.
+#
+# \code{browseVignettes("zeallot")}
+#
 massign <- function(x, values, envir = parent.frame(), inherits = FALSE) {
   lhs <- x
   rhs <- values
