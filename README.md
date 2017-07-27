@@ -19,7 +19,7 @@ destructure and assign object elements, or do it all at once.
 
 Unpack a vector of values.
 ```R
-x : y %<-% c(0, 1)
+c(x, y) %<-% c(0, 1)
 #> x
 #[1] 0
 #> y
@@ -28,7 +28,7 @@ x : y %<-% c(0, 1)
 
 Unpack a list of values. 
 ```R
-{r : d} %<-% list(2, 2)
+c(r, d) %<-% list(2, 2)
 #> r
 #[1] 2
 #> d
@@ -37,7 +37,7 @@ Unpack a list of values.
 
 Destructure a data frame and assign its columns.
 ```R
-{duration : wait} %<-% head(faithful)
+c(duration, wait) %<-% head(faithful)
 
 #> duration
 #[1] 3.600 1.800 3.333 2.283 4.533 2.883
@@ -47,7 +47,7 @@ Destructure a data frame and assign its columns.
 
 Unpack a nested list into nested left-hand side variables.
 ```R
-{{a : b} : {c : d}} %<-% list(list(1, 2), list(3, 4))
+c(c(a, b), c(c, d)) %<-% list(list(1, 2), list(3, 4))
 #> a
 #[1] 1
 #> b  
@@ -61,10 +61,10 @@ Unpack a nested list into nested left-hand side variables.
 Destructure and partially unpack a list. "a" is assigned to `first`, but
 "b", "c", "d", and "e" are grouped and assigned to one variable.
 ```R
-#> {first : ...rest} %<-% list("a", "b", "c", "d", "e")
-#> first
+c(first, ...rest) %<-% list("a", "b", "c", "d", "e")
+first
 #[1] "a"
-#> rest
+rest
 #[[1]]
 #[1] "b"
 #
@@ -136,7 +136,7 @@ value into two explicit variables and avoid dealing with the list return value
 all together.
 
 ```R
-{res : err} %<-% safe_log(10)
+c(res, err) %<-% safe_log(10)
 res
 #[1] 2.302585
 err
