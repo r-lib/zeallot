@@ -83,7 +83,7 @@ test_that("pair_off unpacks strings and data frames", {
 test_that("pair_off throws error for atomic vector of length > 1", {
   expect_error(
     pair_off(list("a", "b"), list(character(2))),
-    "invalid `destructure` argument, cannot de-structure character vector of length greater than 1"
+    "invalid `destructure` argument, cannot destructure character vector of length greater than 1"
   )
 })
 

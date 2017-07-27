@@ -1,4 +1,4 @@
-#' De-structure an Object
+#' Destructure an object
 #'
 #' `destructure` is used during unpacking assignment to coerce an object
 #' into a list. Individual elements of the list are assigned to names on the
@@ -14,7 +14,7 @@
 #' New implementations of `destructure` can be very simple. A new
 #' `destructure` implementation might only strip away the class of a custom
 #' object and return the underlying list structure. Alternatively, an object
-#' might de-structure into a nested set of values and may require a more
+#' might destructure into a nested set of values and may require a more
 #' complicated implementation. In either case, new implementations must return a
 #' list object so \code{\%<-\%} can handle the returned value(s).
 #'
@@ -143,7 +143,7 @@ destructure.default <- function(x) {
 assert_destruction <- function(x) {
   if (length(x) > 1) {
     stop(
-      "invalid `destructure` argument, cannot de-structure ", class(x),
+      "invalid `destructure` argument, cannot destructure ", class(x),
       " vector of length greater than 1",
       call. = FALSE
     )

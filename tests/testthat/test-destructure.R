@@ -36,11 +36,11 @@ test_that("destructure summary.lm converts to list", {
 test_that("destructure throws error for multi-length vectors of atomics", {
   expect_error(
     assert_destruction(character(2)),
-    "invalid `destructure` argument, cannot de-structure character vector of length greater than 1"
+    "invalid `destructure` argument, cannot destructure character vector of length greater than 1"
   )
   expect_error(
     destructure(c(Sys.Date(), Sys.Date())),
-    "invalid `destructure` argument, cannot de-structure Date vector of length greater than 1"
+    "invalid `destructure` argument, cannot destructure Date vector of length greater than 1"
   )
 })
 

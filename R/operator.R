@@ -15,7 +15,7 @@
 #' To specify multiple variable names use a call to `c(), c(x, y, z)`.
 #'
 #' When `value` is neither a vector nor a list, \code{\%<-\%} will try to
-#' de-structure `value` into a list, see [destructure].
+#' destructure `value` into a list, see [destructure].
 #'
 #' **nested names**
 #'
