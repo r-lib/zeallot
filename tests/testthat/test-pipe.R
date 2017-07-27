@@ -1,16 +1,16 @@
 context(' * testing %>% expressions')
 
-test_that('%<-% caveat', {
+test_that('%<-% and %>% caveat', {
   skip('must wrap piped expressions in parentheses')
 })
 
-test_that('can %<-% assign magrittr chain vector', {
+test_that('%<-% assign magrittr chain vector', {
   skip_if_not_installed('magrittr')
 
   library(magrittr)
 
   expect_silent(
-    a: b: c: d: e %<-% (
+    c(a, b, c, d, e) %<-% (
       1:5 %>%
         vapply(`+`, numeric(1), 5) %>%
         as.character
@@ -23,13 +23,13 @@ test_that('can %<-% assign magrittr chain vector', {
   expect_equal(e, '10')
 })
 
-test_that('%<-% can assign magrittr chain list', {
+test_that('%<-% assign magrittr chain list', {
   skip_if_not_installed('magrittr')
 
   library(magrittr)
 
   expect_silent(
-    {a: ...b} %<-% (
+    c(a, ...b) %<-% (
       1:5 %>%
         vapply(`==`, logical(1), 1) %>%
         as.list

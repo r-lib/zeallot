@@ -49,6 +49,6 @@ month, and day.
 each of the eleven values returned by \code{summary.lm}.
 }
 \seealso{
-\code{\link{destructure}}
+\link{destructure}
 }
 \keyword{internal}
