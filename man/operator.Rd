@@ -3,7 +3,7 @@
 \name{operator}
 \alias{operator}
 \alias{\%<-\%}
-\title{Unpacking Operator}
+\title{Unpacking operator}
 \usage{
 x \%<-\% value
 }
@@ -24,32 +24,30 @@ Assign values to name(s).
 \section{Left-hand side syntax}{
 
 
+\strong{the basics}
+
 At its simplest the left-hand side may be a single variable name, in which
 case \code{\%<-\%} performs regular assignment,
 \code{x \%<-\% list(1, 2, 3)}.
 
-To specify multiple variable names use a call to \code{c(), c(x, y, z)}.
+To specify multiple variable names use a call to \code{c()}, for example
+\code{c(x, y, z) \%<-\% c(1, 2, 3)}.
 
-When \code{value} is neither a vector nor a list, \code{\%<-\%} will try to
-destructure \code{value} into a list, see \link{destructure}.
+When \code{value} is neither an atomic vector nor a list, \code{\%<-\%} will try
+to destructure \code{value} into a list before assigning variables, see
+\code{\link[=destructure]{destructure()}}.
 
 \strong{nested names}
 
 One can also nest calls to \code{c()} when needed, \code{c(x, c(y, z))}. This nested
-structure is used to unpack nested values on the right-hand side,
+structure is used to unpack nested right-hand side values,
 \code{c(x, c(y, z)) \%<-\% list(1, list(2, 3))}.
 
 \strong{collector variables}
 
-To gather extra values from the beginning, middle, or end of value use a
+To gather extra values from the beginning, middle, or end of \code{value} use a
 collector variable. Collector variables are indicated with a \code{...}
-prefix.
-
-Collect starting values, \code{c(...start, z) \%<-\% list(1, 2, 3, 4)}.
-
-Collect middle values, \code{c(x, ...mid, z) \%<-\% list(1, 2, 3, 4)}.
-
-Collect ending values, \code{c(x, ...end) \%<-\% list(1, 2, 3, 4)}.
+prefix, \code{c(...start, z) \%<-\% list(1, 2, 3, 4)}.
 
 \strong{skipping values}
 
@@ -57,7 +55,7 @@ Use \code{.} in place of a variable name to skip a value without raising an erro
 or assigning the value, \code{c(x, ., z) \%<-\% list(1, 2, 3)}.
 
 Use \code{...} to skip multiple values without raising an error or assigning the
-values, \code{c(w, ..., z) \%<-\% list(1, NA, NA, z)}.
+values, \code{c(w, ..., z) \%<-\% list(1, NA, NA, 4)}.
 }
 
 \examples{
@@ -154,5 +152,5 @@ lasts   # c("Smith", "Peterson", ..
 }
 \seealso{
 For more on unpacking custom objects please refer to
-\link{destructure}.
+\code{\link[=destructure]{destructure()}}.
 }

@@ -1,4 +1,4 @@
-#' Unpacking Operator
+#' Unpacking operator
 #'
 #' Assign values to name(s).
 #'
@@ -8,32 +8,30 @@
 #'
 #' @section Left-hand side syntax:
 #'
+#' **the basics**
+#'
 #' At its simplest the left-hand side may be a single variable name, in which
 #' case \code{\%<-\%} performs regular assignment,
 #' \code{x \%<-\% list(1, 2, 3)}.
 #'
-#' To specify multiple variable names use a call to `c(), c(x, y, z)`.
+#' To specify multiple variable names use a call to `c()`, for example
+#' \code{c(x, y, z) \%<-\% c(1, 2, 3)}.
 #'
-#' When `value` is neither a vector nor a list, \code{\%<-\%} will try to
-#' destructure `value` into a list, see [destructure].
+#' When `value` is neither an atomic vector nor a list, \code{\%<-\%} will try
+#' to destructure `value` into a list before assigning variables, see
+#' [destructure()].
 #'
 #' **nested names**
 #'
 #' One can also nest calls to `c()` when needed, `c(x, c(y, z))`. This nested
-#' structure is used to unpack nested values on the right-hand side,
+#' structure is used to unpack nested right-hand side values,
 #' \code{c(x, c(y, z)) \%<-\% list(1, list(2, 3))}.
 #'
 #' **collector variables**
 #'
-#' To gather extra values from the beginning, middle, or end of value use a
+#' To gather extra values from the beginning, middle, or end of `value` use a
 #' collector variable. Collector variables are indicated with a `...`
-#' prefix.
-#'
-#' Collect starting values, \code{c(...start, z) \%<-\% list(1, 2, 3, 4)}.
-#'
-#' Collect middle values, \code{c(x, ...mid, z) \%<-\% list(1, 2, 3, 4)}.
-#'
-#' Collect ending values, \code{c(x, ...end) \%<-\% list(1, 2, 3, 4)}.
+#' prefix, \code{c(...start, z) \%<-\% list(1, 2, 3, 4)}.
 #'
 #' **skipping values**
 #'
@@ -41,7 +39,7 @@
 #' or assigning the value, \code{c(x, ., z) \%<-\% list(1, 2, 3)}.
 #'
 #' Use `...` to skip multiple values without raising an error or assigning the
-#' values, \code{c(w, ..., z) \%<-\% list(1, NA, NA, z)}.
+#' values, \code{c(w, ..., z) \%<-\% list(1, NA, NA, 4)}.
 #'
 #' @return
 #'
@@ -53,7 +51,7 @@
 #' @seealso
 #'
 #' For more on unpacking custom objects please refer to
-#' [destructure].
+#' [destructure()].
 #'
 #' @name operator
 #' @md

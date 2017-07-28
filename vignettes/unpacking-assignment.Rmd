@@ -32,7 +32,6 @@ lng
 ```
 
 You can also unpack the elements of a vector.
-Omit the braces ({}) in that case.
 
 ```{r}
 c(lat, lng) %<-% c(38.061944, -122.643889)
