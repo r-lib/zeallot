@@ -2,17 +2,16 @@
 
 ## Major Changes
 
-* The bracket and colon syntax has been deprecated in favor of a lighter syntax.
-  Documentation has been updated accordingly, see docs for more information
-  about the new syntax. Using the old syntax will raise a warning and will be
-  removed in future versions of zeallot. Thank you to Hadley for the suggestion.
-  (@hadley, #21)
+* The bracket and colon syntax has been deprecated in favor of a lighter syntax
+  which uses calls to `c()`. Documentation and vignettes has been updated
+  accordingly. Using the old syntax now raises a warning and will be removed in
+  future versions of zeallot. (@hadley, #21)
   
 ## Minor Improvements
 
 * `%<-%` can now be used for regular assignment. (@hadley, #17)
 * `...` can now be used to skip multiple values without assigning those values
-  and is now recommended over the previously suggested `....`. (@hadley, #18)
+  and is recommended over the previously suggested `....`. (@hadley, #18)
   
 ## Miscellaneous Changes
 
@@ -20,8 +19,9 @@
 
 ## Bug Fixes
 
-* Numerics on left-hand side are no longer unintentionally quoted and will now
-  raise an error. (@hadley, #20)
+* Numerics on left-hand side are no longer unintentionally quoted, thus no
+  longer treated as valid variable names, and will now raise an error. 
+  (@hadley, #20)
 * Language objects on left-hand side are no longer treated as symbols and will
   now raise an error. (@hadley, #20)
 
