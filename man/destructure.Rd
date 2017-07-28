@@ -2,7 +2,7 @@
 % Please edit documentation in R/destructure.R
 \name{destructure}
 \alias{destructure}
-\title{De-structure an Object}
+\title{Destructure an object}
 \usage{
 destructure(x)
 }
@@ -21,7 +21,7 @@ length greater than 1 is passed to \code{destructure} an error is raised.
 New implementations of \code{destructure} can be very simple. A new
 \code{destructure} implementation might only strip away the class of a custom
 object and return the underlying list structure. Alternatively, an object
-might de-structure into a nested set of values and may require a more
+might destructure into a nested set of values and may require a more
 complicated implementation. In either case, new implementations must return a
 list object so \code{\%<-\%} can handle the returned value(s).
 }

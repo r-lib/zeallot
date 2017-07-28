@@ -31,7 +31,7 @@ case \code{\%<-\%} performs regular assignment,
 To specify multiple variable names use a call to \code{c(), c(x, y, z)}.
 
 When \code{value} is neither a vector nor a list, \code{\%<-\%} will try to
-de-structure \code{value} into a list, see \link{destructure}.
+destructure \code{value} into a list, see \link{destructure}.
 
 \strong{nested names}
 
