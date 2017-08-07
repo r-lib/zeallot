@@ -3,44 +3,48 @@
 \name{operator}
 \alias{operator}
 \alias{\%<-\%}
-\title{Unpacking operator}
+\alias{\%->\%}
+\title{Multiple assignment operators}
 \usage{
 x \%<-\% value
+
+value \%->\% x
 }
 \arguments{
-\item{x}{A name structure, see details.}
+\item{x}{A name structure, see section below.}
 
 \item{value}{A list of values, vector of values, or \R object to assign.}
 }
 \value{
-\code{\%<-\%} invisibly returns \code{value}.
+\code{\%<-\%} and \code{\%->\%} invisibly return \code{value}.
 
-\code{\%<-\%} is used primarily for its assignment side-effect. \code{\%<-\%}
-assigns into the environment in which it is evaluated.
+These operators are used primarily for their assignment side-effect.
+\code{\%<-\%} and \code{\%->\%} assign into the environment in which they
+are evaluated.
 }
 \description{
 Assign values to name(s).
 }
-\section{Left-hand side syntax}{
+\section{Name Structure}{
 
 
 \strong{the basics}
 
-At its simplest the left-hand side may be a single variable name, in which
-case \code{\%<-\%} performs regular assignment,
-\code{x \%<-\% list(1, 2, 3)}.
+At its simplest, the name structure may be a single variable name, in which
+case \code{\%<-\%} and \code{\%->\%} perform regular assignment, \code{x
+\%<-\% list(1, 2, 3)} or \code{list(1, 2, 3) \%->\% x}.
 
 To specify multiple variable names use a call to \code{c()}, for example
 \code{c(x, y, z) \%<-\% c(1, 2, 3)}.
 
-When \code{value} is neither an atomic vector nor a list, \code{\%<-\%} will try
-to destructure \code{value} into a list before assigning variables, see
-\code{\link[=destructure]{destructure()}}.
+When \code{value} is neither an atomic vector nor a list, \code{\%<-\%} and
+\code{\%->\%} will try to destructure \code{value} into a list before assigning
+variables, see \code{\link[=destructure]{destructure()}}.
 
 \strong{nested names}
 
 One can also nest calls to \code{c()} when needed, \code{c(x, c(y, z))}. This nested
-structure is used to unpack nested right-hand side values,
+structure is used to unpack nested values,
 \code{c(x, c(y, z)) \%<-\% list(1, list(2, 3))}.
 
 \strong{collector variables}
@@ -148,6 +152,25 @@ c(firsts, lasts) \%<-\% strsplit(names, ",")
 
 firsts  # c("Nathan", "Maria", ..
 lasts   # c("Smith", "Peterson", ..
+
+# right operator
+list(1, 2, "a", "b", "c") \%->\% c(x, y, ...chars)
+
+x      # 1
+y      # 2
+chars  # list("a", "b", "c")
+
+# magrittr chains
+# install.packages("magrittr") for this example
+if (requireNamespace("magrittr", quietly = TRUE)) {
+  c("hello", "world!") \%>\%
+    paste0("\\n") \%>\%
+    lapply(toupper) \%->\%
+    c(greeting, subject)
+
+  greeting  # "HELLO\\n"
+  subject   # "WORLD!\\n"
+}
 
 }
 \seealso{

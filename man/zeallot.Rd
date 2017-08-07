@@ -5,9 +5,9 @@
 \alias{zeallot}
 \alias{zeallot-package}
 \alias{zeallot-package}
-\title{Multiple and Unpacking Assignment in R}
+\title{Multiple, unpacking, and destructuring assignment in R}
 \description{
-zeallot provides a \code{\link{\%<-\%}} operator to perform unpacking
+zeallot provides a \code{\link{\%<-\%}} operator to perform multiple
 assignment in R. To get started with zeallot be sure to read over the
 introductory vignette on unpacking assignment,
 \code{vignette('unpacking-assignment')}.
