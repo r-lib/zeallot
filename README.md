@@ -143,13 +143,13 @@ err
 #NULL
 ```
 
-On the left-hand side of the operator is a list of bare variable names using
-colons and braces. These variables do not need to be previously defined. On the
-right-hand side is a vector, list, or other R object to unpack. `%<-%` unpacks
-the right-hand side, checks the number of variable names against the number of
-unpacked values, and then assigns each unpacked value to a variable. The result,
-instead of dealing with a list of values there are two distinct variables, `res`
-and `err`.
+The name structure of the operator is a flat or nested set of bare variable
+names built with calls to `c()`. . These variables do not need to be previously
+defined. On the right-hand side is a vector, list, or other R object to unpack.
+`%<-%` unpacks the right-hand side, checks the number of variable names against
+the number of unpacked values, and then assigns each unpacked value to a
+variable. The result, instead of dealing with a list of values there are two
+distinct variables, `res` and `err`.
 
 ### Further Reading and Examples
 
