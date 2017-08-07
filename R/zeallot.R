@@ -1,6 +1,6 @@
-#' Multiple and Unpacking Assignment in R
+#' Multiple, unpacking, and destructuring assignment in R
 #'
-#' zeallot provides a \code{\link{\%<-\%}} operator to perform unpacking
+#' zeallot provides a \code{\link{\%<-\%}} operator to perform multiple
 #' assignment in R. To get started with zeallot be sure to read over the
 #' introductory vignette on unpacking assignment,
 #' \code{vignette('unpacking-assignment')}.
@@ -9,4 +9,4 @@
 #'
 #' @docType package
 #' @name zeallot
-'_PACKAGE'
+"_PACKAGE"
