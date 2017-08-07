@@ -159,3 +159,9 @@ test_that("%<-% throws error when assigning empty list", {
     "invalid `%<-%` right-hand side, incorrect number of values"
   )
 })
+
+test_that("%->% properly calls `multi_assign`", {
+  c(1, 2) %->% c(x, y)
+  expect_equal(x, 1)
+  expect_equal(y, 2)
+})
