@@ -156,6 +156,8 @@
 #'
 #' # magrittr chains, install.packages("magrittr") for this example
 #' if (requireNamespace("magrittr", quietly = TRUE)) {
+#'   library(magrittr)
+#'
 #'   c("hello", "world!") %>%
 #'     paste0("\n") %>%
 #'     lapply(toupper) %->%

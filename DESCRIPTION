@@ -21,4 +21,5 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    purrr
+    purrr,
+    magrittr
