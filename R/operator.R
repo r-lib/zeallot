@@ -151,20 +151,16 @@
   ast <- tree(substitute(x))
   cenv <- parent.frame()
 
+  #
+  # old syntax patch until removed
+  #
   if (length(ast) != 1 && ast[[1]] != "c") {
     return(old_operator(ast, value, cenv))
   }
 
   internals <- calls(ast)
-  lhs <- tryCatch(
-    variables(ast),
-    error = function(e) {
-      stop(
-        "invalid `%<-%` left-hand side, expecting symbol, but ", e$message,
-        call. = FALSE
-      )
-    }
-  )
+  lhs <- variables(ast)
+  rhs <- value
 
   #
   # standard assignment
@@ -174,19 +170,47 @@
     return(invisible(value))
   }
 
-  if (any(internals != "c")) {
-    name <- internals[which(internals != "c")][1]
-    stop(
-      "invalid `%<-%` left-hand side, unexpected call `", name, "`",
-      call. = FALSE
-    )
+  #
+  # *error* multiple assignment, but sinle RHS value
+  #
+  if (length(value) == 0) {
+    stop_invalid_rhs(incorrect_number_of_values())
   }
 
-  # if (is_list(lhs) && is_list(car(lhs))) {
-  #   lhs <- car(lhs)
-  # }
+  #
+  # edge cases when RHS is not a list
+  #
+  if (!is_list(value)) {
+    if (is.atomic(value)) {
+      rhs <- as.list(value)
+    } else {
+      rhs <- destructure(value)
+    }
+  }
 
-  massign(lhs, value, envir = cenv)
+  #
+  # tuples in question are variable names and value to assign
+  #
+  tuples <- pair_off(lhs, rhs)
+
+  for (t in tuples) {
+    name <- t[["name"]]
+    val <- t[["value"]]
+
+    #
+    # collector variable names retain the leading "..." in order to revert
+    # list values back to vectors if necessary
+    #
+    if (is_collector(name)) {
+      name <- sub("^\\.\\.\\.", "", name)
+
+      if (is.atomic(value)) {
+        val <- unlist(val)
+      }
+    }
+
+    assign(name, val, envir = cenv)
+  }
 
   invisible(value)
 }
