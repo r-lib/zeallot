@@ -6,7 +6,7 @@ test_that("destructure atomics", {
 
   expect_error(
     destructure(1),
-    "invalid `%<-%` right-hand side, incorrect number of values"
+    "incorrect number of values"
   )
 })
 
@@ -48,6 +48,6 @@ test_that("destructure throws error as default", {
   random <- structure(list(), class = "random")
   expect_error(
     destructure(random),
-    "invalid `%<-%` right-hand side, incorrect number of values"
+    "incorrect number of values"
   )
 })

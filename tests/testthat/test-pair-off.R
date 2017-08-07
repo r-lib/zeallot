@@ -90,31 +90,31 @@ test_that("pair_off throws error for atomic vector of length > 1", {
 test_that("pair_off throws error for flat lists of different lengths", {
   expect_error(
     pair_off(list("a", "b"), list(1)),
-    "invalid `%<-%` right-hand side, incorrect number of values"
+    "incorrect number of values"
   )
   expect_error(
     pair_off(list("a", "b"), list(1, 2, 3)),
-    "invalid `%<-%` right-hand side, incorrect number of values"
+    "incorrect number of values"
   )
 })
 
 test_that("pair_off throws error for nested lists of different lengths, depths", {
   expect_error(
     pair_off(list(list("a"), list("b", "c")), list(list(1), list(2), list(3))),
-    "invalid `%<-%` right-hand side, incorrect number of values"
+    "incorrect number of values"
   )
 })
 
 test_that("pair_off throws error for extra names, including a collector", {
   expect_error(
     pair_off(list("a", "...mid", "b"), list(1, 2)),
-    "invalid `%<-%` right-hand side, incorrect number of values"
+    "incorrect number of values"
   )
 })
 
 test_that("pair_off throws error for multiple collectors at one depth", {
   expect_error(
     pair_off(list("a", "...b", "...c"), list(1, 2, 3, 4)),
-    "invalid `%<-%` left-hand side, multiple collector variables at the same depth"
+    "multiple collector variables at the same depth"
   )
 })

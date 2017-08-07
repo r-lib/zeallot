@@ -165,3 +165,17 @@ test_that("%->% properly calls `multi_assign`", {
   expect_equal(x, 1)
   expect_equal(y, 2)
 })
+
+test_that("%->% errors include %->% in message, flips lhs and rhs", {
+  expect_error(
+    c(1, 2) %->% {x:y},
+    "invalid `%->%` right-hand side, unexpected call `{`",
+    fixed = TRUE
+  )
+
+  expect_error(
+    1 %->% c(x, y),
+    "invalid `%->%` left-hand side, incorrect number of values",
+    fixed = TRUE
+  )
+})

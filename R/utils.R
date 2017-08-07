@@ -66,16 +66,21 @@ unexpected_call <- function(obj) {
   paste0("unexpected call `", as.character(obj), "`")
 }
 
-stop_invalid_lhs <- function(message) {
-  stop(
-    paste("invalid `%<-%` left-hand side,", message),
-    call. = FALSE
+# thank you Advanced R
+condition <- function(subclass, message, call = sys.call(-1), ...) {
+  structure(
+    class = c(subclass, "condition"),
+    list(message = message, call = call),
+    ...
   )
 }
 
-stop_invalid_rhs <- function(message) {
-  stop(
-    paste("invalid `%<-%` right-hand side,", message),
-    call. = FALSE
-  )
+stop_invalid_lhs <- function(message, call = sys.call(-1), ...) {
+  cond <- condition(c("invalid_lhs", "error"), message, call, ...)
+  stop(cond)
+}
+
+stop_invalid_rhs <- function(message, call = sys.call(-1), ...) {
+  cond <- condition(c("invalid_rhs", "error"), message, call, ...)
+  stop(cond)
 }

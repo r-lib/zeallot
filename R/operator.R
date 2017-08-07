@@ -168,13 +168,29 @@
 #' }
 #'
 `%<-%` <- function(x, value) {
-  multi_assign(substitute(x), value, parent.frame())
+  tryCatch(
+    multi_assign(substitute(x), value, parent.frame()),
+    invalid_lhs = function(e) {
+      stop("invalid `%<-%` left-hand side, ", e$message, call. = FALSE)
+    },
+    invalid_rhs = function(e) {
+      stop("invalid `%<-%` right-hand side, ", e$message, call. = FALSE)
+    }
+  )
 }
 
 #' @rdname operator
 #' @export
 `%->%` <- function(value, x) {
-  multi_assign(substitute(x), value, parent.frame())
+  tryCatch(
+    multi_assign(substitute(x), value, parent.frame()),
+    invalid_lhs = function(e) {
+      stop("invalid `%->%` right-hand side, ", e$message, call. = FALSE)
+    },
+    invalid_rhs = function(e) {
+      stop("invalid `%->%` left-hand side, ", e$message, call. = FALSE)
+    }
+  )
 }
 
 # The real power behind %->% and %<-%
