@@ -8,9 +8,9 @@
 
 ## Major Improvements
 
-* A `%->%` operator has been added. The right operator performs the same
-  operation as `%<-%`, except the name structure is on the right-hand side and
-  the values to assign are on the left-hand side.
+* A `%->%` operator has been added. This right operator performs the same
+  operation as `%<-%` with the name structure on the right-hand side and
+  the values to assign on the left-hand side.
 
 # zeallot 0.0.4
 
