@@ -170,7 +170,7 @@ The [vadr](https://github.com/crowding/vadr) package includes a
 with much of the same functionality as `%<-%`. As the author states, "[they]
 strongly prefer there to be a `<-` anywhere that there is a modification to the
 environment." If you feel similarly I suggest looking at vadr. Unfortunately the
-vadr package is not on CRAN and will need to be downloaded using
+vadr package is not on CRAN and will need to be installed using
 `devtools::install_github()`.
 
 ---
