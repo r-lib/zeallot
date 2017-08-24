@@ -6,11 +6,11 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 notes
 
 ### Notes
 
-NULL
+* Possibly misspelled word "destructuring" in DESCRIPTION.
 
 ## Reverse dependencies
 
