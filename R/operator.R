@@ -240,7 +240,7 @@ multi_assign <- function(x, value, env) {
   #
   # tuples in question are variable names and value to assign
   #
-  tuples <- pair_off(lhs, rhs)
+  tuples <- pair_off(lhs, rhs, env)
 
   for (t in tuples) {
     name <- t[["name"]]

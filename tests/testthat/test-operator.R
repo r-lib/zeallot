@@ -101,6 +101,27 @@ test_that("%<-% skips multiple values using ...", {
   expect_equal(b, 4)
 })
 
+test_that("%<-% assigns default values", {
+  c(a, b <- 1) %<-% c(3)
+  expect_equal(a, 3)
+  expect_equal(b, 1)
+
+  c(d, e <- iris, f <- 3030) %<-% 5
+  expect_equal(d, 5)
+  expect_equal(e, iris)
+  expect_equal(f, 3030)
+})
+
+test_that("%<-% default values do not override specified values", {
+  c(a <- 1, b <- 4) %<-% 2
+  expect_equal(a, 2)
+  expect_equal(b, 4)
+
+  c(d <- 5, e <- 6) %<-% c(8, 9)
+  expect_equal(d, 8)
+  expect_equal(e, 9)
+})
+
 test_that("%<-% throws error on unequal number of variables and values", {
   expect_error(
     c(a, b) %<-% list(1),

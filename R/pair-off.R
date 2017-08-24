@@ -1,8 +1,10 @@
-pair_off <- function(names, values) {
+pair_off <- function(names, values, env) {
   if (is.character(names)) {
     if (names == ".") {
       return()
     }
+
+    attributes(names) <- NULL
 
     return(list(list(name = names, value = values)))
   }
@@ -16,6 +18,13 @@ pair_off <- function(names, values) {
   # mismatch between variables and values
   #
   if (length(names) != length(values)) {
+    if (any(has_default(names))) {
+      values <- add_defaults(names, values, env)
+      names <- lapply(names, `attributes<-`, value = NULL)
+
+      return(pair_off(names, values))
+    }
+
     #
     # mismatch could be resolved by destructuring the values, in this case
     # values must be a single element list
