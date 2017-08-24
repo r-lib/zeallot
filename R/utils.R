@@ -16,9 +16,29 @@ cdr <- function(cons) {
   cons[-1]
 }
 
+default <- function(x) {
+  attr(x, "default", exact = TRUE)
+}
+
+has_default <- function(x) {
+  vapply(x, function(i) !is.null(attr(i, "default")), logical(1))
+}
+
+add_defaults <- function(names, values, env) {
+  where <- which(has_default(names))
+  defaults <- lapply(names[where], default)[where > length(values)]
+  evaled <- lapply(defaults, eval, envir = env)
+
+  append(values, evaled)
+}
+
 tree <- function(x) {
   if (length(x) == 1) {
     return(x)
+  }
+
+  if (x[[1]] == "<-") {
+    return(as.list(x))
   }
 
   append(tree(x[[1]]), lapply(x[-1], tree))
@@ -31,7 +51,7 @@ calls <- function(x) {
 
   this <- car(x)
 
-  if (this != "c") {
+  if (this != "c" && this != "<-") {
     stop_invalid_lhs(unexpected_call(this))
   }
 
@@ -45,6 +65,19 @@ variables <- function(x) {
     }
 
     return(as.character(x))
+  }
+
+  if (car(x) == "<-") {
+    var <- as.character(car(cdr(x)))
+    default <- car(cdr(cdr(x)))
+
+    if (is.null(default)) {
+      default <- quote(pairlist())
+    }
+
+    attr(var, "default") <- default
+
+    return(var)
   }
 
   lapply(cdr(x), variables)
