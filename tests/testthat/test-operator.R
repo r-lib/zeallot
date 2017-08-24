@@ -112,6 +112,12 @@ test_that("%<-% assigns default values", {
   expect_equal(f, 3030)
 })
 
+test_that("%<-% assign default value of NULL", {
+  c(a, b <- NULL) %<-% c(3)
+  expect_equal(a, 3)
+  expect_equal(b, NULL)
+})
+
 test_that("%<-% default values do not override specified values", {
   c(a <- 1, b <- 4) %<-% 2
   expect_equal(a, 2)

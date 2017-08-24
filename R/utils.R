@@ -70,6 +70,11 @@ variables <- function(x) {
   if (car(x) == "<-") {
     var <- as.character(car(cdr(x)))
     default <- car(cdr(cdr(x)))
+
+    if (is.null(default)) {
+      default <- quote(pairlist())
+    }
+
     attr(var, "default") <- default
 
     return(var)
