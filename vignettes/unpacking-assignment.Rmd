@@ -325,7 +325,39 @@ middle
 end
 ```
 
-### Swapping values
+It is important to note that although value(s) are skipped they are still 
+expected. The next section touches on how to handle missing values.
+
+## Default values: handle missing values
+You can specify a default value for a left-hand side variable using `<-`. This
+comes in handy when the number of elements returned by a function cannot be
+guaranteed. `tail` for example may return fewer elements than asked for.
+
+```{r}
+nums <- 1:2
+c(x, y) %<-% tail(nums, 2)
+x
+y
+```
+
+However, if we tried to get 3 elements and assign them an error would be raised
+because `tail(nums, 3)` still only returns 2 values.
+
+```{r, error = TRUE}
+c(x, y, z) %<-% tail(nums, 3)
+```
+
+We can fix the problem and resolve the error by specifying a default value for
+`z`.
+
+```{r}
+c(x, y, z <- NULL) %<-% tail(nums, 3)
+x
+y
+z
+```
+
+## Swapping values
 A handy trick is swapping values without the use of a temporary variable.
 
 ```{r}
@@ -348,4 +380,23 @@ c(cat, dog, fish) %<-% c(dog, cat, dog)
 cat
 dog
 fish
+```
+
+## Right operator
+The `magrittr` package provides a pipe operator `%>%` which allows functions
+to be chained together in succession instead of nested. The left operator `%<-%`
+does not work well with these function chains. Instead, the right operator
+`%->%` is recommended. The below example is adapted from the `magrittr` readme.
+
+```{r, eval = require("magrittr")}
+library(magrittr)
+
+mtcars %>%
+  subset(hp > 100) %>%
+  aggregate(. ~ cyl, data = ., FUN = . %>% mean() %>% round(2)) %>%
+  transform(kpl = mpg %>% multiply_by(0.4251)) %->% 
+  c(cyl, mpg, ...rest)
+cyl
+mpg
+rest
 ```

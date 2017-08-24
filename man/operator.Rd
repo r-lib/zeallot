@@ -60,6 +60,11 @@ or assigning the value, \code{c(x, ., z) \%<-\% list(1, 2, 3)}.
 
 Use \code{...} to skip multiple values without raising an error or assigning the
 values, \code{c(w, ..., z) \%<-\% list(1, NA, NA, 4)}.
+
+\strong{default values}
+
+Use \code{<-} to specify a default value for a variable, \code{c(x, y <- NULL)
+\%<-\% tail(1, 2)}.
 }
 
 \examples{
@@ -152,6 +157,21 @@ c(firsts, lasts) \%<-\% strsplit(names, ",")
 
 firsts  # c("Nathan", "Maria", ..
 lasts   # c("Smith", "Peterson", ..
+
+# handle missing values with default values
+parse_time <- function(x) {
+  strsplit(x, " ")[[1]]
+}
+
+c(hour, period <- NA) \%<-\% parse_time("10:00 AM")
+
+hour    # "10:00"
+period  # "AM"
+
+c(hour, period <- NA) \%<-\% parse_time("15:00")
+
+hour    # "15:00"
+period  # NA
 
 # right operator
 list(1, 2, "a", "b", "c") \%->\% c(x, y, ...chars)
