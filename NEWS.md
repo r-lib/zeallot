@@ -8,9 +8,11 @@
 
 ## Major Improvements
 
-* A `%->%` operator has been added. This right operator performs the same
+* A `%->%` operator has been added. The right operator performs the same
   operation as `%<-%` with the name structure on the right-hand side and
   the values to assign on the left-hand side.
+* `<-` may be used to specify the default value of a variable. A default value
+  is used when there are an insufficient number of values.
 
 # zeallot 0.0.4
 
