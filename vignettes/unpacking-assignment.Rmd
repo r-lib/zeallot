@@ -329,9 +329,10 @@ It is important to note that although value(s) are skipped they are still
 expected. The next section touches on how to handle missing values.
 
 ## Default values: handle missing values
-You can specify a default value for a left-hand side variable using `<-`. This
-comes in handy when the number of elements returned by a function cannot be
-guaranteed. `tail` for example may return fewer elements than asked for.
+You can specify a default value for a left-hand side variable using `=`, similar
+to specifying the default value of a function argument. This comes in handy when
+the number of elements returned by a function cannot be guaranteed. `tail` for
+example may return fewer elements than asked for.
 
 ```{r}
 nums <- 1:2
@@ -351,7 +352,7 @@ We can fix the problem and resolve the error by specifying a default value for
 `z`.
 
 ```{r}
-c(x, y, z <- NULL) %<-% tail(nums, 3)
+c(x, y, z = NULL) %<-% tail(nums, 3)
 x
 y
 z
@@ -396,6 +397,7 @@ mtcars %>%
   aggregate(. ~ cyl, data = ., FUN = . %>% mean() %>% round(2)) %>%
   transform(kpl = mpg %>% multiply_by(0.4251)) %->% 
   c(cyl, mpg, ...rest)
+
 cyl
 mpg
 rest

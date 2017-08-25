@@ -63,7 +63,7 @@ values, \code{c(w, ..., z) \%<-\% list(1, NA, NA, 4)}.
 
 \strong{default values}
 
-Use \code{<-} to specify a default value for a variable, \code{c(x, y <- NULL)
+Use \code{=} to specify a default value for a variable, \code{c(x, y = NULL)
 \%<-\% tail(1, 2)}.
 }
 
@@ -163,12 +163,12 @@ parse_time <- function(x) {
   strsplit(x, " ")[[1]]
 }
 
-c(hour, period <- NA) \%<-\% parse_time("10:00 AM")
+c(hour, period = NA) \%<-\% parse_time("10:00 AM")
 
 hour    # "10:00"
 period  # "AM"
 
-c(hour, period <- NA) \%<-\% parse_time("15:00")
+c(hour, period = NA) \%<-\% parse_time("15:00")
 
 hour    # "15:00"
 period  # NA

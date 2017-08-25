@@ -10,7 +10,7 @@
 
 ### Notes
 
-* Possibly misspelled word "destructuring" in DESCRIPTION.
+* Possibly misspelled word "destructuring" in DESCRIPTION is intentionally used.
 
 ## Reverse dependencies
 

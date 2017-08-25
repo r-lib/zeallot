@@ -32,16 +32,29 @@ add_defaults <- function(names, values, env) {
   append(values, evaled)
 }
 
+names2 <- function(x) {
+  if (is.null(names(x))) rep.int("", length(x)) else names(x)
+}
+
 tree <- function(x) {
-  if (length(x) == 1) {
+  if (length(x) == 1 && is.language(x) && !is.symbol(x)) {
     return(x)
   }
 
-  if (x[[1]] == "<-") {
-    return(as.list(x))
+  x <- as.list(x)
+
+  if (length(x) == 1 && length(x[[1]]) <= 1) {
+    if (names2(x) != "") {
+      return(list(as.symbol("="), as.symbol(names(x)), x[[1]]))
+    }
+
+    return(x[[1]])
   }
 
-  append(tree(x[[1]]), lapply(x[-1], tree))
+  append(
+    tree(x[[1]]),
+    lapply(seq_along(x[-1]), function(i) tree(x[-1][i]))
+  )
 }
 
 calls <- function(x) {
@@ -51,7 +64,7 @@ calls <- function(x) {
 
   this <- car(x)
 
-  if (this != "c" && this != "<-") {
+  if (this != "c" && this != "=") {
     stop_invalid_lhs(unexpected_call(this))
   }
 
@@ -60,6 +73,10 @@ calls <- function(x) {
 
 variables <- function(x) {
   if (!is_list(x)) {
+    if (x == "") {
+      stop_invalid_lhs(empty_variable(x))
+    }
+
     if (!is.symbol(x)) {
       stop_invalid_lhs(unexpected_variable(x))
     }
@@ -67,7 +84,7 @@ variables <- function(x) {
     return(as.character(x))
   }
 
-  if (car(x) == "<-") {
+  if (car(x) == "=") {
     var <- as.character(car(cdr(x)))
     default <- car(cdr(cdr(x)))
 
@@ -89,6 +106,10 @@ variables <- function(x) {
 
 incorrect_number_of_values <- function() {
   "incorrect number of values"
+}
+
+empty_variable <- function(obj) {
+  paste("found empty variable, check for extraneous commas")
 }
 
 unexpected_variable <- function(obj) {

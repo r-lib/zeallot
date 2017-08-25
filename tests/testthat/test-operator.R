@@ -102,28 +102,28 @@ test_that("%<-% skips multiple values using ...", {
 })
 
 test_that("%<-% assigns default values", {
-  c(a, b <- 1) %<-% c(3)
+  c(a, b = 1) %<-% c(3)
   expect_equal(a, 3)
   expect_equal(b, 1)
 
-  c(d, e <- iris, f <- 3030) %<-% 5
+  c(d, e = iris, f = 3030) %<-% 5
   expect_equal(d, 5)
   expect_equal(e, iris)
   expect_equal(f, 3030)
 })
 
 test_that("%<-% assign default value of NULL", {
-  c(a, b <- NULL) %<-% c(3)
+  c(a, b = NULL) %<-% c(3)
   expect_equal(a, 3)
   expect_equal(b, NULL)
 })
 
 test_that("%<-% default values do not override specified values", {
-  c(a <- 1, b <- 4) %<-% 2
+  c(a = 1, b = 4) %<-% 2
   expect_equal(a, 2)
   expect_equal(b, 4)
 
-  c(d <- 5, e <- 6) %<-% c(8, 9)
+  c(d = 5, e = 6) %<-% c(8, 9)
   expect_equal(d, 8)
   expect_equal(e, 9)
 })
@@ -160,6 +160,13 @@ test_that("%<-% throws error when invalid calls on LHS", {
   expect_error(
     c(a, c(quote(d), c)) %<-% list(1, list(2, 3)),
     "invalid `%<-%` left-hand side, unexpected call `quote`"
+  )
+})
+
+test_that("%<-% throws error when blank variable names", {
+  expect_error(
+    c(, a) %<-% c(1, 2),
+    "invalid `%<-%` left-hand side, found empty variable, check for extraneous commas"
   )
 })
 

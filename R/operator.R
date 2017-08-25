@@ -43,7 +43,7 @@
 #'
 #' **default values**
 #'
-#' Use `<-` to specify a default value for a variable, \code{c(x, y <- NULL)
+#' Use `=` to specify a default value for a variable, \code{c(x, y = NULL)
 #' \%<-\% tail(1, 2)}.
 #'
 #' @return
@@ -157,12 +157,12 @@
 #'   strsplit(x, " ")[[1]]
 #' }
 #'
-#' c(hour, period <- NA) %<-% parse_time("10:00 AM")
+#' c(hour, period = NA) %<-% parse_time("10:00 AM")
 #'
 #' hour    # "10:00"
 #' period  # "AM"
 #'
-#' c(hour, period <- NA) %<-% parse_time("15:00")
+#' c(hour, period = NA) %<-% parse_time("15:00")
 #'
 #' hour    # "15:00"
 #' period  # NA
