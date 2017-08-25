@@ -342,7 +342,7 @@ y
 ```
 
 However, if we tried to get 3 elements and assign them an error would be raised
-because `tail(nums, 3)` still only returns 2 values.
+because `tail(nums, 3)` still returns only 2 values.
 
 ```{r, error = TRUE}
 c(x, y, z) %<-% tail(nums, 3)
@@ -385,7 +385,7 @@ fish
 
 ## Right operator
 The `magrittr` package provides a pipe operator `%>%` which allows functions
-to be chained together in succession instead of nested. The left operator `%<-%`
+to be called in succession instead of nested. The left operator `%<-%`
 does not work well with these function chains. Instead, the right operator
 `%->%` is recommended. The below example is adapted from the `magrittr` readme.
 

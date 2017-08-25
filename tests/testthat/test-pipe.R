@@ -1,7 +1,7 @@
 context(' * testing %>% expressions')
 
 test_that('%<-% and %>% caveat', {
-  skip('must wrap piped expressions in parentheses')
+  skip('must wrap piped expressions in parentheses or use right operator')
 })
 
 test_that('%<-% assign magrittr chain vector', {
