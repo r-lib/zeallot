@@ -2,7 +2,7 @@
 
 ## Major Improvements
 
-* The left-hand side may now contain calls to `[[`, `[`, or `$` allowing
+* The left-hand side may now contain calls to `[[`, `[`, and `$` allowing
   assignment of list elements and variables in specific environments.
   
 ## Minor Improvements
