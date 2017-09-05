@@ -7,6 +7,23 @@ test_that("%<-% can perform standard assignment", {
   expect_equal(b, list(1, 2, 3))
 })
 
+test_that("%->% can perform standard assignment, too", {
+  1 %->% a
+  2 %->% b
+  expect_equal(a, 1)
+  expect_equal(b, 2)
+})
+
+test_that("%<-% can assign list element, variable in specific environment", {
+  a <- list()
+  a[[1]] %<-% "b"
+  expect_equal(a[[1]], "b")
+
+  e <- new.env(parent = emptyenv())
+  e$a %<-% "b"
+  expect_equal(e$a, "b")
+})
+
 test_that("%<-% handles single name assigned single value", {
   c(a) %<-% list("foo")
   expect_equal(a, "foo")
@@ -25,6 +42,14 @@ test_that("%<-% assigns collected vector as vector", {
   expect_equal(d, FALSE)
 })
 
+test_that("%<-% assigns multiple list elements", {
+  x <- list()
+  y <- list()
+  c(x$a, y[[2]]) %<-% c(1, 2)
+  expect_equal(x$a, 1)
+  expect_equal(y[[2]], 2)
+})
+
 test_that("%<-% unpacks vector", {
   c(a, b) %<-% c("hello", "world")
   expect_equal(a, "hello")
@@ -36,6 +61,10 @@ test_that("%<-% does not unpack nested vectors", {
     c(c(a, b), c(d, e)) %<-% list(c(1, 2), c(3, 4)),
     "invalid `%<-%` right-hand side, incorrect number of values"
   )
+
+  c(a, b) %<-% list(c(1, 2), c(3, 4))
+  expect_equal(a, c(1, 2))
+  expect_equal(b, c(3, 4))
 })
 
 test_that("%<-% unpacks list", {
@@ -192,12 +221,6 @@ test_that("%<-% throws error when assigning empty list", {
     c(a, b) %<-% list(),
     "invalid `%<-%` right-hand side, incorrect number of values"
   )
-})
-
-test_that("%->% properly calls `multi_assign`", {
-  c(1, 2) %->% c(x, y)
-  expect_equal(x, 1)
-  expect_equal(y, 2)
 })
 
 test_that("%->% errors include %->% in message, flips lhs and rhs", {
