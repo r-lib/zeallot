@@ -1,3 +1,15 @@
+# zeallot 0.0.6
+
+## Major Improvements
+
+* The left-hand side may now contain calls to `[[`, `[`, or `$` allowing
+  assignment of list elements and variables in specific environments.
+  
+## Minor Improvements
+
+* Generic error messages now include more context indicating the error orginated
+  from within a call to `%<-%` or `%->%`.
+
 # zeallot 0.0.5
 
 ## Major Changes
