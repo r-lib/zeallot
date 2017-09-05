@@ -16,6 +16,10 @@ cdr <- function(cons) {
   cons[-1]
 }
 
+names2 <- function(x) {
+  if (is.null(names(x))) rep.int("", length(x)) else names(x)
+}
+
 default <- function(x) {
   attr(x, "default", exact = TRUE)
 }
@@ -32,8 +36,10 @@ add_defaults <- function(names, values, env) {
   append(values, evaled)
 }
 
-names2 <- function(x) {
-  if (is.null(names(x))) rep.int("", length(x)) else names(x)
+replace_assign <- function(call, value, envir = parent.frame()) {
+  replacee <- call("<-", call, value)
+  eval(replacee, envir = envir)
+  invisible(value)
 }
 
 tree <- function(x) {
@@ -64,7 +70,7 @@ calls <- function(x) {
 
   this <- car(x)
 
-  if (this != "c" && this != "=") {
+  if (!(as.character(this) %in% c("c", "=", "$", "[", "[["))) {
     stop_invalid_lhs(unexpected_call(this))
   }
 
@@ -95,6 +101,10 @@ variables <- function(x) {
     attr(var, "default") <- default
 
     return(var)
+  } else if (car(x) == "$" || car(x) == "[[" || car(x) == "[") {
+    parts <- as.call(x)
+
+    return(parts)
   }
 
   lapply(cdr(x), variables)

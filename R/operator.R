@@ -195,6 +195,9 @@
     },
     invalid_rhs = function(e) {
       stop("invalid `%<-%` right-hand side, ", e$message, call. = FALSE)
+    },
+    error = function(e) {
+      stop("problem in `%<-%`, ", e$message, call. = FALSE)
     }
   )
 }
@@ -209,6 +212,9 @@
     },
     invalid_rhs = function(e) {
       stop("invalid `%->%` left-hand side, ", e$message, call. = FALSE)
+    },
+    error = function(e) {
+      stop("problem in `%->%`, ", e$message, call. = FALSE)
     }
   )
 }
@@ -235,7 +241,10 @@ multi_assign <- function(x, value, env) {
   # standard assignment, no calls (i.e. `c`) found
   #
   if (is.null(internals)) {
-    assign(as.character(ast), value, envir = env)
+    assign(lhs, value, envir = env)
+    return(invisible(value))
+  } else if (length(internals) == 1 && internals %in% c("[[", "[", "$")) {
+    replace_assign(lhs, value, envir = env)
     return(invisible(value))
   }
 
@@ -265,6 +274,11 @@ multi_assign <- function(x, value, env) {
   for (t in tuples) {
     name <- t[["name"]]
     val <- t[["value"]]
+
+    if (is.language(name)) {
+      replace_assign(name, val, envir = env)
+      next
+    }
 
     #
     # collector variable names retain the leading "..." in order to revert
