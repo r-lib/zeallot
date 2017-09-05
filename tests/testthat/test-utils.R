@@ -1,9 +1,5 @@
 context(" * testing utils")
 
-test_that("is_Date returns TRUE for date objects", {
-  expect_true(is_Date(Sys.Date()))
-})
-
 test_that("is_list returns TRUE for list object", {
   expect_true(is_list(list(1, 2, 3)))
 })

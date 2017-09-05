@@ -1,7 +1,3 @@
-is_Date <- function(x) {
-  inherits(x, 'Date')
-}
-
 is_list <- function(x) {
   class(x) == 'list'
 }
