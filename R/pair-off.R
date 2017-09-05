@@ -1,5 +1,5 @@
 pair_off <- function(names, values, env) {
-  if (is.character(names)) {
+  if (is.character(names) || is.language(names)) {
     if (names == ".") {
       return()
     }
