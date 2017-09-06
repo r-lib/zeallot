@@ -16,20 +16,41 @@ names2 <- function(x) {
   if (is.null(names(x))) rep.int("", length(x)) else names(x)
 }
 
-default <- function(x) {
+set_default <- function(x, value) {
+  attr(x, "default") <- value
+  x
+}
+
+get_default <- function(x) {
   attr(x, "default", exact = TRUE)
 }
 
 has_default <- function(x) {
-  vapply(x, function(i) !is.null(attr(i, "default")), logical(1))
+  vapply(x, function(i) !is.null(get_default(i)), logical(1))
 }
 
 add_defaults <- function(names, values, env) {
   where <- which(has_default(names))
-  defaults <- lapply(names[where], default)[where > length(values)]
+  defaults <- lapply(names[where], get_default)[where > length(values)]
   evaled <- lapply(defaults, eval, envir = env)
 
   append(values, evaled)
+}
+
+is_extract_op <- function(x) {
+  if (length(x) < 1) {
+    return(FALSE)
+  }
+
+  (as.character(x) %in% c("[", "[[", "$"))
+}
+
+is_valid_call <- function(x) {
+  if (length(x) < 1) {
+    return(FALSE)
+  }
+
+  (x == "c" || x == "=" || is_extract_op(x))
 }
 
 replace_assign <- function(call, value, envir = parent.frame()) {
@@ -39,23 +60,23 @@ replace_assign <- function(call, value, envir = parent.frame()) {
 }
 
 tree <- function(x) {
-  if (length(x) == 1 && is.language(x) && !is.symbol(x)) {
+  if (length(x) == 1) {
     return(x)
   }
 
-  x <- as.list(x)
-
-  if (length(x) == 1 && length(x[[1]]) <= 1) {
-    if (names2(x) != "") {
-      return(list(as.symbol("="), as.symbol(names(x)), x[[1]]))
-    }
-
-    return(x[[1]])
+  if (is_extract_op(x[[1]])) {
+    return(x)
   }
 
-  append(
-    tree(x[[1]]),
-    lapply(seq_along(x[-1]), function(i) tree(x[-1][i]))
+  lapply(
+    seq_along(as.list(x)),
+    function(i) {
+      if (names2(x[i]) != "") {
+        return(list(as.symbol("="), names2(x[i]), x[[i]]))
+      } else {
+        tree(x[[i]])
+      }
+    }
   )
 }
 
@@ -66,7 +87,7 @@ calls <- function(x) {
 
   this <- car(x)
 
-  if (!(as.character(this) %in% c("c", "=", "$", "[", "[["))) {
+  if (!is_valid_call(this)) {
     stop_invalid_lhs(unexpected_call(this))
   }
 
@@ -77,6 +98,10 @@ variables <- function(x) {
   if (!is_list(x)) {
     if (x == "") {
       stop_invalid_lhs(empty_variable(x))
+    }
+
+    if (is.language(x) && length(x) > 1 && is_extract_op(x[[1]])) {
+      return(x)
     }
 
     if (!is.symbol(x)) {
@@ -97,10 +122,6 @@ variables <- function(x) {
     attr(var, "default") <- default
 
     return(var)
-  } else if (car(x) == "$" || car(x) == "[[" || car(x) == "[") {
-    parts <- as.call(x)
-
-    return(parts)
   }
 
   lapply(cdr(x), variables)
@@ -143,4 +164,8 @@ stop_invalid_lhs <- function(message, call = sys.call(-1), ...) {
 stop_invalid_rhs <- function(message, call = sys.call(-1), ...) {
   cond <- condition(c("invalid_rhs", "error"), message, call, ...)
   stop(cond)
+}
+
+is_invalid_side_error <- function(e) {
+  inherits(e, c("invalid_lhs", "invalid_rhs"))
 }

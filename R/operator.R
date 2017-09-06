@@ -235,10 +235,11 @@ multi_assign <- function(x, value, env) {
   # standard assignment, no calls (i.e. `c`) found
   #
   if (is.null(internals)) {
-    assign(lhs, value, envir = env)
-    return(invisible(value))
-  } else if (length(internals) == 1 && internals %in% c("[[", "[", "$")) {
-    replace_assign(lhs, value, envir = env)
+    if (is.language(lhs)) {
+      replace_assign(lhs, value, envir = env)
+    } else {
+      assign(lhs, value, envir = env)
+    }
     return(invisible(value))
   }
 
