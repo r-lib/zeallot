@@ -195,9 +195,6 @@
     },
     invalid_rhs = function(e) {
       stop("invalid `%<-%` right-hand side, ", e$message, call. = FALSE)
-    },
-    error = function(e) {
-      stop("problem in `%<-%`, ", e$message, call. = FALSE)
     }
   )
 }
@@ -212,9 +209,6 @@
     },
     invalid_rhs = function(e) {
       stop("invalid `%->%` left-hand side, ", e$message, call. = FALSE)
-    },
-    error = function(e) {
-      stop("problem in `%->%`, ", e$message, call. = FALSE)
     }
   )
 }
