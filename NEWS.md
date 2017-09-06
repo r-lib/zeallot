@@ -5,7 +5,7 @@
 * The left-hand side may now contain calls to `[[`, `[`, and `$` allowing
   assignment of list elements and variables in specific environments. The 
   parent list, environment, or object in question must already exist, otherwise
-  an error is raised.
+  an error is raised. (@rafaqz, #32)
 
 # zeallot 0.0.5
 
