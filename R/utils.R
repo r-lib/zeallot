@@ -17,15 +17,9 @@ names2 <- function(x) {
 }
 
 #
-# set the default attribute of an object, the default attribute is used by
-# `variables()` and `pair_off()` to know when to assign a variable its default
-# value
+# the default attribute is used by `variables()` and `pair_off()` to know when
+# to assign a variable its default value
 #
-set_default <- function(x, value) {
-  attr(x, "default") <- value
-  x
-}
-
 get_default <- function(x) {
   attr(x, "default", exact = TRUE)
 }
