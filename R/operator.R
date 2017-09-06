@@ -21,6 +21,11 @@
 #' \code{\%->\%} will try to destructure `value` into a list before assigning
 #' variables, see [destructure()].
 #'
+#' **object parts**
+#'
+#' Like assigning a variable, one may also assign part of an object, \code{c(x,
+#' x[[1]]) \%<-\% list(list(), 1)}.
+#'
 #' **nested names**
 #'
 #' One can also nest calls to `c()` when needed, `c(x, c(y, z))`. This nested
@@ -45,6 +50,10 @@
 #'
 #' Use `=` to specify a default value for a variable, \code{c(x, y = NULL)
 #' \%<-\% tail(1, 2)}.
+#'
+#' When assigning part of an object a default value may not be specified because
+#' of the syntax enforced by \R. The following would raise an `"unexpected '='
+#' ..."` error, \code{c(x, x[[1]] = 1) \%<-\% list(list())}.
 #'
 #' @return
 #'
@@ -232,10 +241,19 @@ multi_assign <- function(x, value, env) {
   rhs <- value
 
   #
-  # standard assignment, no calls (i.e. `c`) found
+  # all lists or environemnts referenced in lhs must already exist
+  #
+  check_extract_calls(lhs, env)
+
+  #
+  # standard assignment
   #
   if (is.null(internals)) {
-    assign(as.character(ast), value, envir = env)
+    if (is.language(lhs)) {
+      assign_extract(lhs, value, envir = env)
+    } else {
+      assign(lhs, value, envir = env)
+    }
     return(invisible(value))
   }
 
@@ -265,6 +283,11 @@ multi_assign <- function(x, value, env) {
   for (t in tuples) {
     name <- t[["name"]]
     val <- t[["value"]]
+
+    if (is.language(name)) {
+      assign_extract(name, val, envir = env)
+      next
+    }
 
     #
     # collector variable names retain the leading "..." in order to revert

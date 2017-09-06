@@ -41,6 +41,11 @@ When \code{value} is neither an atomic vector nor a list, \code{\%<-\%} and
 \code{\%->\%} will try to destructure \code{value} into a list before assigning
 variables, see \code{\link[=destructure]{destructure()}}.
 
+\strong{object parts}
+
+Like assigning a variable, one may also assign part of an object, \code{c(x,
+x[[1]]) \%<-\% list(list(), 1)}.
+
 \strong{nested names}
 
 One can also nest calls to \code{c()} when needed, \code{c(x, c(y, z))}. This nested
@@ -65,6 +70,9 @@ values, \code{c(w, ..., z) \%<-\% list(1, NA, NA, 4)}.
 
 Use \code{=} to specify a default value for a variable, \code{c(x, y = NULL)
 \%<-\% tail(1, 2)}.
+
+When assigning part of an object a default value may not be specified because
+of the syntax enforced by \R. The following would raise an \code{"unexpected '=' ..."} error, \code{c(x, x[[1]] = 1) \%<-\% list(list())}.
 }
 
 \examples{
