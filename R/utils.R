@@ -16,6 +16,11 @@ names2 <- function(x) {
   if (is.null(names(x))) rep.int("", length(x)) else names(x)
 }
 
+#
+# set the default attribute of an object, the default attribute is used by
+# `variables()` and `pair_off()` to know when to assign a variable its default
+# value
+#
 set_default <- function(x, value) {
   attr(x, "default") <- value
   x
@@ -29,12 +34,47 @@ has_default <- function(x) {
   vapply(x, function(i) !is.null(get_default(i)), logical(1))
 }
 
+#
+# append any default values onto the end of a list of values, used in
+# `pair_off()` to extend the current set of values thereby avoiding an
+# incorrect number of values error
+#
 add_defaults <- function(names, values, env) {
   where <- which(has_default(names))
   defaults <- lapply(names[where], get_default)[where > length(values)]
   evaled <- lapply(defaults, eval, envir = env)
 
   append(values, evaled)
+}
+
+#
+# traverse nested extract op calls to find the extractee, e.g. `x[[1]][[1]]`
+#
+traverse_to_extractee <- function(call) {
+  if (is.language(call) && is.symbol(call)) {
+    return(call)
+  }
+  traverse_to_extractee(call[[2]])
+}
+
+#
+# used by multi_assign to confirm all extractees exist
+#
+check_extract_calls <- function(lhs, envir) {
+  if (is.character(lhs)) {
+    return()
+  }
+
+  if (is.language(lhs)) {
+    extractee <- traverse_to_extractee(lhs)
+    if (!exists(as.character(extractee), envir = envir, inherits = FALSE)) {
+      stop_invalid_lhs(object_does_not_exist(extractee))
+    } else {
+      return()
+    }
+  }
+
+  unlist(lapply(lhs, check_extract_calls, envir = envir))
 }
 
 is_extract_op <- function(x) {
@@ -53,12 +93,19 @@ is_valid_call <- function(x) {
   (x == "c" || x == "=" || is_extract_op(x))
 }
 
-replace_assign <- function(call, value, envir = parent.frame()) {
+#
+# used by multi_assign to assign list elements in the calling environment
+#
+assign_extract <- function(call, value, envir = parent.frame()) {
   replacee <- call("<-", call, value)
   eval(replacee, envir = envir)
   invisible(value)
 }
 
+#
+# parses a substituted expression to create a tree-like list structure,
+# perserves calls to extract ops instead of converting them to lists
+#
 tree <- function(x) {
   if (length(x) == 1) {
     return(x)
@@ -80,6 +127,11 @@ tree <- function(x) {
   )
 }
 
+#
+# given a tree-like list structure returns a character vector of the function
+# calls, used by multi_assign to determine if performing standard assignment or
+# multiple assignment
+#
 calls <- function(x) {
   if (!is_list(x)) {
     return(NULL)
@@ -94,6 +146,10 @@ calls <- function(x) {
   c(as.character(this), unlist(lapply(cdr(x), calls)))
 }
 
+#
+# given a tree-like list structure, returns a nested list of the variables
+# in the tree, will also associated default values with variables
+#
 variables <- function(x) {
   if (!is_list(x)) {
     if (x == "") {
@@ -133,6 +189,10 @@ variables <- function(x) {
 
 incorrect_number_of_values <- function() {
   "incorrect number of values"
+}
+
+object_does_not_exist <- function(obj) {
+  paste0("object `", obj, "` does not exist in calling environment")
 }
 
 empty_variable <- function(obj) {

@@ -252,3 +252,19 @@ test_that("%->% errors include %->% in message, flips lhs and rhs", {
     "^invalid `%->%` left-hand side, incorrect number of values$"
   )
 })
+
+test_that("extractees on left-hand side must exist", {
+  expect_error(
+    a[[1]] %<-% 3030,
+    "^invalid `%<-%` left-hand side, object `a` does not exist in calling environment$"
+  )
+
+  f <- function() {
+    "hello" + 9
+  }
+
+  expect_error(
+    b %<-% f(),
+    '^non-numeric argument to binary operator$'
+  )
+})

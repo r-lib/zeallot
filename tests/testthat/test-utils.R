@@ -22,3 +22,11 @@ test_that("car returns first element of list", {
   expect_equal(car(list(1, 2)), 1)
   expect_equal(car(list(list(1, 2), 3)), list(1, 2))
 })
+
+test_that("traverse_to_extractee gets flat and nested extractees", {
+  s1 <- substitute(x[[1]])
+  expect_equal(as.character(traverse_to_extractee(s1)), "x")
+
+  s2 <- substitute(y[[1]][[3030]])
+  expect_equal(as.character(traverse_to_extractee(s2)), "y")
+})

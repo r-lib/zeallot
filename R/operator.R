@@ -232,11 +232,16 @@ multi_assign <- function(x, value, env) {
   rhs <- value
 
   #
-  # standard assignment, no calls (i.e. `c`) found
+  # all lists or environemnts referenced in lhs must already exist
+  #
+  check_extract_calls(lhs, env)
+
+  #
+  # standard assignment
   #
   if (is.null(internals)) {
     if (is.language(lhs)) {
-      replace_assign(lhs, value, envir = env)
+      assign_extract(lhs, value, envir = env)
     } else {
       assign(lhs, value, envir = env)
     }
@@ -271,7 +276,7 @@ multi_assign <- function(x, value, env) {
     val <- t[["value"]]
 
     if (is.language(name)) {
-      replace_assign(name, val, envir = env)
+      assign_extract(name, val, envir = env)
       next
     }
 
