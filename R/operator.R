@@ -21,6 +21,11 @@
 #' \code{\%->\%} will try to destructure `value` into a list before assigning
 #' variables, see [destructure()].
 #'
+#' **object parts**
+#'
+#' Like assigning a variable, one may also assign part of an object, \code{c(x,
+#' x[[1]]) \%<-\% list(list(), 1)}.
+#'
 #' **nested names**
 #'
 #' One can also nest calls to `c()` when needed, `c(x, c(y, z))`. This nested
@@ -45,6 +50,10 @@
 #'
 #' Use `=` to specify a default value for a variable, \code{c(x, y = NULL)
 #' \%<-\% tail(1, 2)}.
+#'
+#' When assigning part of an object a default value may not be specified because
+#' of the syntax enforced by \R. The following would raise an `"unexpected '='
+#' ..."` error, \code{c(x, x[[1]] = 1) \%<-\% list(list())}.
 #'
 #' @return
 #'
