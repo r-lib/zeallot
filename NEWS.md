@@ -3,7 +3,7 @@
 ## Major Improvements
 
 * The left-hand side may now contain calls to `[[`, `[`, and `$` allowing
-  assignment of parts of objects. The parent object in question must already
+  assignment of parts of objects. The parent object must already
   exist, otherwise an error is raised. (@rafaqz, #32)
 
 # zeallot 0.0.5
