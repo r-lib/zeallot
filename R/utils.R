@@ -219,7 +219,3 @@ stop_invalid_rhs <- function(message, call = sys.call(-1), ...) {
   cond <- condition(c("invalid_rhs", "error"), message, call, ...)
   stop(cond)
 }
-
-is_invalid_side_error <- function(e) {
-  inherits(e, c("invalid_lhs", "invalid_rhs"))
-}
