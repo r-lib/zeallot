@@ -289,15 +289,11 @@ multi_assign <- function(x, value, env) {
       next
     }
 
-    #
-    # collector variable names retain the leading "..." in order to revert
-    # list values back to vectors if necessary
-    #
-    if (is_collector(name)) {
-      name <- sub("^\\.\\.\\.", "", name)
-
-      if (is.atomic(value)) {
-        val <- unlist(val)
+    if (is.atomic(value)) {
+      if (is.null(attr(val, "default", TRUE))) {
+        val <- unlist(val, recursive = FALSE)
+      } else if (attr(val, "default", TRUE) == TRUE) {
+        attr(val, "default") <- NULL
       }
     }
 

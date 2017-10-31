@@ -176,6 +176,16 @@ test_that("%<-% default values do not override specified values", {
   expect_equal(e, 9)
 })
 
+test_that("%<-% collector variables may have defaults", {
+  c(a, ...b = 4) %<-% c(1)
+  expect_equal(a, 1)
+  expect_equal(b, 4)
+
+  c(d, ...e = list(3030)) %<-% c(1)
+  expect_equal(d, 1)
+  expect_equal(e, list(3030))
+})
+
 test_that("%<-% throws error on unequal number of variables and values", {
   expect_error(
     c(a, b) %<-% list(1),

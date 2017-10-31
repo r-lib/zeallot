@@ -35,7 +35,7 @@ pair_off <- function(names, values, env) {
 
     #
     # if there is no collector the mismatch is a problem *or* if collector,
-    # but still more variables than values the collector is useless and
+    # and still more variables than values the collector is useless and
     # mismatch is a problem
     #
     if (!has_collector(names) || length(names) > length(values)) {
@@ -45,12 +45,12 @@ pair_off <- function(names, values, env) {
 
   if (is_collector(car(names))) {
     collected <- collect(names, values)
-    name <- car(names)
+    name <- sub("^\\.\\.\\.", "", car(names))
 
     #
     # skip unnamed collector variable and corresponding values
     #
-    if (name == "...") {
+    if (name == "") {
       return(pair_off(cdr(names), cdr(collected)))
     }
 

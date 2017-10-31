@@ -36,7 +36,19 @@ has_default <- function(x) {
 add_defaults <- function(names, values, env) {
   where <- which(has_default(names))
   defaults <- lapply(names[where], get_default)[where > length(values)]
-  evaled <- lapply(defaults, eval, envir = env)
+  evaled <- lapply(
+    defaults,
+    function(d) {
+      deval <- eval(d, envir = env)
+
+      if (is.null(deval)) {
+        return(deval)
+      }
+
+      attr(deval, "default") <- TRUE
+      deval
+    }
+  )
 
   append(values, evaled)
 }
