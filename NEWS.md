@@ -1,3 +1,9 @@
+# zeallot 0.0.6.1
+
+## Bug Fixes
+
+* Resolved problem where collector variables would not be assigned the correct   default value. (#34)
+
 # zeallot 0.0.6
 
 ## Major Improvements
