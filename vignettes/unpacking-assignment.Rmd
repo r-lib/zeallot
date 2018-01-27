@@ -82,11 +82,7 @@ lat
 lng
 ```
 
-As in the earlier example, colon and braces on the left-hand side of the
-assignment tell the assignment operator to expect a list.
-
-In this example, we call a function that returns a vector.
-Now we omit the braces.
+In this next example, we call a function that returns a vector.
 
 ```{r}
 #
@@ -207,9 +203,7 @@ The previous examples dealt with unpacking a list or vector into its elements.
 You can also split certain kinds of individual values into subvalues.
 
 ### Character vectors
-You can assign individual characters of a string to variables. Since character
-strings are vectors, do not forget to exclude braces from the assignment
-expression.
+You can assign individual characters of a string to variables.
 
 ```{r}
 c(ch1, ch2, ch3) %<-% "abc"

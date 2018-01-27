@@ -4,6 +4,11 @@ test_that("is_list returns TRUE for list object", {
   expect_true(is_list(list(1, 2, 3)))
 })
 
+test_that("is_list returns FALSE for objects with multiple classes", {
+  expect_false(is_list(summary(x ~ y)))
+  expect_silent(is_list(summary(x ~ y)))
+})
+
 test_that("is_list returns FALSE for S3 objects", {
   sumry <- summary(lm(mpg ~ disp, data = mtcars))
   expect_false(is_list(sumry))

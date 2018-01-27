@@ -1,5 +1,5 @@
 is_list <- function(x) {
-  class(x) == 'list'
+  length(class(x)) == 1 && class(x) == 'list'
 }
 
 car <- function(cons) {

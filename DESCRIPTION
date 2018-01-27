@@ -1,7 +1,7 @@
 Package: zeallot
 Type: Package
 Title: Multiple, Unpacking, and Destructuring Assignment
-Version: 0.0.6
+Version: 0.1.0
 Authors@R: c(
     person(given = "Nathan", family = "Teetor", email = "nathanteetor@gmail.com", role = c("aut", "cre")),
     person(given = "Paul", family = "Teetor", role = "ctb"))
