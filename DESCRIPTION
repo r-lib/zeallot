@@ -6,9 +6,9 @@ Authors@R: c(
     person(given = "Nathan", family = "Teetor", email = "nathanteetor@gmail.com", role = c("aut", "cre")),
     person(given = "Paul", family = "Teetor", role = "ctb"))
 Description: Provides a %<-% operator to perform multiple,
-    unpacking, and destructuring assignment in R. The 
+    unpacking, and destructuring assignment in R. The
     operator unpacks the right-hand side of an assignment
-    into multiple values and assigns these values to 
+    into multiple values and assigns these values to
     variables on the left-hand side of the assignment.
 URL: https://github.com/nteetor/zeallot
 BugReports: https://github.com/nteetor/zeallot/issues
@@ -17,6 +17,8 @@ Encoding: UTF-8
 RoxygenNote: 6.0.1
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
+Depends:
+    R (>= 3.1)
 Suggests:
     testthat,
     knitr,

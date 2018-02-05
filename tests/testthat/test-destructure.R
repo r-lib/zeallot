@@ -10,13 +10,19 @@ test_that("destructure atomics", {
   )
 })
 
-test_that("destructure data.frame converts data.frame to list", {
+test_that("destructure.data.frame converts data frame to list", {
   sample_df <- head(iris)
-  expect_equal(destructure(sample_df), as.list(sample_df))
+  destruct_df <- destructure(sample_df)
+
+  expect_equal(destruct_df, as.list(sample_df))
   expect_equal(length(sample_df), NCOL(sample_df))
-  expect_true(all(lengths(destructure(sample_df)) == NROW(sample_df)))
+
+  expect_true(all(
+    vapply(destruct_df, function(x) length(x) == NROW(sample_df), logical(1))
+  ))
+
   for (i in seq_len(NCOL(sample_df))) {
-    expect_equal(destructure(sample_df)[[i]], sample_df[[i]])
+    expect_equal(destruct_df[[i]], sample_df[[i]])
   }
 })
 
