@@ -1,3 +1,9 @@
+# zeallot 0.1.1
+
+## Minor Improvements
+
+* Formally support R versions >= 3.1. (#40)
+
 # zeallot 0.1.0
 
 ## Major Improvements

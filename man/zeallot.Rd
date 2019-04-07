@@ -4,7 +4,6 @@
 \name{zeallot}
 \alias{zeallot}
 \alias{zeallot-package}
-\alias{zeallot-package}
 \title{Multiple, unpacking, and destructuring assignment in R}
 \description{
 zeallot provides a \code{\link{\%<-\%}} operator to perform multiple
