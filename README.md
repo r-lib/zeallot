@@ -2,13 +2,10 @@
 
 Variable assignment with zeal!
 
-[travis]: https://travis-ci.org/nteetor/zeallot.svg?branch=master "shake and bake"
-[appveyor]: https://ci.appveyor.com/api/projects/status/github/nteetor/zeallot?branch=master&svg=true "frappe!" 
-[coverage]: https://codecov.io/gh/nteetor/zeallot/branch/master/graph/badge.svg "deep fat fry" 
+[coverage]: https://codecov.io/gh/r-lib/zeallot/branch/master/graph/badge.svg "deep fat fry"
 [cran]: https://www.r-pkg.org/badges/version/zeallot "green means go!"
-[downloads]: https://cranlogs.r-pkg.org/badges/last-month/zeallot "[====] 100%"
 
-![alt text][travis] ![alt text][appveyor] ![alt text][coverage] ![alt text][cran] ![alt text][downloads]
+![alt text][coverage] ![alt text][cran]
 
 ## What's there to be excited about?
 
@@ -26,7 +23,7 @@ c(x, y) %<-% c(0, 1)
 #[1] 1
 ```
 
-Unpack a list of values. 
+Unpack a list of values.
 ```R
 c(r, d) %<-% list(2, 2)
 #> r
@@ -50,7 +47,7 @@ Unpack a nested list into nested left-hand side variables.
 c(c(a, b), c(c, d)) %<-% list(list(1, 2), list(3, 4))
 #> a
 #[1] 1
-#> b  
+#> b
 #[1] 2
 #> c
 #[1] 3
@@ -99,7 +96,7 @@ package and the safely function.
 
 ### Safe Functions
 
-The `purrr::safely` function returns a "safe" version of a function. The 
+The `purrr::safely` function returns a "safe" version of a function. The
 following example is borrowed from the safely documentation. In this example a
 safe version of the log function is created.
 
@@ -120,7 +117,7 @@ safe_log("a")
 #<simpleError in .f(...): non-numeric argument to mathematical function>
 ```
 
-A safe function always returns a list of two elements and will not throw an 
+A safe function always returns a list of two elements and will not throw an
 error. Instead of throwing an error, the error element of the return list is set
 and the value element is NULL. When called successfully the result element is
 set and the error element is NULL.

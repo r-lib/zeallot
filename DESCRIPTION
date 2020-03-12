@@ -1,10 +1,12 @@
 Package: zeallot
 Type: Package
 Title: Multiple, Unpacking, and Destructuring Assignment
-Version: 0.1.1
+Version: 0.1.0.9000
 Authors@R: c(
-    person(given = "Nathan", family = "Teetor", email = "nathanteetor@gmail.com", role = c("aut", "cre")),
-    person(given = "Paul", family = "Teetor", role = "ctb"))
+    person("Nathan", "Teetor", email = "nathanteetor@gmail.com",
+           role = c("aut", "cre")),
+    person("Paul", "Teetor",
+           role = "ctb"))
 Description: Provides a %<-% operator to perform multiple,
     unpacking, and destructuring assignment in R. The
     operator unpacks the right-hand side of an assignment
@@ -14,11 +16,11 @@ URL: https://github.com/nteetor/zeallot
 BugReports: https://github.com/nteetor/zeallot/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Depends:
-    R (>= 3.1)
+    R (>= 3.2)
 Suggests:
     testthat,
     knitr,

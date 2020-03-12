@@ -193,12 +193,12 @@ if (requireNamespace("magrittr", quietly = TRUE)) {
   library(magrittr)
 
   c("hello", "world!") \%>\%
-    paste0("\\n") \%>\%
+    paste0("\n") \%>\%
     lapply(toupper) \%->\%
     c(greeting, subject)
 
-  greeting  # "HELLO\\n"
-  subject   # "WORLD!\\n"
+  greeting  # "HELLO\n"
+  subject   # "WORLD!\n"
 }
 
 }
