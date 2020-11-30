@@ -1,8 +1,9 @@
-# zeallot 0.1.0.9000
+# zeallot 0.1.0.9001
 
 ## Minor Improvements
 
 * Formally support R versions >= 3.2
+* RStudio addin now supplied for `%<-%` (@dkahle)
 
 # zeallot 0.1.0
 

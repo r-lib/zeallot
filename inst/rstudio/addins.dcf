@@ -1,0 +1,4 @@
+Name: Insert %<-%
+Description: Inserts `%<-%` at the cursor position.
+Binding: rs_addin_insert_multi_assign
+Interactive: false
