@@ -2,8 +2,8 @@
 % Please edit documentation in R/zeallot.R
 \docType{package}
 \name{zeallot}
-\alias{zeallot}
 \alias{zeallot-package}
+\alias{zeallot}
 \title{Multiple, unpacking, and destructuring assignment in R}
 \description{
 zeallot provides a \code{\link{\%<-\%}} operator to perform multiple
