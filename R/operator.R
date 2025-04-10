@@ -241,7 +241,7 @@ multi_assign <- function(x, value, env) {
   rhs <- value
 
   #
-  # all lists or environemnts referenced in lhs must already exist
+  # all lists or environments referenced in lhs must already exist
   #
   check_extract_calls(lhs, env)
 
@@ -250,7 +250,7 @@ multi_assign <- function(x, value, env) {
   #
   if (is.null(internals)) {
     if (is.language(lhs)) {
-      assign_extract(lhs, value, envir = env)
+      arrow_op(lhs, value, envir = env)
     } else {
       assign(lhs, value, envir = env)
     }
@@ -284,8 +284,13 @@ multi_assign <- function(x, value, env) {
     name <- t[["name"]]
     val <- t[["value"]]
 
+    if (is_extract(t)) {
+      assign(name, rhs[[val]], envir = env)
+      next
+    }
+
     if (is.language(name)) {
-      assign_extract(name, val, envir = env)
+      arrow_op(name, val, envir = env)
       next
     }
 

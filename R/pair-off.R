@@ -4,6 +4,17 @@ pair_off <- function(names, values, env) {
       return()
     }
 
+    if (is_extract(names)) {
+      attributes(names) <- NULL
+
+      p <- list(name = names, value = names)
+      attr(p, "extract") <- TRUE
+
+      return(
+        list(p)
+      )
+    }
+
     attributes(names) <- NULL
 
     return(list(list(name = names, value = values)))

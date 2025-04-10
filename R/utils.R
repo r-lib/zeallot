@@ -28,6 +28,14 @@ has_default <- function(x) {
   vapply(x, function(i) !is.null(get_default(i)), logical(1))
 }
 
+get_extract <- function(x) {
+  attr(x, "extract", exact = TRUE)
+}
+
+is_extract <- function(x) {
+  !is.null(get_extract(x))
+}
+
 #
 # append any default values onto the end of a list of values, used in
 # `pair_off()` to extend the current set of values thereby avoiding an
@@ -100,17 +108,18 @@ is_valid_call <- function(x) {
 }
 
 #
-# used by multi_assign to assign list elements in the calling environment
+# a stand-in for the assignment (<-) operator, necessary for assigning
+# into lists
 #
-assign_extract <- function(call, value, envir = parent.frame()) {
-  replacee <- call("<-", call, value)
-  eval(replacee, envir = envir)
+arrow_op <- function(call, value, envir = parent.frame()) {
+  exp <- call("<-", call, value)
+  eval(exp, envir = envir)
   invisible(value)
 }
 
 #
 # parses a substituted expression to create a tree-like list structure,
-# perserves calls to extract ops instead of converting them to lists
+# preserves calls to extract ops instead of converting them to lists
 #
 tree <- function(x) {
   if (length(x) == 1) {
@@ -154,7 +163,7 @@ calls <- function(x) {
 
 #
 # given a tree-like list structure, returns a nested list of the variables
-# in the tree, will also associated default values with variables
+# in the tree, will also associate default values with variables
 #
 variables <- function(x) {
   if (!is_list(x)) {
@@ -176,6 +185,11 @@ variables <- function(x) {
   if (car(x) == "=") {
     var <- as.character(car(cdr(x)))
     default <- car(cdr(cdr(x)))
+
+    if (missing(default)) {
+      attr(var, "extract") <- var
+      return(var)
+    }
 
     if (is.null(default)) {
       default <- quote(pairlist())
