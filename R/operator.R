@@ -8,7 +8,7 @@
 #'
 #' @section Name Structure:
 #'
-#' **the basics**
+#' **The basics**
 #'
 #' At its simplest, the name structure may be a single variable name, in which
 #' case \code{\%<-\%} and \code{\%->\%} perform regular assignment, \code{x
@@ -21,24 +21,24 @@
 #' \code{\%->\%} will try to destructure `value` into a list before assigning
 #' variables, see [destructure()].
 #'
-#' **object parts**
+#' **Object parts**
 #'
 #' Like assigning a variable, one may also assign part of an object, \code{c(x,
 #' x[[1]]) \%<-\% list(list(), 1)}.
 #'
-#' **nested names**
+#' **Nested names**
 #'
 #' One can also nest calls to `c()` when needed, `c(x, c(y, z))`. This nested
 #' structure is used to unpack nested values,
 #' \code{c(x, c(y, z)) \%<-\% list(1, list(2, 3))}.
 #'
-#' **collector variables**
+#' **Collector variables**
 #'
 #' To gather extra values from the beginning, middle, or end of `value` use a
 #' collector variable. Collector variables are indicated with a `...`
 #' prefix, \code{c(...start, z) \%<-\% list(1, 2, 3, 4)}.
 #'
-#' **skipping values**
+#' **Skipping values**
 #'
 #' Use `.` in place of a variable name to skip a value without raising an error
 #' or assigning the value, \code{c(x, ., z) \%<-\% list(1, 2, 3)}.
@@ -46,14 +46,19 @@
 #' Use `...` to skip multiple values without raising an error or assigning the
 #' values, \code{c(w, ..., z) \%<-\% list(1, NA, NA, 4)}.
 #'
-#' **default values**
+#' **Default values**
 #'
-#' Use `=` to specify a default value for a variable, \code{c(x, y = NULL)
-#' \%<-\% tail(1, 2)}.
+#' Use `=` with a value to specify a default value for a variable,
+#' \code{c(x, y = NULL) \%<-\% tail(1, 2)}.
 #'
 #' When assigning part of an object a default value may not be specified because
 #' of the syntax enforced by \R. The following would raise an `"unexpected '='
 #' ..."` error, \code{c(x, x[[1]] = 1) \%<-\% list(list())}.
+#'
+#' **Named assignment**
+#'
+#' Use `=` _without_ a value to extract and assign values by name,
+#' `c(two=, ...) %<-% list(one = 1, two = 2, three = 3)`.
 #'
 #' @return
 #'
@@ -71,13 +76,13 @@
 #' @name operator
 #' @export
 #' @examples
-#' # basic usage
+#' # Basic usage
 #' c(a, b) %<-% list(0, 1)
 #'
 #' a  # 0
 #' b  # 1
 #'
-#' # unpack and assign nested values
+#' # Unpack and assign nested values
 #' c(c(e, f), c(g, h)) %<-% list(list(2, 3), list(3, 4))
 #'
 #' e  # 2
@@ -85,48 +90,50 @@
 #' g  # 4
 #' h  # 5
 #'
-#' # can assign more than 2 values at once
+#' # Can assign more than 2 values at once
 #' c(j, k, l) %<-% list(6, 7, 8)
 #'
-#' # assign columns of data frame
+#' # Assign columns of data frame
 #' c(erupts, wait) %<-% faithful
 #'
 #' erupts  # 3.600 1.800 3.333 ..
 #' wait    # 79 54 74 ..
 #'
-#' # assign only specific columns, skip
-#' # other columns
+#' # Assign only specific columns, skip other columns
 #' c(mpg, cyl, disp, ...) %<-% mtcars
 #'
 #' mpg   # 21.0 21.0 22.8 ..
 #' cyl   # 6 6 4 ..
 #' disp  # 160.0 160.0 108.0 ..
 #'
-#' # skip initial values, assign final value
+#' # Alternatively, assign a column by name
+#' c(qsec=, ...) %<-% mtcars
+#'
+#' qsec  # 16.46 17.02 18.61 ..
+#'
+#' # Skip initial values, assign final value
 #' TODOs <- list("make food", "pack lunch", "save world")
 #'
-#' c(..., task) %<-% TODOs
+#' c(..., final_task) %<-% TODOs
 #'
-#' task  # "save world"
+#' final_task  # "save world"
 #'
-#' # assign first name, skip middle initial,
-#' # assign last name
-#' c(first, ., last) %<-% c("Ursula", "K", "Le Guin")
+#' # Assign first name, skip middle initial, assign last name
+#' c(first_name, ., last_name) %<-% c("Ursula", "K", "Le Guin")
 #'
-#' first  # "Ursula"
-#' last   # "Le Guin"
+#' first_name  # "Ursula"
+#' last_name   # "Le Guin"
 #'
-#' # simple model and summary
+#' # Simple model and summary
 #' mod <- lm(hp ~ gear, data = mtcars)
 #'
-#' # extract call and fstatistic from
-#' # the summary
-#' c(modcall, ..., modstat, .) %<-% summary(mod)
+#' # Extract call and fstatistic from the summary
+#' c(call=, fstatistic=, ...) %<-% summary(mod)
 #'
-#' modcall
-#' modstat
+#' call
+#' fstatistic
 #'
-#' # unpack nested values w/ nested names
+#' # Unpack nested values w/ nested names
 #' fibs <- list(1, list(2, list(3, list(5))))
 #'
 #' c(f2, c(f3, c(f4, c(f5)))) %<-% fibs
@@ -136,13 +143,13 @@
 #' f4  # 3
 #' f5  # 5
 #'
-#' # unpack first numeric, leave rest
+#' # Unpack first numeric, leave rest
 #' c(f2, fibcdr) %<-% fibs
 #'
 #' f2      # 1
 #' fibcdr  # list(2, list(3, list(5)))
 #'
-#' # swap values without using temporary variables
+#' # Swap values without using temporary variables
 #' c(a, b) %<-% c("eh", "bee")
 #'
 #' a  # "eh"
@@ -153,7 +160,7 @@
 #' a  # "bee"
 #' b  # "eh"
 #'
-#' # unpack `strsplit` return value
+#' # Unpack `strsplit` return value
 #' names <- c("Nathan,Maria,Matt,Polly", "Smith,Peterson,Williams,Jones")
 #'
 #' c(firsts, lasts) %<-% strsplit(names, ",")
@@ -161,7 +168,7 @@
 #' firsts  # c("Nathan", "Maria", ..
 #' lasts   # c("Smith", "Peterson", ..
 #'
-#' # handle missing values with default values
+#' # Handle missing values with default values
 #' parse_time <- function(x) {
 #'   strsplit(x, " ")[[1]]
 #' }
@@ -176,24 +183,26 @@
 #' hour    # "15:00"
 #' period  # NA
 #'
-#' # right operator
+#' # Right operator
 #' list(1, 2, "a", "b", "c") %->% c(x, y, ...chars)
 #'
 #' x      # 1
 #' y      # 2
 #' chars  # list("a", "b", "c")
 #'
-#' # magrittr chains, install.packages("magrittr") for this example
+#' # Magrittr chains, install.packages("magrittr") for this example
 #' if (requireNamespace("magrittr", quietly = TRUE)) {
+#'
 #'   library(magrittr)
 #'
 #'   c("hello", "world!") %>%
 #'     paste0("\n") %>%
-#'     lapply(toupper) %->%
+#'     toupper() %->%
 #'     c(greeting, subject)
 #'
 #'   greeting  # "HELLO\n"
 #'   subject   # "WORLD!\n"
+#'
 #' }
 #'
 `%<-%` <- function(x, value) {
