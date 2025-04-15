@@ -1,5 +1,3 @@
-context(" * testing destructure")
-
 test_that("destructure atomics", {
   expect_equal(destructure("hello"), list("h", "e", "l", "l", "o"))
   expect_equal(destructure(complex(1, 33, -7)), list(33, -7))

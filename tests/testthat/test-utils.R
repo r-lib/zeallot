@@ -1,5 +1,3 @@
-context(" * testing utils")
-
 test_that("is_list returns TRUE for list object", {
   expect_true(is_list(list(1, 2, 3)))
 })

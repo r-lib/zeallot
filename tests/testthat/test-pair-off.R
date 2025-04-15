@@ -1,5 +1,3 @@
-context(" * testing pair_off")
-
 expect_equalish <- function(object, expected) {
   eval(bquote(expect_equal(.(object), .(expected), check.attributes = FALSE)))
 }

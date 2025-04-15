@@ -1,5 +1,3 @@
-context(" * testing assignment operator")
-
 test_that("%<-% can perform standard assignment", {
   a %<-% "foo"
   expect_equal(a, "foo")

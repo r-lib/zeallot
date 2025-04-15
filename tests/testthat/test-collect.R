@@ -1,5 +1,3 @@
-context(" * testing collect")
-
 test_that("collect throws error if no collector variable specified", {
   expect_error(collect(list("a", "b"), list(1, 2)), "no collector variable")
 })
