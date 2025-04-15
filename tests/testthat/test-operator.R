@@ -186,6 +186,37 @@ test_that("%<-% collector variables may have defaults", {
   expect_equal(e, list(3030))
 })
 
+test_that("assign values by name", {
+  c(a=) %<-% list(a = 1)
+  c(b=, ...) %<-% list(a = 1, b = 2)
+
+  expect_equal(a, 1)
+  expect_equal(b, 2)
+
+  c(d=, e=, ...) %<-% list(a = 1, b = 2, c = 3, d = 4, e = 5)
+
+  expect_equal(d, 4)
+  expect_equal(e, 5)
+
+  c(..., e=, d=) %<-% list(a = 5, b = 4, c = 3, d = 2, e = 1)
+
+  expect_equal(d, 2)
+  expect_equal(e, 1)
+})
+
+test_that("assign by name affects positional assignments", {
+  c(a=, b) %<-% list(b = 1, a = 2)
+
+  expect_equal(a, 2)
+  expect_equal(b, 2)
+
+  c(b=, ..., a) %<-% list(a = 1, b = 2, c = 3, d = 4)
+
+  expect_equal(b, 2)
+  expect_equal(a, 4)
+})
+
+
 test_that("%<-% throws error on unequal number of variables and values", {
   expect_error(
     c(a, b) %<-% list(1),
