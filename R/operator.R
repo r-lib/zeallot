@@ -267,7 +267,7 @@ multi_assign <- function(x, value, env) {
   }
 
   #
-  # *error* multiple assignment, but sinle RHS value
+  # *error* multiple assignment, but single RHS value
   #
   if (length(value) == 0) {
     stop_invalid_rhs(incorrect_number_of_values())
