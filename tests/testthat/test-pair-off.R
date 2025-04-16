@@ -47,6 +47,30 @@ test_that("pair_off heavily nested list", {
   )
 })
 
+test_that("unnamed collectors are ignored when more names than values", {
+  expect_equalish(
+    pair_off(list("a", "..."), list(1)),
+    list(list("a", 1))
+  )
+
+  expect_equalish(
+    pair_off(list("...", "b"), list(2)),
+    list(list("b", 2))
+  )
+})
+
+test_that("named collectors are NULL when more names than values", {
+  expect_equalish(
+    pair_off(list("a", "...b"), list(1)),
+    list(list("b", NULL), list("a", 1))
+  )
+
+  expect_equalish(
+    pair_off(list("...d", "e"), list(2)),
+    list(list("d", NULL), list("e", 2))
+  )
+})
+
 test_that("pair_off collects values when ... specified", {
   expect_equalish(
     pair_off(list("a", "...mid", "d"), list(1, 2, 3, 4)),
@@ -104,6 +128,7 @@ test_that("pair_off throws error for nested lists of different lengths, depths",
 })
 
 test_that("pair_off throws error for extra names, including a collector", {
+  skip("allowing empty collectors")
   expect_error(
     pair_off(list("a", "...mid", "b"), list(1, 2)),
     "incorrect number of values"

@@ -37,6 +37,27 @@ pair_off <- function(names, values, env) {
     }
 
     #
+    # Allow empty collectors if there are more names than values
+    #
+    if (has_collector(names)) {
+      if (length(names) > length(values)) {
+        coll_index <- which(vapply(names, is_collector, logical(1)))
+        coll_name <- collector_name(names[[coll_index]])
+
+        if (coll_name == "") {
+          return(
+            pair_off(names[-coll_index], values)
+          )
+        }
+
+        return(c(
+          list(list(name = coll_name, value = NULL)),
+          pair_off(names[-coll_index], values)
+        ))
+      }
+    }
+
+    #
     # mismatch could be resolved by destructuring the values, in this case
     # values must be a single element list
     #
@@ -49,7 +70,7 @@ pair_off <- function(names, values, env) {
     # and still more variables than values the collector is useless and
     # mismatch is a problem
     #
-    if (!has_collector(names) || length(names) > length(values)) {
+    if (!has_collector(names)) { # || length(names) > length(values)) {
       stop_invalid_rhs(incorrect_number_of_values())
     }
   }

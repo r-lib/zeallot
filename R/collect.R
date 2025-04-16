@@ -9,6 +9,14 @@ has_collector <- function(x) {
   any(vapply(x, is_collector, logical(1)))
 }
 
+collector_name <- function(x) {
+  stopifnot(
+    is.character(x)
+  )
+
+  sub("^\\.\\.\\.", "", x)
+}
+
 collect <- function(names, values) {
   if (!any(grepl("^\\.\\.\\.", names))) {
     stop("no collector variable specified", call. = FALSE)

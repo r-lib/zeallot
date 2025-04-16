@@ -59,6 +59,21 @@ test_that("%<-% assigns collected vector as vector", {
   expect_equal(d, FALSE)
 })
 
+test_that("%<-% assigns NULL to unused collector", {
+  c(a, ...b) %<-% list(1)
+  expect_equal(a, 1)
+  expect_null(b)
+
+  c(...d, e) %<-% list(2)
+  expect_null(d)
+  expect_equal(e, 2)
+
+  c(f, ...g, h) %<-% list(3, 4)
+  expect_equal(f, 3)
+  expect_null(g)
+  expect_equal(h, 4)
+})
+
 test_that("%<-% assigns multiple list elements", {
   x <- list()
   y <- list()
