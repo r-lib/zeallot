@@ -1,3 +1,52 @@
+usage_handler_empty <- function(expr, walker) {
+
+}
+
+usage_handler_default <- function(expr, walker) {
+  exprs_list <- as.list(expr)
+  exprs_lengths <- lengths(exprs_list)
+
+  exprs_possible <- exprs_list[exprs_lengths == 3]
+
+  for (e in exprs_possible) {
+    if (e[[1]] == "%<-%") {
+      expr_vars <- variables(as.list(e[[2]]))
+
+      vars_names <- unlist(lapply(expr_vars, function(x) {
+        if (is_collector(x) && x != "...") {
+          c(collector_name(x), x)
+        } else {
+          x
+        }
+      }))
+
+      if (length(vars_names) > 0) {
+        walker$startCollectLocals(vars_names, character(), walker)
+      }
+    }
+  }
+}
+
+add_usage_handler <- function(handlers, nm, f) {
+  stopifnot(
+    is.character(nm),
+    is.function(f)
+  )
+
+  prev_handler <- handlers[[nm]]
+
+  if (is.null(prev_handler)) {
+    prev_handler <- usage_handler_empty
+  }
+
+  handlers[[nm]] <- function(expr, walker) {
+    f(expr, walker)
+    prev_handler(expr, walker)
+  }
+
+  invisible(handlers)
+}
+
 #' Allow zeallous assignment
 #'
 #' Using zeallot within an R package may cause `R CMD check` to raise NOTEs
@@ -30,37 +79,6 @@ zeallous <- function() {
     return()
   }
 
-  orig_handler <- usage_handlers$`{`
-
-  if (is.null(orig_handler)) {
-    orig_handler <- function(e, w) NULL
-  }
-
-  usage_handlers$`{` <- function(e, w) {
-
-    exprs_list <- as.list(e)
-    exprs_lengths <- lengths(exprs_list)
-
-    exprs_possible <- exprs_list[exprs_lengths == 3]
-
-    for (expr in exprs_possible) {
-      if (expr[[1]] == "%<-%") {
-        expr_vars <- variables(as.list(expr[[2]]))
-
-        vars_names <- unlist(lapply(expr_vars, function(x) {
-          if (is_collector(x) && x != "...") {
-            c(collector_name(x), x)
-          } else {
-            x
-          }
-        }))
-
-        if (length(vars_names) > 0) {
-          w$startCollectLocals(vars_names, character(), w)
-        }
-      }
-    }
-
-    orig_handler(e, w)
-  }
+  add_usage_handler(usage_handlers, "{", usage_handler_default)
+  add_usage_handler(usage_handlers, "if", usage_handler_default)
 }

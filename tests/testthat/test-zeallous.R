@@ -107,3 +107,25 @@ test_that("collectors are properly recognized", {
   # expect_false(grepl("first", problems))
   # expect_false(grepl("...", problems))
 })
+
+test_that("if statement one-liner", {
+  skip_if_not_installed("codetools")
+
+  if_one_liner <- function() {
+    if (TRUE) c(x, y) %<-% list(1, 2)
+
+    c(x, y)
+  }
+
+  problems <- ""
+
+  codetools::checkUsage(
+    fun = if_one_liner,
+    report = function(x) {
+      problems <<- paste0(problems, x)
+    }
+  )
+
+  expect_false(grepl("x", problems))
+  expect_false(grepl("y", problems))
+})
