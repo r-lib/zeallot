@@ -2,6 +2,7 @@
 ^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.github$
 ^\.travis\.yml$
 ^\.appveyor\.yml$
 ^cran-comments\.md$
