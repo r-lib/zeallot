@@ -202,7 +202,7 @@ if (requireNamespace("magrittr", quietly = TRUE)) {
 
   c("hello", "world!") \%>\%
     paste0("\n") \%>\%
-    lapply(toupper) \%->\%
+    toupper() \%->\%
     c(greeting, subject)
 
   greeting  # "HELLO\n"
