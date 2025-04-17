@@ -22,6 +22,7 @@ VignetteBuilder: knitr
 Depends:
     R (>= 3.2)
 Suggests:
+    codetools,
     testthat,
     knitr,
     rmarkdown,
