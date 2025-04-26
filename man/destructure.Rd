@@ -2,30 +2,40 @@
 % Please edit documentation in R/destructure.R
 \name{destructure}
 \alias{destructure}
+\alias{destructure.data.frame}
+\alias{destructure.summary.lm}
+\alias{destructure.default}
 \title{Destructure an object}
 \usage{
 destructure(x)
+
+\method{destructure}{data.frame}(x)
+
+\method{destructure}{summary.lm}(x)
+
+\method{destructure}{default}(x)
 }
 \arguments{
 \item{x}{An \R object.}
 }
 \description{
-\code{destructure} is used during unpacking assignment to coerce an object
-into a list. Individual elements of the list are assigned to names on the
-left-hand side of the unpacking assignment expression.
+\code{destructure} is used during unpacking assignment to coerce an object into a
+list. Individual elements of the list are assigned to names on the left-hand
+side of the unpacking assignment expression.
 }
 \details{
 If \code{x} is atomic \code{destructure} expects \code{length(x)} to be 1. If a vector with
 length greater than 1 is passed to \code{destructure} an error is raised.
 
-New implementations of \code{destructure} can be very simple. A new
-\code{destructure} implementation might only strip away the class of a custom
-object and return the underlying list structure. Alternatively, an object
-might destructure into a nested set of values and may require a more
-complicated implementation. In either case, new implementations must return a
-list object so \code{\%<-\%} can handle the returned value(s).
+New implementations of \code{destructure} can be very simple. A new \code{destructure}
+implementation might only strip away the class of a custom object and return
+the underlying list structure. Alternatively, an object might destructure
+into a nested set of values and may require a more complicated
+implementation. In either case, new implementations must return a list object
+so \code{\%<-\%} can handle the returned value(s).
 }
 \examples{
+
 # data frames become a list of columns
 destructure(
   data.frame(x = 0:4, y = 5:9)

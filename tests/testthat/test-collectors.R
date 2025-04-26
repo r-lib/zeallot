@@ -1,0 +1,48 @@
+test_that("collect start", {
+  c(.., y) %<-% 1:5
+
+  expect_equal(y, 5)
+
+  c(..x, y) %<-% 1:5
+
+  expect_equal(x, list(1, 2, 3, 4))
+  expect_equal(y, 5)
+})
+
+test_that("collect middle", {
+  c(x, .., z) %<-% 1:5
+
+  expect_equal(x, 1)
+  expect_equal(z, 5)
+
+  c(x, ..y, z) %<-% 5:1
+
+  expect_equal(x, 5)
+  expect_equal(y, list(4, 3, 2))
+  expect_equal(z, 1)
+})
+
+test_that("collect end", {
+  c(x, ..) %<-% 1:3
+
+  expect_equal(x, 1)
+
+  c(x, ..y) %<-% 1:3
+
+  expect_equal(x, 1)
+  expect_equal(y, list(2, 3))
+})
+
+test_that("defaults to NULL", {
+  c(x, ..y) %<-% list(1)
+
+  expect_equal(x, 1)
+  expect_equal(y, NULL)
+})
+
+test_that("default values", {
+  c(x, ..y = NA) %<-% list(1)
+
+  expect_equal(x, 1)
+  expect_equal(y, NA)
+})

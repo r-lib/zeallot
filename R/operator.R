@@ -206,113 +206,24 @@
 #' }
 #'
 `%<-%` <- function(x, value) {
-  tryCatch(
-    multi_assign(substitute(x), value, parent.frame()),
-    invalid_lhs = function(e) {
-      stop("invalid `%<-%` left-hand side, ", e$message, call. = FALSE)
-    },
-    invalid_rhs = function(e) {
-      stop("invalid `%<-%` right-hand side, ", e$message, call. = FALSE)
-    }
-  )
+  pairs <- unpack(substitute(x), value)
+
+  list_assign(pairs, parent.frame())
+
+  invisible(value)
+
+  pairs
 }
 
 #' @rdname operator
 #' @export
 `%->%` <- function(value, x) {
-  tryCatch(
-    multi_assign(substitute(x), value, parent.frame()),
-    invalid_lhs = function(e) {
-      stop("invalid `%->%` right-hand side, ", e$message, call. = FALSE)
-    },
-    invalid_rhs = function(e) {
-      stop("invalid `%->%` left-hand side, ", e$message, call. = FALSE)
-    }
-  )
-}
+  pairs <- unpack(substitute(x), value)
 
-# The real power behind %->% and %<-%
-#
-# Within the function `lhs` and `rhs` refer to the left- and right-hand side of
-# a call to %<-% operator. For %->% the lhs and rhs from the original call are
-# swapped when passed to `multi_assign`.
-#
-# @param x A name structure, converted into a tree-like structure with `tree`.
-#
-# @param value The values to assign.
-#
-# @param env The environment where the variables will be assigned.
-#
-multi_assign <- function(x, value, env) {
-  ast <- tree(x)
-  internals <- calls(ast)
-  lhs <- variables(ast)
-  rhs <- value
-
-  #
-  # all lists or environments referenced in lhs must already exist
-  #
-  check_extract_calls(lhs, env)
-
-  #
-  # standard assignment
-  #
-  if (is.null(internals)) {
-    if (is.language(lhs)) {
-      arrow_op(lhs, value, envir = env)
-    } else {
-      assign(lhs, value, envir = env)
-    }
-    return(invisible(value))
-  }
-
-  #
-  # *error* multiple assignment, but single RHS value
-  #
-  if (length(value) == 0) {
-    stop_invalid_rhs(incorrect_number_of_values())
-  }
-
-  #
-  # edge cases when RHS is not a list
-  #
-  if (!is_list(value)) {
-    if (is.atomic(value)) {
-      rhs <- as.list(value)
-    } else {
-      rhs <- destructure(value)
-    }
-  }
-
-  #
-  # tuples in question are variable names and value to assign
-  #
-  tuples <- pair_off(lhs, rhs, env)
-
-  for (t in tuples) {
-    name <- t[["name"]]
-    val <- t[["value"]]
-
-    if (is_extract(t)) {
-      assign(name, rhs[[val]], envir = env)
-      next
-    }
-
-    if (is.language(name)) {
-      arrow_op(name, val, envir = env)
-      next
-    }
-
-    if (is.atomic(value)) {
-      if (is.null(attr(val, "default", TRUE))) {
-        val <- unlist(val, recursive = FALSE)
-      } else if (attr(val, "default", TRUE) == TRUE) {
-        attr(val, "default") <- NULL
-      }
-    }
-
-    assign(name, val, envir = env)
-  }
+  list_assign(pairs, parent.frame())
 
   invisible(value)
 }
+
+
+
