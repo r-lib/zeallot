@@ -8,9 +8,6 @@
 #'
 #' @details
 #'
-#' If `x` is atomic `destructure` expects `length(x)` to be 1. If a vector with
-#' length greater than 1 is passed to `destructure` an error is raised.
-#'
 #' New implementations of `destructure` can be very simple. A new `destructure`
 #' implementation might only strip away the class of a custom object and return
 #' the underlying list structure. Alternatively, an object might destructure
@@ -24,18 +21,10 @@
 #'
 #' @examples
 #'
-#' # data frames become a list of columns
-#' destructure(
-#'   data.frame(x = 0:4, y = 5:9)
-#' )
+#' # Data frames become a list of columns
+#' destructure(faithful)
 #'
-#' # strings are split into list of characters
-#' destructure("abcdef")
-#'
-#' # dates become list of year, month, and day
-#' destructure(Sys.Date())
-#'
-#' # create a new destructure implementation
+#' # A simple shape class
 #' shape <- function(sides = 4, color = "red") {
 #'   structure(
 #'     list(sides = sides, color = color),
@@ -44,25 +33,19 @@
 #' }
 #'
 #' \dontrun{
-#' # cannot destructure the shape object yet
+#' # Cannot destructure the shape object _yet_
 #' c(sides, color) %<-% shape()
 #' }
 #'
-#' # implement `destructure` for shapes
+#' # Implement a new destructure method for the shape class
 #' destructure.shape <- function(x) {
-#'   list(x$sides, x$color)
+#'   unclass(x)
 #' }
 #'
-#' # now we can destructure shape objects
-#' c(sides, color) %<-% destructure(shape())
+#' # Now we can destructure shape objects
+#' c(sides, color) %<-% shape()
 #'
-#' sides  # 4
-#' color  # "red"
-#'
-#' c(sides, color) %<-% destructure(shape(3, "green"))
-#'
-#' sides  # 3
-#' color  # 'green'
+#' c(sides, color) %<-% shape(3, "green")
 #'
 destructure <- function(x) {
   UseMethod("destructure")
@@ -85,4 +68,3 @@ destructure.summary.lm <- function(x) {
 destructure.default <- function(x) {
   as.list(x)
 }
-

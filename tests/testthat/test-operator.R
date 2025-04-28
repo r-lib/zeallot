@@ -12,6 +12,12 @@ test_that("standard assignment", {
   expect_equal(z, 1)
 })
 
+test_that("invisibly returns `value`", {
+  expect_equal((x %<-% 1), 1)
+
+  expect_equal(c(x, y) %<-% c(1, 2), c(1, 2))
+})
+
 test_that("multiple assignment", {
   c(x, y) %<-% list(1, 2)
 
