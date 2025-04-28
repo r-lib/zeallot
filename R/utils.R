@@ -57,7 +57,7 @@ list_compress <- function(x, len) {
     return(x)
   }
 
-  list_compress(c(list(c(x[[1]], x[2])), tail(x, -2)), len)
+  list_compress(c(list(c(x[[1]], x[2])), x[c(-1, -2)]), len)
 }
 
 list_assign <- function(x, envir = parent.frame()) {
