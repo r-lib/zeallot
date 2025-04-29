@@ -69,7 +69,7 @@ list_assign <- function(x, envir = parent.frame()) {
   name <- pair[[1]]
   value <- pair[[2]]
 
-  eval(call("<-", name, value), envir = envir)
+  eval(call("<-", name, bquote(quote(.(value)))), envir = envir)
 
   list_assign(cdr(x), envir)
 }

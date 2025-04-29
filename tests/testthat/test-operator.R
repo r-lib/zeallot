@@ -98,3 +98,9 @@ test_that("assignment by name affects positional assignments", {
   expect_equal(x, 2)
   expect_equal(y, 2)
 })
+
+test_that("assign symbols", {
+  x %<-% quote(y)
+
+  expect_equal(x, quote(y))
+})
