@@ -74,3 +74,13 @@ list_assign <- function(x, envir = parent.frame()) {
   list_assign(cdr(x), envir)
 }
 
+attempt <- function(expr, call = sys.call(-1)) {
+  tryCatch(
+    error = function(cnd) {
+      stop(simpleError(conditionMessage(cnd), call))
+    },
+    expr
+  )
+}
+
+
