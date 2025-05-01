@@ -48,7 +48,11 @@ unpack_language <- function(
   )
 }
 
-unpack_symbol <- function(vars, vals, lookup = list()) {
+unpack_symbol <- function(
+    vars,
+    vals,
+    lookup = list()
+) {
   var <- first(vars)
   val <- first(vals)
 
@@ -73,7 +77,11 @@ unpack_extract <- function(
   )
 }
 
-unpack_collector <- function(vars, vals, lookup = list()) {
+unpack_collector <- function(
+    vars,
+    vals,
+    lookup = list()
+) {
   if (length(vars) == length(vals)) {
     unpack_symbol(vars, vals, lookup)
   } else if (length(vars) > length(vals)) {
@@ -85,4 +93,3 @@ unpack_collector <- function(vars, vals, lookup = list()) {
     unpack_collector(vars, list_compress(vals, length(vars)), lookup)
   }
 }
-
