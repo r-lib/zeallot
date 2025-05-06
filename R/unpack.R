@@ -60,6 +60,10 @@ unpack_symbol <- function(
     return(unpack_next(cdr(vars), cdr(vals), lookup))
   }
 
+  if (is_empty_list(vals) && !var_has_default(var)) {
+    stop("missing value for variable `", var_name(var), "`")
+  }
+
   prepend(
     list(var_symbol(var), var_value(var, val, lookup)),
     unpack_next(cdr(vars), cdr(vals), lookup)

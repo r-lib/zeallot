@@ -17,16 +17,22 @@ var_symbol <- function(var) {
   as.symbol(var_name(var))
 }
 
+var_has_default <- function(var) {
+  is_named(var)
+}
+
 var_default <- function(var) {
-  if (is_named(var)) {
-    car(var)
+  if (!var_has_default(var)) {
+    stop("no default value for variable `", var_name(var), "`")
   }
+
+  car(var)
 }
 
 var_value <- function(var, val, lookup) {
   if (var_is_empty(var)) {
     lookup[[var_name(var)]]
-  } else if (val_is_null(val)) {
+  } else if (val_is_null(val) && var_has_default(var)) {
     var_default(var)
   } else {
     car(val)

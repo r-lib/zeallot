@@ -101,6 +101,29 @@ test_that("assignment by name affects positional assignments", {
 
 test_that("assign symbols", {
   x %<-% quote(y)
+  c(y) %<-% list(quote(z))
 
   expect_equal(x, quote(y))
+  expect_equal(y, quote(z))
+})
+
+test_that("assign NULL", {
+  x %<-% NULL
+  c(y) %<-% list(NULL)
+
+  expect_equal(x, NULL)
+  expect_equal(y, NULL)
+})
+
+test_that("positional variables expect values", {
+  expect_error(c(x, y) %<-% list(1), "missing value for variable `y`")
+
+  expect_error(c(x=, y) %<-% list(1), "missing value for variable `y")
+})
+
+test_that("trailing skip does nothing", {
+  c(x, .) %<-% list(1)
+
+  expect_equal(x, 1)
+  expect_error(., "object '.' not found")
 })
