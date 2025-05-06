@@ -5,23 +5,14 @@ usage_handler_empty <- function(expr, walker) {
 usage_handler_default <- function(expr, walker) {
   exprs_list <- as.list(expr)
   exprs_lengths <- lengths(exprs_list)
-
   exprs_possible <- exprs_list[exprs_lengths == 3]
 
   for (e in exprs_possible) {
     if (e[[1]] == "%<-%") {
-      expr_vars <- variables(as.list(e[[2]]))
+      var_names <- var_search(e[[2]])
 
-      vars_names <- unlist(lapply(expr_vars, function(x) {
-        if (is_collector(x) && x != "...") {
-          c(collector_name(x), x)
-        } else {
-          x
-        }
-      }))
-
-      if (length(vars_names) > 0) {
-        walker$startCollectLocals(vars_names, character(), walker)
+      if (length(var_names) > 0) {
+        walker$startCollectLocals(var_names, character(), walker)
       }
     }
   }
@@ -39,10 +30,11 @@ add_usage_handler <- function(handlers, nm, f) {
     prev_handler <- usage_handler_empty
   }
 
-  handlers[[nm]] <- function(expr, walker) {
-    f(expr, walker)
-    prev_handler(expr, walker)
-  }
+  handlers[[nm]] <-
+    function(expr, walker) {
+      f(expr, walker)
+      prev_handler(expr, walker)
+    }
 
   invisible(handlers)
 }

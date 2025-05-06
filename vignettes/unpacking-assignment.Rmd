@@ -146,15 +146,9 @@ A data frame is simply a list of columns, so the *zeallot* assignment does
 what you expect. It unpacks the data frame into individual columns.
 
 ```{r}
-c(mpg, cyl, disp, hp) %<-% mtcars[, 1:4]
+c(mpg=, cyl=, dist=, hp=) %<-% mtcars
 
-head(mpg)
-
-head(cyl)
-
-head(disp)
-
-head(hp)
+cyl
 ```
 
 ### Example: List of data frames
@@ -241,7 +235,7 @@ else".
 ```{r}
 f <- lm(mpg ~ cyl, data = mtcars)
 
-c(fcall, fterms, resids, ...rest) %<-% summary(f)
+c(fcall, fterms, resids, ..rest) %<-% summary(f)
 
 fcall
 
@@ -256,7 +250,7 @@ Here, `rest` will capture everything else.
 str(rest)
 ```
 
-The assignment operator noticed that `...rest` is prefixed with `...`, and it
+The assignment operator noticed that `..rest` is prefixed with `..`, and it
 created a variable called `rest` for the trailing values of the list. If you
 omitted the "everything else" prefix, there would be an error because the
 lengths of the left- and right-hand sides of the assignment would be mismatched.
@@ -273,7 +267,7 @@ In addition to collecting trailing values, you can also collect initial values
 and assign specific remaining values.
 
 ```{r}
-c(...skip, e, f) %<-% list(1, 2, 3, 4, 5)
+c(..skip, e, f) %<-% list(1, 2, 3, 4, 5)
 skip
 e
 f
@@ -282,7 +276,7 @@ f
 Or you can assign the first value, skip values, and then assign the last value.
 
 ```{r}
-c(begin, ...middle, end) %<-% list(1, 2, 3, 4, 5)
+c(begin, ..middle, end) %<-% list(1, 2, 3, 4, 5)
 begin
 middle
 end
@@ -300,11 +294,11 @@ mean_wt
 max_wt
 ```
 
-By combining an anonymous element (`.`) with the collector prefix, (`...`), you
+By combining an anonymous element (`.`) with the collector prefix, (`..`), you
 can ignore whole sublists.
 
 ```{r}
-c(begin, ..., end) %<-% list("hello", "blah", list("blah"), "blah", "world!")
+c(begin, .., end) %<-% list("hello", "blah", list("blah"), "blah", "world!")
 begin
 end
 ```
@@ -313,7 +307,7 @@ You can mix periods and collectors together to selectively keep and discard
 elements.
 
 ```{r}
-c(begin, ., ...middle, end) %<-% as.list(1:5)
+c(begin, ., ..middle, end) %<-% as.list(1:5)
 begin
 middle
 end
@@ -390,7 +384,7 @@ mtcars %>%
   subset(hp > 100) %>%
   aggregate(. ~ cyl, data = ., FUN = . %>% mean() %>% round(2)) %>%
   transform(kpl = mpg %>% multiply_by(0.4251)) %->% 
-  c(cyl, mpg, ...rest)
+  c(cyl, mpg, ..rest)
 
 cyl
 mpg

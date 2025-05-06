@@ -1,57 +1,29 @@
-test_that("destructure atomics", {
-  expect_equal(destructure("hello"), list("h", "e", "l", "l", "o"))
-  expect_equal(destructure(complex(1, 33, -7)), list(33, -7))
+test_that("included data.frame implementation", {
+  c(mpg, cyl, .., carb) %<-% mtcars
 
-  expect_error(
-    destructure(1),
-    "incorrect number of values"
-  )
+  expect_equal(mpg, mtcars$mpg)
+  expect_equal(cyl, mtcars$cyl)
+  expect_equal(carb, mtcars$carb)
 })
 
-test_that("destructure.data.frame converts data frame to list", {
-  sample_df <- head(iris)
-  destruct_df <- destructure(sample_df)
+test_that("included summary implementation", {
+  summ <- summary(lm(mpg ~ cyl, mtcars))
 
-  expect_equal(destruct_df, as.list(sample_df))
-  expect_equal(length(sample_df), NCOL(sample_df))
+  c(., terms) %<-% summ
 
-  expect_true(all(
-    vapply(destruct_df, function(x) length(x) == NROW(sample_df), logical(1))
-  ))
-
-  for (i in seq_len(NCOL(sample_df))) {
-    expect_equal(destruct_df[[i]], sample_df[[i]])
-  }
+  expect_equal(terms, summ$terms)
 })
 
-test_that("destructure converts Date to list of year, month, day", {
-  today <- Sys.Date()
-  year <- as.numeric(format(today, "%Y"))
-  month <- as.numeric(format(today, "%m"))
-  day <- as.numeric(format(today, "%d"))
-  expect_equal(destructure(today), list(year, month, day))
-})
+test_that("custom implementation", {
+  registerS3method("destructure", "Date", function(x) {
+    ymd <- strftime(x, "%Y-%m-%d")
+    pieces <- strsplit(ymd, "-", fixed = TRUE)
+    as.numeric(pieces[[1]])
+  })
 
-test_that("destructure summary.lm converts to list", {
-  f <- lm(disp ~ mpg, data = mtcars)
-  expect_equal(destructure(summary(f)), lapply(summary(f), identity))
-})
+  c(year, month, day) %<-% as.Date("2000-01-10")
 
-test_that("destructure throws error for multi-length vectors of atomics", {
-  expect_error(
-    assert_destruction(character(2)),
-    "invalid `destructure` argument, cannot destructure character vector of length greater than 1"
-  )
-  expect_error(
-    destructure(c(Sys.Date(), Sys.Date())),
-    "invalid `destructure` argument, cannot destructure Date vector of length greater than 1"
-  )
-})
-
-test_that("destructure throws error as default", {
-  random <- structure(list(), class = "random")
-  expect_error(
-    destructure(random),
-    "incorrect number of values"
-  )
+  expect_equal(year, 2000)
+  expect_equal(month, 1)
+  expect_equal(day, 10)
 })

@@ -26,5 +26,4 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    purrr,
-    magrittr
+    purrr

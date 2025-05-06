@@ -1,9 +1,10 @@
-test_that("basic usage", {
+test_that("prevent no visible bindings", {
   skip_if_not_installed("codetools")
 
   nums <- function() {
     c(one, two) %<-% list(1, 2)
-    c(one, two, three)
+    four %<-% 4
+    c(one, two, three, four)
   }
 
   problems <- ""
@@ -17,6 +18,7 @@ test_that("basic usage", {
 
   expect_false(grepl("one", problems))
   expect_false(grepl("two", problems))
+  expect_false(grepl("four", problems))
   expect_true(grepl("three", problems))
 })
 
@@ -70,7 +72,7 @@ test_that("collectors are properly recognized", {
   skip_if_not_installed("codetools")
 
   func <- function() {
-    c(first, ...middle, last) %<-% list(1, 2, 3, 4)
+    c(first, ..middle, last) %<-% list(1, 2, 3, 4)
 
     c(first, middle, last)
   }
@@ -85,6 +87,7 @@ test_that("collectors are properly recognized", {
   )
 
   expect_false(grepl("first", problems))
+  expect_false(grepl("..middle", problems))
   expect_false(grepl("middle", problems))
   expect_false(grepl("last", problems))
 

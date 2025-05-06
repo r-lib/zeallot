@@ -2,42 +2,41 @@
 % Please edit documentation in R/destructure.R
 \name{destructure}
 \alias{destructure}
+\alias{destructure.data.frame}
+\alias{destructure.summary.lm}
+\alias{destructure.default}
 \title{Destructure an object}
 \usage{
 destructure(x)
+
+\method{destructure}{data.frame}(x)
+
+\method{destructure}{summary.lm}(x)
+
+\method{destructure}{default}(x)
 }
 \arguments{
 \item{x}{An \R object.}
 }
 \description{
-\code{destructure} is used during unpacking assignment to coerce an object
-into a list. Individual elements of the list are assigned to names on the
-left-hand side of the unpacking assignment expression.
+\code{destructure} is used during unpacking assignment to coerce an object into a
+list. Individual elements of the list are assigned to names on the left-hand
+side of the unpacking assignment expression.
 }
 \details{
-If \code{x} is atomic \code{destructure} expects \code{length(x)} to be 1. If a vector with
-length greater than 1 is passed to \code{destructure} an error is raised.
-
-New implementations of \code{destructure} can be very simple. A new
-\code{destructure} implementation might only strip away the class of a custom
-object and return the underlying list structure. Alternatively, an object
-might destructure into a nested set of values and may require a more
-complicated implementation. In either case, new implementations must return a
-list object so \code{\%<-\%} can handle the returned value(s).
+New implementations of \code{destructure} can be very simple. A new \code{destructure}
+implementation might only strip away the class of a custom object and return
+the underlying list structure. Alternatively, an object might destructure
+into a nested set of values and may require a more complicated
+implementation. In either case, new implementations must return a list object
+so \code{\%<-\%} can handle the returned value(s).
 }
 \examples{
-# data frames become a list of columns
-destructure(
-  data.frame(x = 0:4, y = 5:9)
-)
 
-# strings are split into list of characters
-destructure("abcdef")
+# Data frames become a list of columns
+destructure(faithful)
 
-# dates become list of year, month, and day
-destructure(Sys.Date())
-
-# create a new destructure implementation
+# A simple shape class
 shape <- function(sides = 4, color = "red") {
   structure(
     list(sides = sides, color = color),
@@ -46,25 +45,19 @@ shape <- function(sides = 4, color = "red") {
 }
 
 \dontrun{
-# cannot destructure the shape object yet
+# Cannot destructure the shape object _yet_
 c(sides, color) \%<-\% shape()
 }
 
-# implement `destructure` for shapes
+# Implement a new destructure method for the shape class
 destructure.shape <- function(x) {
-  list(x$sides, x$color)
+  unclass(x)
 }
 
-# now we can destructure shape objects
-c(sides, color) \%<-\% destructure(shape())
+# Now we can destructure shape objects
+c(sides, color) \%<-\% shape()
 
-sides  # 4
-color  # "red"
-
-c(sides, color) \%<-\% destructure(shape(3, "green"))
-
-sides  # 3
-color  # 'green'
+c(sides, color) \%<-\% shape(3, "green")
 
 }
 \seealso{
