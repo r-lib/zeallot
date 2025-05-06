@@ -46,3 +46,22 @@ test_that("default values", {
   expect_equal(x, 1)
   expect_equal(y, NA)
 })
+
+test_that("trailing excess collector does nothing", {
+  c(x, ..) %<-% list(1)
+
+  expect_equal(x, 1)
+  expect_error(.., "object '..' not found")
+})
+
+test_that("leading excess collector is ignored", {
+  c(.., x) %<-% list(1)
+
+  expect_equal(x, 1)
+  expect_error(.., "object '..' not found")
+
+  c(..y, x) %<-% list(2)
+
+  expect_equal(x, 2)
+  expect_equal(y, NULL)
+})

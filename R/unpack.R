@@ -87,7 +87,7 @@ unpack_collector <- function(
   } else if (length(vars) > length(vals)) {
     c(
       unpack_symbol(first(vars), list(NULL)),
-      unpack_next(cdr(vars), cdr(vals), lookup)
+      unpack_next(cdr(vars), vals, lookup)
     )
   } else if (length(vars) < length(vals)) {
     unpack_collector(vars, list_compress(vals, length(vars)), lookup)
