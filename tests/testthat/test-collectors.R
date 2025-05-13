@@ -65,3 +65,13 @@ test_that("leading excess collector is ignored", {
   expect_equal(x, 2)
   expect_equal(y, NULL)
 })
+
+test_that("old syntax is deprecated", {
+  expect_warning(c(x, ...y) %<-% list(1), "collector syntax has changed")
+
+  expect_silent(c(x, ...y) %<-% list(1))
+
+  dep_warn_reset()
+
+  expect_warning(c(x, ...y) %<-% list(1), "  [*] `[.]{3}y` => `[.]{2}y`")
+})

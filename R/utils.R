@@ -14,7 +14,7 @@ peek_type <- function(x) {
   if (is_named(first(x))) {
     n <- names(first(x))
 
-    if (is_collector(n)) {
+    if (is_collector(n) || is_deprecated_collector(n)) {
       return("collector")
     } else {
       return("symbol")

@@ -6,7 +6,10 @@ var_name <- function(var) {
       car(var)
     }
 
-  if (is_collector(n)) {
+  if (is_deprecated_collector(n)) {
+    deprecated_collector_warn()
+    deprecated_collector_name(n)
+  } else if (is_collector(n)) {
     collector_name(n)
   } else {
     as.character(n)
@@ -48,12 +51,22 @@ var_is_empty <- function(var) {
 }
 
 var_is_skip <- function(var) {
-  identical(car(var), quote(.)) ||
-    identical(car(var), quote(..))
+  identical(car(var), quote(.))
 }
 
-var_is_collector <- function(x) {
-  length(x) == 1 && is_collector(car(x))
+var_is_anonymous_collector <- function(var) {
+  if (identical(car(var), quote(...))) {
+    deprecated_collector_warn()
+    return(TRUE)
+  }
+
+  identical(car(var), quote(..))
+}
+
+
+var_is_collector <- function(var) {
+  length(var) == 1 &&
+    (is_collector(car(var)) || is_deprecated_collector(car(var)))
 }
 
 var_search <- function(expr) {

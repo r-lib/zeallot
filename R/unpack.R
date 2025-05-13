@@ -56,7 +56,7 @@ unpack_symbol <- function(
   var <- first(vars)
   val <- first(vals)
 
-  if (var_is_skip(var)) {
+  if (var_is_skip(var) || var_is_anonymous_collector(var)) {
     return(unpack_next(cdr(vars), cdr(vals), lookup))
   }
 
