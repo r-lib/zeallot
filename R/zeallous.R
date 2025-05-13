@@ -1,3 +1,7 @@
+is_assignment <- function(x) {
+  x == "%<-%" || x == "%->%"
+}
+
 usage_handler_empty <- function(expr, walker) {
 
 }
@@ -8,7 +12,7 @@ usage_handler_default <- function(expr, walker) {
   exprs_possible <- exprs_list[exprs_lengths == 3]
 
   for (e in exprs_possible) {
-    if (e[[1]] == "%<-%") {
+    if (is_assignment(e[[1]])) {
       var_names <- var_search(e[[2]])
 
       if (length(var_names) > 0) {
