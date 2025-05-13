@@ -1,8 +1,64 @@
 # zeallot 0.1.0.9000
 
-## Minor Improvements
+## Breaking changes
 
-* Formally support R versions >= 3.2
+* The collector syntax has changed. The previous syntax `...` was incompatible
+  with `R CMD check` and would raise the error "... may be used in an incorrect
+  context". The new syntax `..` (double dots instead of triple) avoids this
+  error. (#62)
+
+  ```R
+  # new
+  c(x, ..) %<-% list(1, 2, 3)
+  
+  # old
+  c(x, ...) %<-% list(1, 2, 3)
+  ```
+  
+* The `destructure` methods for the Date, character, and complex classes have
+  been removed.
+  
+## New features
+
+* Values may now be assigned by name. The new syntax allows assigning a 
+  value to a variable by name instead of position. (#47)
+  
+  ```R
+  c(disp=, gear=) %<-% mtcars
+  ```
+  
+* For package developers, the new function `zeallous()` will prevent 
+  `R CMD check` from raising visible binding errors for variables assigned using
+  `%<-%`. Call the function from a package's `.onLoad` function. (#57)
+  
+  ```R
+  .onLoad <- function(libname, pkgname) {
+    zeallous()
+  }
+  ```
+
+## Major improvements
+
+* Collector variables now default to an empty list instead of raising an error
+  when there are no values to collect. (#56)
+  
+  ```R
+  c(x, ..y) %<-% list(1)
+  ```
+
+* Trailing anonymous collectors and value skips no longer raise errors.
+  
+  ```R
+  c(x, ..) %<-% list(1)
+  
+  c(y, .) %<-% list(1)
+  ```
+
+## Minor improvements
+
+* Error messages have been simplified.
+
+* R versions >= 3.2 are formally supported.
 
 # zeallot 0.1.0
 
