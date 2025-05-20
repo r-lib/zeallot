@@ -129,25 +129,25 @@
 #'   c(vs=)
 #'
 `%<-%` <- function(x, value) {
-  attempt_assign({
-    pairs <- unpack(substitute(x), value)
+  force(value)
 
-    list_assign(pairs, parent.frame())
+  pairs <- unpack(substitute(x), value)
 
-    invisible(value)
-  })
+  list_assign(pairs, parent.frame())
+
+  invisible(value)
 }
 
 #' @rdname operator
 #' @export
 `%->%` <- function(value, x) {
-  attempt_assign({
-    pairs <- unpack(substitute(x), value)
+  force(value)
 
-    list_assign(pairs, parent.frame())
+  pairs <- unpack(substitute(x), value)
 
-    invisible(value)
-  })
+  list_assign(pairs, parent.frame())
+
+  invisible(value)
 }
 
 

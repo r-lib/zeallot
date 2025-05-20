@@ -42,8 +42,8 @@ unpack_language <- function(
       unpack_next(cdr(lang), destructure(car(vals)), car(vals)),
       unpack_next(cdr(vars), cdr(vals), lookup)
     ),
-    stop(
-      "unexpected call ", deparse(lang[[1]], backtick = TRUE)
+    local_error_stop(
+      "unexpected call `", deparse(lang[[1]], backtick = TRUE), "`"
     )
   )
 }
@@ -61,7 +61,9 @@ unpack_symbol <- function(
   }
 
   if (is_empty_list(vals) && !var_has_default(var)) {
-    stop("missing value for variable `", var_name(var), "`")
+    local_error_stop(
+      "missing value for variable `", var_name(var), "`"
+    )
   }
 
   prepend(
