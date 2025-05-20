@@ -74,4 +74,8 @@ test_that("old syntax is deprecated", {
   dep_warn_reset()
 
   expect_warning(c(x, ...y) %<-% list(1), "  [*] `[.]{3}y` => `[.]{2}y`")
+
+  dep_warn_reset()
+
+  expect_warning(list(1) %->% c(x, ...y), "collector syntax has changed")
 })

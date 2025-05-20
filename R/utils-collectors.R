@@ -32,7 +32,7 @@ dep_warn_call <- function() {
     sys.calls()
 
   assignment_calls <-
-    grepl("[.]{3}.+%<-%", as.character(sys_calls))
+    grepl("([.]{3}.+%<-%|%->%.+[.]{3})", as.character(sys_calls))
 
   if (!any(assignment_calls)) {
     return()
