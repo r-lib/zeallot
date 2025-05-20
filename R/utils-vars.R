@@ -26,7 +26,7 @@ var_has_default <- function(var) {
 
 var_default <- function(var) {
   if (!var_has_default(var)) {
-    stop("no default value for variable `", var_name(var), "`")
+    return()
   }
 
   car(var)
