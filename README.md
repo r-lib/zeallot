@@ -5,10 +5,14 @@
 
 Variable assignment with zeal!
 
-![alt
-text](https://codecov.io/gh/r-lib/zeallot/branch/master/graph/badge.svg "deep fat fry")
-![alt
-text](https://www.r-pkg.org/badges/version/zeallot "green means go!")
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/r-lib/zeallot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/zeallot/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/r-lib/zeallot/graph/badge.svg)](https://app.codecov.io/gh/r-lib/zeallot)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/zeallot)](https://CRAN.R-project.org/package=zeallot)
+<!-- badges: end -->
 
 ## What’s there to be excited about?
 
