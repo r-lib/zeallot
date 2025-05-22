@@ -152,117 +152,60 @@ cyl
 ```
 
 ### Example: List of data frames
-Bear in mind that a list of data frames is still just a list. The assignment
+Bear in mind, a list of data frames is still just a list. The assignment
 will extract the list elements (which are data frames) but not unpack the data
 frames themselves.
 
 ```{R}
-quartet <- lapply(1:4, function(i) anscombe[, c(i, i + 4)])
+c(gear3, gear4, gear5) %<-% split(mtcars, ~ gear)
 
-c(an1, an2, an3, an4) %<-% lapply(quartet, head, n = 3)
+head(gear3)
 
-an1
+head(gear4)
 
-an2
-
-an3
-
-an4
+gear5
 ```
 
 The `%<-%` operator assigned four data frames to four variables, leaving the
 data frames intact.
 
-## Unpacking nested values
-In addition to unpacking flat lists, you can unpack lists of lists.
-
-```{r}
-c(a, c(b, d), e) %<-% list("begin", list("middle1", "middle2"), "end")
-a
-b
-d
-e
-```
-
-Not only does this simplify extracting individual elements, it also adds a level
-of checking. If the described list structure does not match the actual list
-structure, an error is raised.
-
-```{r, error=TRUE}
-c(a, c(b, d, e), f) %<-% list("begin", list("middle1", "middle2"), "end")
-```
-
-## Splitting a value into its parts
-The previous examples dealt with unpacking a list or vector into its elements. 
-You can also split certain kinds of individual values into subvalues.
-
-### Character vectors
-You can assign individual characters of a string to variables.
-
-```{r}
-c(ch1, ch2, ch3) %<-% "abc"
-ch1
-ch2
-ch3
-```
-
-### Dates
-You can split a Date into its year, month, and day, and assign the parts to
-variables.
-
-```{r}
-c(y, m, d) %<-% Sys.Date()
-y
-m
-d
-```
-
-### Class objects
-*zeallot* includes implementations of `destructure` for character strings,
-complex numbers, data frames, date objects, and linear model summaries.
-However, because `destructure` is a generic function, you can define new
-implementations for custom classes. When defining a new implementation keep in
-mind the implementation needs to return a list so that values are properly
-unpacked.
+## Custom classes
+*zeallot* includes implementations of `destructure` for data frames and linear
+model summaries. However, because `destructure` is a generic function, you can
+define new implementations for custom classes. When defining a new
+implementation keep in mind the return value must be a list so the values are
+properly unpacked.
 
 ## Trailing values: the "everything else" clause
 In some cases, you want the first few elements of a list or vector but do not
-care about the trailing elements. The `summary` function of `lm`, for example, 
-returns a list of 11 values, and you might want only the first few. Fortunately,
+care about the trailing elements. The `summary.lm` function, for example, 
+returns a list of 11 values, and you may want only the first few. Fortunately,
 there is a way to capture those first few and say "don't worry about everything
 else".
 
 ```{r}
-f <- lm(mpg ~ cyl, data = mtcars)
+lm_mpg_cyl <- lm(mpg ~ cyl, data = mtcars)
 
-c(fcall, fterms, resids, ..rest) %<-% summary(f)
+c(lmc_call, lmc_terms, lmc_residuals, ..rest) %<-% summary(lm_mpg_cyl)
 
-fcall
+lmc_call
 
-fterms
+lmc_terms
 
-head(resids)
+head(lmc_residuals)
 ```
 
-Here, `rest` will capture everything else.
+The collector variable `rest` captures everything else.
 
 ```{r}
 str(rest)
 ```
 
-The assignment operator noticed that `..rest` is prefixed with `..`, and it
-created a variable called `rest` for the trailing values of the list. If you
-omitted the "everything else" prefix, there would be an error because the
-lengths of the left- and right-hand sides of the assignment would be mismatched.
-
-```{r, error = TRUE}
-c(fcall, fterms, resids, rest) %<-% summary(f)
-```
-
-If multiple collector variables are specified at a particular depth it is 
-ambiguous which values to assign to which collector and an error will be raised.
+Because `..rest` is prefixed with `..` a variable called `rest` is created
+for the trailing values of the list.
 
 ## Leading values and middle values 
+
 In addition to collecting trailing values, you can also collect initial values
 and assign specific remaining values.
 
@@ -283,19 +226,16 @@ end
 ```
 
 ## Skipped values: anonymous elements
-You can skip one or more values without raising an error by using a period (`.`)
-instead of a variable name. For example, you might care only about the min,
-mean, and max values of a vector's `summary`.
+
+You can skip one or more values using a period (`.`) instead of a variable name.
 
 ```{r}
-c(min_wt, ., ., mean_wt, ., max_wt) %<-% summary(mtcars$wt)
-min_wt
-mean_wt
-max_wt
+c(x, ., z) %<-% list(1, 2, 3)
+x
+z
 ```
 
-By combining an anonymous element (`.`) with the collector prefix, (`..`), you
-can ignore whole sublists.
+You can skip many values with the anonymous collector (`..`).
 
 ```{r}
 c(begin, .., end) %<-% list("hello", "blah", list("blah"), "blah", "world!")
@@ -303,41 +243,37 @@ begin
 end
 ```
 
-You can mix periods and collectors together to selectively keep and discard
+You can mix skips and collectors together to selectively keep and discard
 elements.
 
 ```{r}
-c(begin, ., ..middle, end) %<-% as.list(1:5)
+c(begin, ., ..middle, end) %<-% list(1, 2, 3, 4, 5)
 begin
 middle
 end
 ```
 
-It is important to note that although value(s) are skipped they are still 
-expected. The next section touches on how to handle missing values.
-
 ## Default values: handle missing values
 You can specify a default value for a left-hand side variable using `=`, similar
 to specifying the default value of a function argument. This comes in handy when
-the number of elements returned by a function cannot be guaranteed. `tail` for
+the number of elements returned by a function cannot be guaranteed. `tail()` for
 example may return fewer elements than asked for.
 
 ```{r}
-nums <- 1:2
+nums <- c(1, 2)
 c(x, y) %<-% tail(nums, 2)
 x
 y
 ```
 
-However, if we tried to get 3 elements and assign them an error would be raised
-because `tail(nums, 3)` still returns only 2 values.
+However, if we tried to get the last 3 elements an error would be raised because
+`tail(nums, 3)` still returns only 2 values.
 
 ```{r, error = TRUE}
 c(x, y, z) %<-% tail(nums, 3)
 ```
 
-We can fix the problem and resolve the error by specifying a default value for
-`z`.
+We can fix the problem by specifying a default value for `z`.
 
 ```{r}
 c(x, y, z = NULL) %<-% tail(nums, 3)
@@ -369,24 +305,4 @@ c(cat, dog, fish) %<-% c(dog, cat, dog)
 cat
 dog
 fish
-```
-
-## Right operator
-The `magrittr` package provides a pipe operator `%>%` which allows functions
-to be called in succession instead of nested. The left operator `%<-%`
-does not work well with these function chains. Instead, the right operator
-`%->%` is recommended. The below example is adapted from the `magrittr` readme.
-
-```{r, eval = require("magrittr")}
-library(magrittr)
-
-mtcars %>%
-  subset(hp > 100) %>%
-  aggregate(. ~ cyl, data = ., FUN = . %>% mean() %>% round(2)) %>%
-  transform(kpl = mpg %>% multiply_by(0.4251)) %->% 
-  c(cyl, mpg, ..rest)
-
-cyl
-mpg
-rest
 ```

@@ -128,11 +128,6 @@ c(hour, period = NA) \%<-\% parse_time("15:00")
 # Right operator
 list(1, 2, "a", "b", "c") \%->\% c(x, y, ..z)
 
-# Pipe chains
-mtcars |>
-  lapply(mean) \%->\%
-  c(vs=)
-
 }
 \seealso{
 For more on unpacking custom objects please refer to

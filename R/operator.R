@@ -123,11 +123,6 @@
 #' # Right operator
 #' list(1, 2, "a", "b", "c") %->% c(x, y, ..z)
 #'
-#' # Pipe chains
-#' mtcars |>
-#'   lapply(mean) %->%
-#'   c(vs=)
-#'
 `%<-%` <- function(x, value) {
   force(value)
 

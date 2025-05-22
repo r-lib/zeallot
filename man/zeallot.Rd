@@ -15,7 +15,7 @@ introductory vignette on unpacking assignment,
 \code{\link{\%<-\%}}
 }
 \author{
-\strong{Maintainer}: Nathan Teetor \email{nathanteetor@gmail.com}
+\strong{Maintainer}: Nathan Teetor \email{nate@haufin.ch}
 
 Other contributors:
 \itemize{

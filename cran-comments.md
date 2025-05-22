@@ -1,6 +1,6 @@
 ## Test environments
 
-* local OS X install, R 3.4.3
+* local OS X install, R 4.5.0
 * ubuntu 12.04 (on travis-ci), R 3.4.2
 * win-builder (devel and release)
 
@@ -10,9 +10,9 @@
 
 ### Notes
 
-* Possibly misspelled word "destructuring" in DESCRIPTION is intentionally used.
+* Stackoverflow links in the README are valid for humans.
 
 ## Reverse dependencies
 
-I have run an R CMD check on all (6) downstream dependencies. All packages I
+I have run an R CMD check on all (33) downstream dependencies. All packages I
 could install passed.

@@ -14,56 +14,6 @@ Run `revdepcheck::revdep_details(, "COTAN")` for more info
 
 ## In both
 
-*   checking examples ... ERROR
-    ```
-    Running examples in ‘COTAN-Ex.R’ failed
-    The error most likely occurred in:
-    
-    > ### Name: Conversions
-    > ### Title: Data class conversions
-    > ### Aliases: Conversions convertToSingleCellExperiment
-    > ###   convertFromSingleCellExperiment
-    > 
-    > ### ** Examples
-    > 
-    ...
-    >   obj <- proceedToCoex(obj, calcCoex = FALSE, saveObj = FALSE)
-    Cotan analysis functions started
-    Working on [600] genes and [1200] cells
-    dispersion | min: 0.2197265625 | max: 6.08056640625 | % negative: 0
-    > 
-    >   sce <- convertToSingleCellExperiment(objCOTAN = obj)
-    Error in validObject(.Object) : 
-      invalid class “SingleCellExperiment” object: superclass "ExpData" not defined in the environment of the object's class
-    Calls: convertToSingleCellExperiment ... .rse_to_sce -> new -> initialize -> initialize -> validObject
-    Execution halted
-    ```
-
-*   checking tests ...
-    ```
-      Running ‘outputTestDatasetCreation.R’
-      Running ‘spelling.R’
-      Running ‘testthat.R’
-     ERROR
-    Running the tests in ‘tests/testthat.R’ failed.
-    Last 13 lines of output:
-      Backtrace:
-          ▆
-       1. ├─Seurat::as.SingleCellExperiment(sratObj) at test-convertSingleCellExperiment.R:81:3
-       2. └─Seurat:::as.SingleCellExperiment.Seurat(sratObj)
-    ...
-       4.     └─SingleCellExperiment (local) asMethod(object)
-       5.       └─SingleCellExperiment:::.rse_to_sce(as(from, "RangedSummarizedExperiment"))
-       6.         └─methods::new(...)
-       7.           ├─methods::initialize(value, ...)
-       8.           └─methods::initialize(value, ...)
-       9.             └─methods::validObject(.Object)
-      
-      [ FAIL 2 | WARN 2 | SKIP 0 | PASS 485 ]
-      Error: Test failures
-      Execution halted
-    ```
-
 *   R CMD check timed out
     
 
@@ -101,72 +51,6 @@ Run `revdepcheck::revdep_details(, "COTAN")` for more info
       values violinwidth width x xmax xmaxv xminv y
     ```
 
-# SpatialFeatureExperiment
-
-<details>
-
-* Version: 1.10.0
-* GitHub: https://github.com/pachterlab/SpatialFeatureExperiment
-* Source code: https://github.com/cran/SpatialFeatureExperiment
-* Date/Publication: 2025-04-15
-* Number of recursive dependencies: 270
-
-Run `revdepcheck::revdep_details(, "SpatialFeatureExperiment")` for more info
-
-</details>
-
-## In both
-
-*   checking whether package ‘SpatialFeatureExperiment’ can be installed ... ERROR
-    ```
-    Installation failed.
-    See ‘/Users/nteetor/haufinch/projects/zeallot/revdep/checks.noindex/SpatialFeatureExperiment/new/SpatialFeatureExperiment.Rcheck/00install.out’ for details.
-    ```
-
-## Installation
-
-### Devel
-
-```
-* installing *source* package ‘SpatialFeatureExperiment’ ...
-** this is package ‘SpatialFeatureExperiment’ version ‘1.10.0’
-** using staged installation
-** R
-** data
-** inst
-** byte-compile and prepare package for lazy loading
-Error in cliDef@subclasses : 
-  no applicable method for `@` applied to an object of class "NULL"
-Error in setClass("SpatialFeatureExperiment", contains = "SpatialExperiment") : 
-  error in contained classes ("SpatialExperiment") for class “SpatialFeatureExperiment”; class definition removed from ‘SpatialFeatureExperiment’
-Error: unable to load R code in package ‘SpatialFeatureExperiment’
-Execution halted
-ERROR: lazy loading failed for package ‘SpatialFeatureExperiment’
-* removing ‘/Users/nteetor/haufinch/projects/zeallot/revdep/checks.noindex/SpatialFeatureExperiment/new/SpatialFeatureExperiment.Rcheck/SpatialFeatureExperiment’
-
-
-```
-### CRAN
-
-```
-* installing *source* package ‘SpatialFeatureExperiment’ ...
-** this is package ‘SpatialFeatureExperiment’ version ‘1.10.0’
-** using staged installation
-** R
-** data
-** inst
-** byte-compile and prepare package for lazy loading
-Error in cliDef@subclasses : 
-  no applicable method for `@` applied to an object of class "NULL"
-Error in setClass("SpatialFeatureExperiment", contains = "SpatialExperiment") : 
-  error in contained classes ("SpatialExperiment") for class “SpatialFeatureExperiment”; class definition removed from ‘SpatialFeatureExperiment’
-Error: unable to load R code in package ‘SpatialFeatureExperiment’
-Execution halted
-ERROR: lazy loading failed for package ‘SpatialFeatureExperiment’
-* removing ‘/Users/nteetor/haufinch/projects/zeallot/revdep/checks.noindex/SpatialFeatureExperiment/old/SpatialFeatureExperiment.Rcheck/SpatialFeatureExperiment’
-
-
-```
 # tfevents
 
 <details>

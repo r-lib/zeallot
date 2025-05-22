@@ -71,7 +71,7 @@ unlist(rest)
 ## Getting started
 
 Below is a simple usage example using the
-[purrr](https://github.com/hadley/purrr) package and the safely
+[purrr](https://github.com/tidyverse/purrr) package and the safely
 function.
 
 ### Safe functions
