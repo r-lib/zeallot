@@ -72,8 +72,10 @@ list_assign <- function(x, envir = parent.frame(), simplify = FALSE) {
   name <- pair[[1]]
   value <- pair[[2]]
 
-  if (simplify) {
+  if (is.list(value) && simplify) {
+    nms <- names(value)
     value <- unlist(value)
+    names(value) <- nms
   }
 
   eval(call("<-", name, bquote(quote(.(value)))), envir = envir)

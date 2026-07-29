@@ -131,7 +131,7 @@
   list_assign(
     pairs,
     parent.frame(),
-    is.atomic(value)
+    is.atomic(value) && !is.object(value)
   )
 
   invisible(value)
@@ -147,7 +147,7 @@
   list_assign(
     pairs,
     parent.frame(),
-    is.atomic(value)
+    is.atomic(value) && !is.object(value)
   )
 
   invisible(value)
