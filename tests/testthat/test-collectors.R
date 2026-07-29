@@ -3,10 +3,19 @@ test_that("collect start", {
 
   expect_equal(y, 5)
 
+  c(.., y) %<-% list(x = 1:3, y = 4:6, z = 7:9)
+
+  expect_equal(y, 7:9)
+
   c(..x, y) %<-% 1:5
 
   expect_equal(x, list(1, 2, 3, 4))
   expect_equal(y, 5)
+
+  c(..x, y) %<-% list(x = 1:3, y = 4:6, z = 7:9)
+
+  expect_equal(x, list(x = 1:3, y = 4:6))
+  expect_equal(y, 7:9)
 })
 
 test_that("collect middle", {
@@ -15,11 +24,21 @@ test_that("collect middle", {
   expect_equal(x, 1)
   expect_equal(z, 5)
 
+  c(x, ..y, z) %<-% list(x = 1:3, y = 4:6, z = 7:9)
+  expect_equal(x, 1:3)
+  expect_equal(y, 4:6)
+  expect_equal(z, 7:9)
+
   c(x, ..y, z) %<-% 5:1
 
   expect_equal(x, 5)
   expect_equal(y, list(4, 3, 2))
   expect_equal(z, 1)
+
+  c(x, ..y, z) %<-% list(x = 1:3, y = 4:6, z = 7:9, a = 10:12)
+  expect_equal(x, 1:3)
+  expect_equal(y, list(y = 4:6, z = 7:9))
+  expect_equal(z, 10:12)
 })
 
 test_that("collect end", {
@@ -27,10 +46,19 @@ test_that("collect end", {
 
   expect_equal(x, 1)
 
+  c(x, ..) %<-% list(x = 1:3, y = 4:6, z = 7:9)
+
+  expect_equal(x, 1:3)
+
   c(x, ..y) %<-% 1:3
 
   expect_equal(x, 1)
   expect_equal(y, list(2, 3))
+
+  c(x, ..y) %<-% list(x = 1:3, y = 4:6, z = 7:9)
+
+  expect_equal(x, 1:3)
+  expect_equal(y, list(y = 4:6, z = 7:9))
 })
 
 test_that("defaults to NULL", {
