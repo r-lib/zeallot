@@ -1,5 +1,9 @@
 # zeallot (development version)
 
+## Bug fixes
+
+* The collector no longer flattens the first collected element of a list, instead retaining the original structure and name. (#65)
+
 # zeallot 0.2.0
 
 ## Breaking changes
