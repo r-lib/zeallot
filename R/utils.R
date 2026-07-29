@@ -63,7 +63,7 @@ list_compress <- function(x, len) {
   )
 }
 
-list_assign <- function(x, envir = parent.frame()) {
+list_assign <- function(x, envir = parent.frame(), v_typeof = NULL) {
   if (is_empty_list(x)) {
     return()
   }
@@ -72,9 +72,14 @@ list_assign <- function(x, envir = parent.frame()) {
   name <- pair[[1]]
   value <- pair[[2]]
 
+  if (!is.null(v_typeof) && typeof(value) != v_typeof) {
+    # the check is marginally quicker than assigning same mode on my machine
+    storage.mode(value) <- v_typeof
+  }
+
   eval(call("<-", name, bquote(quote(.(value)))), envir = envir)
 
-  list_assign(cdr(x), envir)
+  list_assign(cdr(x), envir, v_typeof)
 }
 
 attempt_assign <- function(expr, call = sys.call(-1)) {

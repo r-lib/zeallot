@@ -128,7 +128,11 @@
 
   pairs <- unpack(substitute(x), value)
 
-  list_assign(pairs, parent.frame())
+  list_assign(
+    pairs, 
+    parent.frame(), 
+    if (is.atomic(value)) typeof(value)
+  )
 
   invisible(value)
 }
@@ -140,7 +144,11 @@
 
   pairs <- unpack(substitute(x), value)
 
-  list_assign(pairs, parent.frame())
+  list_assign(
+    pairs, 
+    parent.frame(), 
+    if (is.atomic(value)) typeof(value)
+  )
 
   invisible(value)
 }
