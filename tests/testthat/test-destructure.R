@@ -4,6 +4,10 @@ test_that("included data.frame implementation", {
   expect_equal(mpg, mtcars$mpg)
   expect_equal(cyl, mtcars$cyl)
   expect_equal(carb, mtcars$carb)
+
+  c(mpg, cyl, ..x) %<-% mtcars
+
+  expect_equal(x, as.list(mtcars[3:ncol(mtcars)]))
 })
 
 test_that("included summary implementation", {

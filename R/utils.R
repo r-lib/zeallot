@@ -49,18 +49,21 @@ prepend <- function(x, y) {
 }
 
 list_compress <- function(x, len) {
-  stopifnot(
-    is.list(x)
-  )
+  stopifnot(is.list(x), len >= 1L)
 
-  if (length(x) <= len) {
+  x_len <- length(x)
+
+  if (x_len <= len) {
     return(x)
   }
 
-  list_compress(c(list(c(x[[1]], x[2])), x[c(-1, -2)]), len)
+  c(
+    list(head(x, x_len - len + 1L)),
+    tail(x, len - 1L)
+  )
 }
 
-list_assign <- function(x, envir = parent.frame()) {
+list_assign <- function(x, envir = parent.frame(), simplify = FALSE) {
   if (is_empty_list(x)) {
     return()
   }
@@ -69,9 +72,13 @@ list_assign <- function(x, envir = parent.frame()) {
   name <- pair[[1]]
   value <- pair[[2]]
 
+  if (is.list(value) && simplify) {
+    value <- unlist(value)
+  }
+
   eval(call("<-", name, bquote(quote(.(value)))), envir = envir)
 
-  list_assign(cdr(x), envir)
+  list_assign(cdr(x), envir, simplify)
 }
 
 attempt_assign <- function(expr, call = sys.call(-1)) {
