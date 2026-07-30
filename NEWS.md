@@ -1,5 +1,9 @@
 # zeallot (development version)
 
+## Breaking changes
+
+* For bare atomic inputs, the collector now retains the original input class rather than collecting elements into a vectorizable list. (#67)
+
 ## Bug fixes
 
 * The collector no longer flattens the first collected element of a list, instead retaining the original structure and name. (#65)
