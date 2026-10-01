@@ -49,17 +49,20 @@ prepend <- function(x, y) {
 }
 
 list_compress <- function(x, len) {
-  stopifnot(is.list(x), len >= 1L)
+  stopifnot(
+    is.list(x),
+    len >= 1L
+  )
 
-  x_len <- length(x)
+  len_x <- length(x)
 
-  if (x_len <= len) {
+  if (len_x <= len) {
     return(x)
   }
 
   c(
-    list(head(x, x_len - len + 1L)),
-    tail(x, len - 1L)
+    list(utils::head(x, len_x - len + 1L)),
+    utils::tail(x, len - 1L)
   )
 }
 
