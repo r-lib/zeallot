@@ -50,14 +50,20 @@ prepend <- function(x, y) {
 
 list_compress <- function(x, len) {
   stopifnot(
-    is.list(x)
+    is.list(x),
+    len >= 1L
   )
 
-  if (length(x) <= len) {
+  len_x <- length(x)
+
+  if (len_x <= len) {
     return(x)
   }
 
-  list_compress(c(list(c(x[[1]], x[2])), x[c(-1, -2)]), len)
+  c(
+    list(utils::head(x, len_x - len + 1L)),
+    utils::tail(x, len - 1L)
+  )
 }
 
 list_assign <- function(x, envir = parent.frame()) {
