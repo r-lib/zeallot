@@ -61,6 +61,48 @@ test_that("collect end", {
   expect_equal(y, list(y = 4:6, z = 7:9))
 })
 
+test_that("collect NULL elements", {
+  c(x, ..y) %<-% list(1, NULL, 2)
+
+  expect_equal(y, list(NULL, 2))
+})
+
+test_that("collect list elements", {
+  c(..x, y) %<-% list(list(1, 2), 3, 4)
+
+  expect_equal(x, list(list(1, 2), 3))
+  expect_equal(y, 4)
+})
+
+test_that("collect classed elements", {
+  f <- factor("a")
+
+  c(x, ..y) %<-% list(f, f, f)
+
+  expect_equal(y, list(f, f))
+
+  d <- as.Date("2020-01-01")
+
+  c(..x, y) %<-% list(d, 1, 2)
+
+  expect_equal(x, list(d, 1))
+  expect_equal(y, 2)
+})
+
+test_that("collect named atomic elements", {
+  c(x, ..y) %<-% c(a = 1, b = 2, c = 3)
+
+  expect_equal(y, list(b = 2, c = 3))
+})
+
+test_that("collect nested", {
+  c(x, c(y, ..z)) %<-% list(1, list(a = 1:2, b = 3:4, c = 5:6))
+
+  expect_equal(x, 1)
+  expect_equal(y, 1:2)
+  expect_equal(z, list(b = 3:4, c = 5:6))
+})
+
 test_that("defaults to NULL", {
   c(x, ..y) %<-% list(1)
 
