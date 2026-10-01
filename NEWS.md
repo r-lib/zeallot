@@ -2,7 +2,8 @@
 
 ## Bug fixes
 
-* The collector no longer flattens the first collected element of a list, instead retaining the original structure and name. (#65)
+* Collectors no longer flatten the first collected element of a list. Now the
+  first collected element retains its original structure. (@LJ-Jenkins, #65)
 
 # zeallot 0.2.0
 
